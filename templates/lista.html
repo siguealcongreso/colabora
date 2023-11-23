@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en-US" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
+<head>
+
+
+
+
+
+    <meta charset="utf-8" />
+<meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<meta name="description" content="">
+<meta property="og:description" content="" />
+<meta name="author" content="map[]" />
+
+<meta property="og:title" content="Iniciativas sin resumen - Legislatura LXIII" />
+<meta property="twitter:title" content="Iniciativas sin resumen - Legislatura LXIII" />
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/images/favicons/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/images/favicons/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/images/favicons/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/images/favicons/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="/images/favicons/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="/images/favicons/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicons/favicon-16x16.png">
+        <link rel="manifest" href="/images/favicons/manifest.json">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="/images/favicons/ms-icon-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+
+
+
+    <base href="https://siguealcongreso.org">
+    <title>Iniciativas sin resumen - Legislatura LXIII</title>
+    <link rel="canonical" href="https://siguealcongreso.org/monitoreo/sintema/lxiii/">
+
+
+
+    <link rel="alternate" type="application/rss+xml" href="https://siguealcongreso.org/monitoreo/sintema/lxiii/index.xml" title="Sigue al Congreso" />
+
+
+<link rel="stylesheet" href="/css/style.min.css">
+
+
+<link rel="stylesheet" href="https://siguealcongreso.org/custom.css">
+
+
+</head>
+<body lang="en">
+<div class="wrapper-masthead">
+  <div class="container">
+    <header class="masthead clearfix">
+      <a href="https://siguealcongreso.org/" class="site-avatar"><img src="/logo.jpg" /></a>
+
+      <div class="site-info">
+        <h1 class="site-name"><a href="https://siguealcongreso.org/">Sigue al Congreso</a></h1>
+        <p class="site-description">Monitoreo parlamentario ciudadano</p>
+        <div class="social-media">
+
+
+
+
+
+        </div>
+      </div>
+
+      <nav>
+        <a href="/acerca">Acerca de</a>
+      </nav>
+    </header>
+  </div>
+</div>
+
+    <div class="container">
+      <p>¡Ayúdanos a escribir el resumen de una de estas iniciativas! <a href="/colabora/">¿Cómo?</a></p>
+    </div>
+        {% for r in records %}
+    <div class="container">
+      <div class="row border g-2 p-3">
+        <div class="col-12 col-md-3">
+          <div class="p-3 border bg-light"><b>{{ r.numero }}</b>
+          </div>
+        </div>
+          <div class="col-12 col-md-3 bg-light">
+            <div class="p-3 border bg-light"><b>Asignada</b> {{ r.autor }}
+            </div>
+          </div>
+          <div class="col-12 col-md-6 bg-light">
+            <div class="p-3 border bg-light"><b>Estado</b> {{ r.estado }}
+            </div>
+          </div>
+            <div class="col-12">
+              <div class="p-3 border bg-light">
+                <b>Cambios</b> {{ r.cambios }}
+                (<a href="https://siguealcongreso.org/monitoreo/iniciativas/lxiii/{{ r.numero }}/" title="Ver ficha">{{ r.numero }}</a>)
+            <a href="https://congresoweb.congresojal.gob.mx/infolej/sistemaintegral/infolej/../../agendakioskos/documentos/sistemaintegral/estados/R_52806.pdf" target="_blank" title="Leer el documento">🖹</a>
+          <a href="" title="Editar">✏</a>
+              </div>
+          </div>
+          {% if r.editing %}
+          <div class="col-12 col-md-3"><b>Tema</b>
+            <textarea class="form-control">{{ r.tema }}</textarea>
+            <span class="form-text">¿De qué trata?</span>
+          </div>
+          <div class="col-12 col-md-6"><b>Resumen</b>
+            <textarea class="form-control" rows="5">{{ r.resumen }}</textarea>
+          </div>
+          <div class="col-12 col-md-3"><b>Área</b>
+            <select class="form-select" required multiple>
+              <option value="">Seleccionar...</option>
+              {% for area in areas %}
+              <option value="{{ loop.index }}">{{ area.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          {% else %}
+          <div class="col-12 col-md-3">
+            <div class="bg-light p-3 border"><b>Tema</b>
+              <br>{{ r.tema }}
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="p-3 border bg-light"><b>Resumen</b>
+              {{ r.resumen }}
+            </div>
+          </div>
+          <div class="col-12 col-md-3">
+            <div class="p-3 border bg-light"><b>Área</b>
+              {% for area in r.tags %}
+               {{ area }}
+              {% endfor %}
+            </div>
+          </div>
+           {% endif %}
+          <div class="col-12 bg-light">
+            <div class="p-3 border bg-light"><b>Comentario</b> {{ r.comentario }}
+            </div>
+          </div>
+          </div>
+  </div>
+  <br>
+      {% endfor %}
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+        © Sigue al Congreso 2023
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
+

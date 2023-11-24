@@ -105,7 +105,7 @@
           <a href="" title="Editar">✏</a>
               </div>
           </div>
-          {% if r.editing %}
+          {% if editar[r.numero] %}
           <div class="col-12 col-md-3"><b>Tema</b>
             <textarea class="form-control">{{ r.tema }}</textarea>
             <span class="form-text">¿De qué trata?</span>
@@ -134,7 +134,7 @@
           </div>
           <div class="col-12 col-md-3">
             <div class="p-3 border bg-light"><b>Área</b>
-              {% for area in r.tags %}
+              {% for area in tags[r.numero] %}
                {{ area }}
               {% endfor %}
             </div>

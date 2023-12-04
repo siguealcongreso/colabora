@@ -1,3 +1,6 @@
+"""Aplicación para colaboar"""
+
+__version__ = "0.2"
 import sqlite3
 from flask import Flask
 from flask import render_template

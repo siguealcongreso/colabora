@@ -8,7 +8,8 @@ from flask import g
 
 
 app = Flask(__name__)
-app.config.from_object("config")
+app.config.from_object("defaults")
+app.config.from_envvar("COLABORA_CONFIG", silent=True)
 DATABASE = app.config["DATABASE"]
 
 

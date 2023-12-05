@@ -5,7 +5,11 @@
       <p><span>¡Ayúdanos a escribir el resumen de una de estas iniciativas! <a href="/colabora/">¿Cómo?</a></span> -
 	{% if request.is_authenticated %}
 	{{ request.user }}
+	{% if request.path == '/' %}
 	<a class="btn-link" href="/iniciativas">Mis iniciativas</a>
+	{% else %}
+	<a class="btn-link" href="/">Todas las iniciativas</a>
+	{% endif %}
 	<a class="btn-link" href="/logout">Terminar sesión</a>
 	{% else %}
 	<a href="/login">Iniciar sesión</a>

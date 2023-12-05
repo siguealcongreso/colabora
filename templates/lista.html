@@ -4,6 +4,7 @@
     <div class="container">
       <p><span>¡Ayúdanos a escribir el resumen de una de estas iniciativas! <a href="/colabora/">¿Cómo?</a></span> -
 	{% if request.is_authenticated %}
+	{{ request.user }}
 	<a class="btn-link" href="/iniciativas">Mis iniciativas</a>
 	<a class="btn-link" href="/logout">Terminar sesión</a>
 	{% else %}

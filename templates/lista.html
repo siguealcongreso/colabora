@@ -2,8 +2,14 @@
 {% block title %}Iniciativas sin resumen - Legislatura LXIII{% endblock %}
 {% block content %}
     <div class="container">
-      <p><span>¡Ayúdanos a escribir el resumen de una de estas iniciativas! <a href="/colabora/">¿Cómo?</a></span>
-      &nbsp;&nbsp;&nbsp;<a href="/login">Iniciar sesión</a></p>
+      <p><span>¡Ayúdanos a escribir el resumen de una de estas iniciativas! <a href="/colabora/">¿Cómo?</a></span> -
+	{% if request.is_authenticated %}
+	<a class="btn-link" href="/iniciativas">Mis iniciativas</a>
+	<a class="btn-link" href="/logout">Terminar sesión</a>
+	{% else %}
+	<a href="/login">Iniciar sesión</a>
+	{% endif %}
+      </p>
     </div>
         {% for r in records %}
     <div class="container px-4">

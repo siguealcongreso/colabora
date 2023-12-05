@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Mis iniciativas sin resumen - Legislatura LXIII{% endblock %}
+{% block content %}
+
+<div class="container">
+</div>
+
+        {% for r in records %}
+    <div class="container px-4">
+      <div class="row py-2 bg-light border-bottom-0 border">
+        <div class="col-md-3">
+          <div class=""><b>Número</b> {{ r.numero }}
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class=""><b>Asignada</b> {{ r.autor }}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class=""><b>Estado</b> {{ r.estado }}
+          </div>
+        </div>
+      </div>
+      <div class="row py-2 border border-top-0 bg-light">
+        <div class="">
+          <div class="">
+              <b>Cambios</b> {{ r.cambios }}
+                (<a href="https://siguealcongreso.org/monitoreo/iniciativas/lxiii/{{ r.numero }}/" title="Ver ficha">{{ r.numero }}</a>)
+            <a href="https://congresoweb.congresojal.gob.mx/infolej/sistemaintegral/infolej/../../agendakioskos/documentos/sistemaintegral/estados/R_52806.pdf" target="_blank" title="Leer el documento">🖹</a>
+          <a href="" title="Editar">✏</a>
+          </div>
+        </div>
+      </div>
+      <div class="row py-2 border border-top-0 bg-light">
+          {% if editar[r.numero] %}
+          <div class="col-md-3"><b>Tema</b>
+            <textarea class="form-control">{{ r.tema }}</textarea>
+            <span class="form-text">¿De qué trata?</span>
+          </div>
+          <div class="col-md-6"><b>Resumen</b>
+            <textarea class="form-control" rows="5">{{ r.resumen }}</textarea>
+            <span class="form-text">¿Qué propone?</span>
+          </div>
+          <div class="col-md-3"><b>Área</b>
+            <select class="form-select" required multiple>
+              <option value="">Seleccionar...</option>
+              {% for area in areas %}
+              <option value="{{ loop.index }}">{{ area.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          {% else %}
+          <div class="col-md-3">
+            <div class=""><b>Tema</b>
+              {{ r.tema }}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class=""><b>Resumen</b>
+              {{ r.resumen }}
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class=""><b>Área</b>
+              {% for area in tags[r.numero] %}
+               {{ area }}
+              {% endfor %}
+            </div>
+          </div>
+           {% endif %}
+      </div>
+      <div class="row py-2 border border-top-0 bg-light">
+        <div class=""><b>Comentario</b>
+	      {% for c in comentarios[r.numero] %}
+	      {{ c }}<br>
+	      {% endfor %}
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+<br>
+      {% endfor %}
+
+{% endblock %}

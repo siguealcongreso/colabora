@@ -13,7 +13,8 @@ app = Flask(__name__)
 app.config.from_object("defaults")
 app.config.from_envvar("COLABORA_CONFIG", silent=True)
 DATABASE = app.config["DATABASE"]
-app.is_authenticated = True
+app.is_authenticated = False
+app.autor = ''
 
 
 def get_db():
@@ -44,6 +45,7 @@ def lista():
     cur.execute(cmd)
     areas = cur.fetchall()
     request.is_authenticated = app.is_authenticated
+    request.user = app.autor
     return render_template(
         "lista.html", records=records, editar=editar, tags=tags, areas=areas,
         comentarios=comentarios
@@ -58,6 +60,7 @@ def login_get():
 @app.post("/login")
 def login_post():
     app.is_authenticated = True
+    app.autor = request.form['username']
     return redirect(url_for('lista'))
 
 @app.route("/logout")

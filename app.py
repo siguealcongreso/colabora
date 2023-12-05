@@ -5,12 +5,15 @@ import sqlite3
 from flask import Flask
 from flask import render_template
 from flask import g
+from flask import request
+from flask import redirect, url_for
 
 
 app = Flask(__name__)
 app.config.from_object("defaults")
 app.config.from_envvar("COLABORA_CONFIG", silent=True)
 DATABASE = app.config["DATABASE"]
+app.is_authenticated = True
 
 
 def get_db():
@@ -40,7 +43,24 @@ def lista():
     cmd = "SELECT nombre FROM areas"
     cur.execute(cmd)
     areas = cur.fetchall()
+    request.is_authenticated = app.is_authenticated
     return render_template(
         "lista.html", records=records, editar=editar, tags=tags, areas=areas,
         comentarios=comentarios
     )
+
+@app.get("/login")
+def login_get():
+    return render_template(
+        "login.html"
+    )
+
+@app.post("/login")
+def login_post():
+    app.is_authenticated = True
+    return redirect(url_for('lista'))
+
+@app.route("/logout")
+def logout():
+    app.is_authenticated = False
+    return redirect(url_for('lista'))

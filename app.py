@@ -73,3 +73,20 @@ def login_post():
 def logout():
     app.is_authenticated = False
     return redirect(url_for('lista'))
+
+@app.route("/edita/<numero>")
+def edita(numero):
+    cur = get_db().cursor()
+    cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM sintema WHERE numero=?"
+    cur.execute(cmd, (numero,))
+    record = cur.fetchone()
+    comentarios = record["comentario"].split('\n')
+    cmd = "SELECT nombre FROM areas"
+    cur.execute(cmd)
+    areas = cur.fetchall()
+    request.user = app.autor
+    return render_template('edita.html',
+                           r=record,
+                           tags=record['tags'],
+                           comentarios=comentarios,
+                           areas=areas)

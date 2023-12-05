@@ -32,11 +32,17 @@ def close_connection(exception):
         db.close()
 
 
+@app.route("/iniciativas")
 @app.route("/")
 def lista():
     cur = get_db().cursor()
-    cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM sintema"
-    cur.execute(cmd)
+    if app.autor and request.path == '/iniciativas':
+        params = (app.autor,)
+        cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM sintema WHERE autor=?"
+        cur.execute(cmd, params)
+    else:
+        cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM sintema"
+        cur.execute(cmd)
     records = cur.fetchall()
     editar = {r["numero"]: "editar" in r["estado"] for r in records}
     tags = {r["numero"]: r["tags"].split("|") for r in records}
@@ -67,23 +73,3 @@ def login_post():
 def logout():
     app.is_authenticated = False
     return redirect(url_for('lista'))
-
-@app.route("/iniciativas")
-def iniciativas():
-    params = (app.autor,)
-    cur = get_db().cursor()
-    cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM sintema WHERE autor=?"
-    cur.execute(cmd, params)
-    records = cur.fetchall()
-    editar = {r["numero"]: "editar" in r["estado"] for r in records}
-    tags = {r["numero"]: r["tags"].split("|") for r in records}
-    comentarios = {r["numero"]: r["comentario"].split('\n') for r in records}
-    cmd = "SELECT nombre FROM areas"
-    cur.execute(cmd)
-    areas = cur.fetchall()
-    request.is_authenticated = app.is_authenticated
-    request.user = app.autor
-    return render_template(
-        "iniciativas.html", records=records, editar=editar, tags=tags, areas=areas,
-        comentarios=comentarios
-    )

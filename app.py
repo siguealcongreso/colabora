@@ -56,7 +56,6 @@ def lista():
         cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM sintema"
         cur.execute(cmd)
     records = cur.fetchall()
-    editar = {r["numero"]: "editar" in r["estado"] for r in records}
     tags = {r["numero"]: r["tags"].split("|") for r in records}
     comentarios = {r["numero"]: r["comentario"].split('\n') for r in records}
     cmd = "SELECT nombre FROM areas"
@@ -66,7 +65,7 @@ def lista():
     request.user = app.autor
     users = app.users
     return render_template(
-        "lista.html", records=records, editar=editar, tags=tags, areas=areas,
+        "lista.html", records=records, tags=tags, areas=areas,
         comentarios=comentarios, users=users
     )
 

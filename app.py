@@ -32,14 +32,25 @@ def close_connection(exception):
         db.close()
 
 
+@app.route("/asigna", methods=["GET", "POST"])
 @app.route("/iniciativas")
 @app.route("/")
 def lista():
-    cur = get_db().cursor()
+    db = get_db()
+    cur = db.cursor()
     if app.autor and request.path == '/iniciativas':
         params = (app.autor,)
         cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM sintema WHERE autor=?"
         cur.execute(cmd, params)
+    elif request.path == '/asigna':
+        if request.method == 'POST':
+            for numero in request.form.getlist('numero'):
+                params = (request.form['autor'], 'LXIII', numero)
+                cmd = "UPDATE sintema SET autor=? WHERE legislatura=? AND numero=?"
+                cur.execute(cmd, params)
+                db.commit()
+        cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM sintema WHERE autor=''"
+        cur.execute(cmd)
     else:
         cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM sintema"
         cur.execute(cmd)

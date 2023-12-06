@@ -64,9 +64,13 @@ def lista():
     request.is_authenticated = app.is_authenticated
     request.user = app.autor
     users = app.users
+    cmd = "SELECT autor, count(numero) as asignadas FROM sintema GROUP BY autor"
+    cur.execute(cmd)
+    rows = cur.fetchall()
+    asignadas = {row['autor']: row['asignadas'] for row in rows}
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
-        comentarios=comentarios, users=users
+        comentarios=comentarios, users=users, asignadas=asignadas
     )
 
 @app.get("/login")

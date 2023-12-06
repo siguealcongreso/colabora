@@ -15,6 +15,7 @@ app.config.from_envvar("COLABORA_CONFIG", silent=True)
 DATABASE = app.config["DATABASE"]
 app.is_authenticated = False
 app.autor = ''
+app.users = ['usuario1', 'usuario2', 'usuario3', 'usuario4']
 
 
 def get_db():
@@ -63,9 +64,10 @@ def lista():
     areas = cur.fetchall()
     request.is_authenticated = app.is_authenticated
     request.user = app.autor
+    users = app.users
     return render_template(
         "lista.html", records=records, editar=editar, tags=tags, areas=areas,
-        comentarios=comentarios
+        comentarios=comentarios, users=users
     )
 
 @app.get("/login")

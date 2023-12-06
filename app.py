@@ -80,7 +80,7 @@ def login_get():
 def login_post():
     app.is_authenticated = True
     app.autor = request.form['username']
-    return redirect(url_for('lista'))
+    return redirect(url_for('lista', _method="GET"))
 
 @app.route("/logout")
 def logout():

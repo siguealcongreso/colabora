@@ -6,13 +6,13 @@
 	{% if request.is_authenticated %}
 	{{ request.user }}
 	{% if request.path == '/' %}
-	<a class="btn-link" href="/iniciativas">Mis iniciativas</a>
+	<a class="btn-link" href="iniciativas">Mis iniciativas</a>
 	{% else %}
-	<a class="btn-link" href="/">Todas las iniciativas</a>
+	<a class="btn-link" href=".">Todas las iniciativas</a>
 	{% endif %}
-	<a class="btn-link" href="/logout">Terminar sesión</a>
+	<a class="btn-link" href="logout">Terminar sesión</a>
 	{% else %}
-	<a class="btn-link" href="/login">Iniciar sesión</a>
+	<a class="btn-link" href="login">Iniciar sesión</a>
 	{% endif %}
 	{% if request.path == '/asigna' %}
 	<form class="needs-validation" novalidate method="post">
@@ -62,7 +62,7 @@
               <b>Cambios</b> {{ r.cambios }}
                 (<a href="https://siguealcongreso.org/monitoreo/iniciativas/lxiii/{{ r.numero }}/" title="Ver ficha">{{ r.numero }}</a>)
             <a href="https://congresoweb.congresojal.gob.mx/infolej/sistemaintegral/infolej/../../agendakioskos/documentos/sistemaintegral/estados/R_52806.pdf" target="_blank" title="Leer el documento">🖹</a>
-          <a href="/edita/{{ r.numero }}" title="Editar">✏</a>
+          <a href="edita/{{ r.numero }}" title="Editar">✏</a>
           </div>
         </div>
       </div>

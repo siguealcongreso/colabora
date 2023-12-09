@@ -26,6 +26,14 @@ def get_db():
     return db
 
 
+def init_db():
+    with app.app_context():
+        db = get_db()
+        with app.open_resource('schema.sql') as f:
+            db.executescript(f.read().decode())
+        db.commit()
+
+
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, "_database", None)

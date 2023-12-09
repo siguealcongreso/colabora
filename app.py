@@ -14,7 +14,6 @@ app.config.from_object("defaults")
 app.config.from_envvar("COLABORA_CONFIG", silent=True)
 app.is_authenticated = False
 app.autor = ''
-app.users = ['usuario1', 'usuario2', 'usuario3', 'usuario4']
 
 
 def get_db():
@@ -70,7 +69,8 @@ def lista():
     areas = cur.fetchall()
     request.is_authenticated = app.is_authenticated
     request.user = app.autor
-    users = app.users
+    cur.execute("SELECT usuario FROM usuarios")
+    users = [usuario['usuario'] for usuario in cur.fetchall()]
     cmd = "SELECT autor, count(numero) as asignadas FROM sintema GROUP BY autor"
     cur.execute(cmd)
     rows = cur.fetchall()

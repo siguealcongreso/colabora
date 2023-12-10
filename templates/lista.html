@@ -3,8 +3,8 @@
 {% block content %}
     <div class="container">
       <p><span>¡Ayúdanos a escribir el resumen de una de estas iniciativas! <a href="/colabora/">¿Cómo?</a></span> -
-	{% if request.is_authenticated %}
-	{{ request.user }}
+	{% if 'username' in session %}
+	{{ session['username'] }}
 	{% if request.path == '/' %}
 	<a class="btn-link" href="iniciativas">Mis iniciativas</a>
 	{% else %}

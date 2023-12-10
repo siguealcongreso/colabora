@@ -3,7 +3,7 @@
 {% block content %}
     <div class="container">
       <p><span>¡Ayúdanos a escribir el resumen de una de estas iniciativas! <a href="/colabora/">¿Cómo?</a></span> -
-	{{ request.user }}
+	{{ session['username'] }}
 	<a class="btn-link" href="/logout">Terminar sesión</a>
       </p>
     </div>

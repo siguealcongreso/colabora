@@ -7,13 +7,13 @@ from flask import render_template
 from flask import g
 from flask import request
 from flask import redirect, url_for
+from flask import session
 
 
 app = Flask(__name__)
 app.config.from_object("defaults")
 app.config.from_envvar("COLABORA_CONFIG", silent=True)
-app.is_authenticated = False
-app.autor = ''
+app.secret_key = app.config['SECRET_KEY']
 
 
 def get_db():
@@ -45,8 +45,8 @@ def close_connection(exception):
 def lista():
     db = get_db()
     cur = db.cursor()
-    if app.autor and request.path == '/iniciativas':
-        params = (app.autor,)
+    if 'username' in session and request.path == '/iniciativas':
+        params = (session['username'],)
         cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM sintema WHERE autor=?"
         cur.execute(cmd, params)
     elif request.path == '/asigna':
@@ -67,8 +67,6 @@ def lista():
     cmd = "SELECT nombre FROM areas"
     cur.execute(cmd)
     areas = cur.fetchall()
-    request.is_authenticated = app.is_authenticated
-    request.user = app.autor
     cur.execute("SELECT usuario FROM usuarios")
     users = [usuario['usuario'] for usuario in cur.fetchall()]
     cmd = "SELECT autor, count(numero) as asignadas FROM sintema GROUP BY autor"
@@ -88,13 +86,13 @@ def login_get():
 
 @app.post("/login")
 def login_post():
-    app.is_authenticated = True
-    app.autor = request.form['username']
+    session['username'] = request.form['username']
+    session.permanent = True
     return redirect(url_for('lista', _method="GET"))
 
 @app.route("/logout")
 def logout():
-    app.is_authenticated = False
+    session.pop('username', None)
     return redirect(url_for('lista'))
 
 @app.route("/edita/<numero>")
@@ -107,7 +105,6 @@ def edita(numero):
     cmd = "SELECT nombre FROM areas"
     cur.execute(cmd)
     areas = cur.fetchall()
-    request.user = app.autor
     return render_template('edita.html',
                            r=record,
                            tags=record['tags'],

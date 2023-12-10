@@ -2,6 +2,7 @@
 
 __version__ = "0.2"
 import sqlite3
+import functools
 from flask import Flask
 from flask import render_template
 from flask import g
@@ -30,6 +31,17 @@ def init_db():
         with app.open_resource('schema.sql') as f:
             db.executescript(f.read().decode())
         db.commit()
+
+
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if 'username' not in session:
+            return redirect(url_for('login_get'))
+
+        return view(**kwargs)
+
+    return wrapped_view
 
 
 @app.teardown_appcontext

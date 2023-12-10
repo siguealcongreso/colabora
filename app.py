@@ -108,6 +108,7 @@ def logout():
     return redirect(url_for('lista'))
 
 @app.route("/edita/<numero>")
+@login_required
 def edita(numero):
     cur = get_db().cursor()
     cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM sintema WHERE numero=?"

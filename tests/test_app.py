@@ -48,5 +48,7 @@ def test_asigna_enviar(client):
 
 def test_edita(client):
     with client:
+        response = client.post('/login',
+                               data={'username': 'autor1'})
         response = client.get('/edita/1')
         assert b'trata?' in response.data

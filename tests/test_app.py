@@ -52,3 +52,9 @@ def test_edita(client):
                                data={'username': 'autor1'})
         response = client.get('/edita/1')
         assert b'trata?' in response.data
+
+def test_edita_reenvia_a_login(client):
+    response = client.get('/edita/1', follow_redirects=True)
+    assert len(response.history) == 1
+    assert response.history[0].status == '302 FOUND'
+    assert response.request.path == "/login"

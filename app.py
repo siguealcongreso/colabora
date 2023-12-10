@@ -14,7 +14,6 @@ from flask import session
 app = Flask(__name__)
 app.config.from_object("defaults")
 app.config.from_envvar("COLABORA_CONFIG", silent=True)
-app.secret_key = app.config['SECRET_KEY']
 
 
 def get_db():

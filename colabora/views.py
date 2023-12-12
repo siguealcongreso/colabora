@@ -58,17 +58,7 @@ def lista():
         cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas"
         cur.execute(cmd)
     records = cur.fetchall()
-    tags = {r["numero"]: r["tags"].split("|") for r in records}
-    comentarios = {r["numero"]: r["comentario"].split('\n') for r in records}
-    cmd = "SELECT nombre FROM areas"
-    cur.execute(cmd)
-    areas = cur.fetchall()
-    cur.execute("SELECT usuario FROM usuarios")
-    users = [usuario['usuario'] for usuario in cur.fetchall()]
-    cmd = "SELECT autor, count(numero) as asignadas FROM iniciativas GROUP BY autor"
-    cur.execute(cmd)
-    rows = cur.fetchall()
-    asignadas = {row['autor']: row['asignadas'] for row in rows}
+    tags, comentarios, areas, users, asignadas = valores(records, cur)
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
         comentarios=comentarios, users=users, asignadas=asignadas

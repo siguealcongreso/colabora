@@ -72,6 +72,7 @@ def logout():
     return redirect(url_for('lista'))
 
 @app.route("/asigna", methods=["GET", "POST"])
+@login_required
 def asigna():
     db = get_db()
     cur = db.cursor()

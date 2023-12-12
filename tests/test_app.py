@@ -36,11 +36,19 @@ def test_iniciativas_normal(client):
     response = client.get('/iniciativas')
     assert b'resumen1' in response.data
 
+def test_asigna_reenvia_a_login(client):
+    response = client.get('asigna', follow_redirects=True)
+    assert response.request.path == "/login"
+
 def test_asigna_despliega(client):
+    response = client.post('/login',
+                           data={'username': 'autor1'})
     response = client.get('/asigna')
     assert b'cc' in response.data
 
 def test_asigna_enviar(client):
+    response = client.post('/login',
+                           data={'username': 'autor1'})
     response = client.post('/asigna',
                            data={'autor': 'autor1', 'numero': '1'}
                            )

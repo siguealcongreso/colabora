@@ -35,7 +35,6 @@ def valores(records, cur):
     return tags, comentarios, areas, users, asignadas
 
 
-@app.route("/asigna", methods=["GET", "POST"])
 @app.route("/iniciativas")
 @app.route("/")
 def lista():
@@ -45,15 +44,6 @@ def lista():
         params = (session['username'],)
         cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas WHERE autor=?"
         cur.execute(cmd, params)
-    elif request.path == '/asigna':
-        if request.method == 'POST':
-            for numero in request.form.getlist('numero'):
-                params = (request.form['autor'], 'LXIII', numero)
-                cmd = "UPDATE iniciativas SET autor=? WHERE legislatura=? AND numero=?"
-                cur.execute(cmd, params)
-                db.commit()
-        cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas WHERE autor=''"
-        cur.execute(cmd)
     else:
         cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas"
         cur.execute(cmd)
@@ -80,6 +70,26 @@ def login_post():
 def logout():
     session.pop('username', None)
     return redirect(url_for('lista'))
+
+@app.route("/asigna", methods=["GET", "POST"])
+def asigna():
+    db = get_db()
+    cur = db.cursor()
+    if request.method == 'POST':
+        for numero in request.form.getlist('numero'):
+            params = (request.form['autor'], 'LXIII', numero)
+            cmd = "UPDATE iniciativas SET autor=? WHERE legislatura=? AND numero=?"
+            cur.execute(cmd, params)
+            db.commit()
+    cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas WHERE autor=''"
+    cur.execute(cmd)
+    records = cur.fetchall()
+    tags, comentarios, areas, users, asignadas = valores(records, cur)
+    return render_template(
+        "lista.html", records=records, tags=tags, areas=areas,
+        comentarios=comentarios, users=users, asignadas=asignadas
+    )
+
 
 @app.route("/edita/<numero>")
 @login_required

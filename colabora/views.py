@@ -27,19 +27,19 @@ def lista():
     cur = db.cursor()
     if 'username' in session and request.path == '/iniciativas':
         params = (session['username'],)
-        cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM sintema WHERE autor=?"
+        cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas WHERE autor=?"
         cur.execute(cmd, params)
     elif request.path == '/asigna':
         if request.method == 'POST':
             for numero in request.form.getlist('numero'):
                 params = (request.form['autor'], 'LXIII', numero)
-                cmd = "UPDATE sintema SET autor=? WHERE legislatura=? AND numero=?"
+                cmd = "UPDATE iniciativas SET autor=? WHERE legislatura=? AND numero=?"
                 cur.execute(cmd, params)
                 db.commit()
-        cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM sintema WHERE autor=''"
+        cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas WHERE autor=''"
         cur.execute(cmd)
     else:
-        cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM sintema"
+        cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas"
         cur.execute(cmd)
     records = cur.fetchall()
     tags = {r["numero"]: r["tags"].split("|") for r in records}
@@ -49,7 +49,7 @@ def lista():
     areas = cur.fetchall()
     cur.execute("SELECT usuario FROM usuarios")
     users = [usuario['usuario'] for usuario in cur.fetchall()]
-    cmd = "SELECT autor, count(numero) as asignadas FROM sintema GROUP BY autor"
+    cmd = "SELECT autor, count(numero) as asignadas FROM iniciativas GROUP BY autor"
     cur.execute(cmd)
     rows = cur.fetchall()
     asignadas = {row['autor']: row['asignadas'] for row in rows}
@@ -79,7 +79,7 @@ def logout():
 @login_required
 def edita(numero):
     cur = get_db().cursor()
-    cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM sintema WHERE numero=?"
+    cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas WHERE numero=?"
     cur.execute(cmd, (numero,))
     record = cur.fetchone()
     comentarios = record["comentario"].split('\n')

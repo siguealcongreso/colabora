@@ -1,8 +1,8 @@
-DROP TABLE IF EXISTS sintema;
+DROP TABLE IF EXISTS iniciativas;
 DROP TABLE IF EXISTS areas;
 DROP TABLE IF EXISTS usuarios;
 
-CREATE TABLE sintema (
+CREATE TABLE iniciativas (
     id INTEGER PRIMARY KEY,
     legislatura TEXT NOT NULL,
     numero TEXT NOT NULL,
@@ -23,5 +23,6 @@ CREATE TABLE areas (
 CREATE TABLE usuarios (
     id INTEGER PRIMARY KEY,
     usuario TEXT DEFAULT '',
-    contrasena TEXT DEFAULT ''
+    contrasena TEXT DEFAULT '',
+    rol TEXT DEFAULT ''
     );

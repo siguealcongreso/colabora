@@ -1,4 +1,4 @@
-INSERT INTO sintema (legislatura, numero, cambios, tema, resumen, tags,
+INSERT INTO iniciativas (legislatura, numero, cambios, tema, resumen, tags,
 comentario, autor, estado)
 VALUES ('LXIII', '1', 'cambios', 'tema1', 'resumen1', 'tag1|tag2', 'comentario1',
 'autor1', 'estado1');

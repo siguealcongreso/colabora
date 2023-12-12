@@ -2,7 +2,8 @@ import os
 import tempfile
 
 import pytest
-from app import app as appli, get_db, init_db
+from colabora.app import app as appli
+from colabora.db import get_db, init_db
 
 
 with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:

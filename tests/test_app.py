@@ -1,5 +1,5 @@
 from flask import session
-from app import app
+from colabora.main import app
 
 
 def test_list(client):

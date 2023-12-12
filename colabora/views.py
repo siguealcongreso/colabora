@@ -19,6 +19,22 @@ def login_required(view):
     return wrapped_view
 
 
+def valores(records, cur):
+    ""
+    tags = {r["numero"]: r["tags"].split("|") for r in records}
+    comentarios = {r["numero"]: r["comentario"].split('\n') for r in records}
+    cmd = "SELECT nombre FROM areas"
+    cur.execute(cmd)
+    areas = cur.fetchall()
+    cur.execute("SELECT usuario FROM usuarios")
+    users = [usuario['usuario'] for usuario in cur.fetchall()]
+    cmd = "SELECT autor, count(numero) as asignadas FROM iniciativas GROUP BY autor"
+    cur.execute(cmd)
+    rows = cur.fetchall()
+    asignadas = {row['autor']: row['asignadas'] for row in rows}
+    return tags, comentarios, areas, users, asignadas
+
+
 @app.route("/asigna", methods=["GET", "POST"])
 @app.route("/iniciativas")
 @app.route("/")

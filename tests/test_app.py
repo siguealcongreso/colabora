@@ -54,6 +54,14 @@ def test_asigna_enviar(client):
                            )
     assert b'cc' in response.data
 
+def test_crea_ok(client):
+    response = client.post('/crea/2', data={'cambios': 'cambios2'})
+    assert b'ok: 2 creada' == response.data
+
+def test_crea_error(client):
+    response = client.post('/crea/1', data={'cambios': 'cambios1'})
+    assert b'error: 1 existe' == response.data
+
 def test_edita(client):
     with client:
         response = client.post('/login',

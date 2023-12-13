@@ -92,6 +92,22 @@ def asigna():
     )
 
 
+@app.route("/crea/<numero>", methods=['POST'])
+def crea(numero):
+    db = get_db()
+    cur = db.cursor()
+    cmd = "SELECT * FROM iniciativas WHERE numero=?"
+    cur.execute(cmd, (numero,))
+    if cur.fetchone():
+        return f"error: {numero} existe"
+    cambios = request.form['cambios']
+    params = ('LXIII', numero, cambios)
+    cmd = "INSERT INTO iniciativas (legislatura, numero, cambios) VALUES (?, ?, ?)"
+    cur.execute(cmd, params)
+    db.commit()
+    return f"ok: {numero} creada"
+
+
 @app.route("/edita/<numero>")
 @login_required
 def edita(numero):

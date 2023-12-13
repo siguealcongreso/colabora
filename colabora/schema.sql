@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS usuarios;
 CREATE TABLE iniciativas (
     id INTEGER PRIMARY KEY,
     legislatura TEXT NOT NULL,
-    numero TEXT NOT NULL,
+    numero TEXT NOT NULL UNIQUE,
     cambios TEXT DEFAULT '',
     tema TEXT DEFAULT '',
     resumen TEXT DEFAULT '',
@@ -17,12 +17,12 @@ CREATE TABLE iniciativas (
 
 CREATE TABLE areas (
     id INTEGER PRIMARY KEY,
-    nombre TEXT NOT NULL
+    nombre TEXT NOT NULL UNIQUE
     );
 
 CREATE TABLE usuarios (
     id INTEGER PRIMARY KEY,
-    usuario TEXT DEFAULT '',
+    usuario TEXT NOT NULL UNIQUE,
     contrasena TEXT DEFAULT '',
     rol TEXT DEFAULT ''
     );

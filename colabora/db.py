@@ -26,3 +26,13 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
+
+def agrega_area(db, nombre):
+    cmd = "INSERT INTO areas (nombre) VALUES (?)"
+    cur = db.cursor()
+    try:
+        cur.execute(cmd, (nombre,))
+        db.commit()
+    except sqlite3.DatabaseError:
+        return f"error: '{nombre}' no creada"
+    return f"ok: '{nombre}' creada"

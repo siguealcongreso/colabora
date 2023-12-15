@@ -27,6 +27,14 @@ def close_connection(exception):
         db.close()
 
 
+def iniciativas(db):
+    cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas"
+    cur = db.cursor()
+    cur.execute(cmd)
+    records = cur.fetchall()
+    return records
+
+
 def iniciativas_asignadas(db, usuario):
     cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas WHERE autor=?"
     cur = db.cursor()

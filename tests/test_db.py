@@ -24,6 +24,11 @@ def database():
     os.unlink(db_path)
 
 
+def test_iniciativas(database):
+    database.executescript(_data_sql)
+    result = colabora.db.iniciativas(database)
+    assert len(result) == 1
+
 def test_iniciativas_no_asignadas_vacio(database):
     database.executescript(_data_sql)
     result = colabora.db.iniciativas_asignadas(database, '')

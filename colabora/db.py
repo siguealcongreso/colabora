@@ -36,3 +36,14 @@ def agrega_area(db, nombre):
     except sqlite3.DatabaseError:
         return f"error: '{nombre}' no creada"
     return f"ok: '{nombre}' creada"
+
+
+def agrega_usuario(db, nombre):
+    cmd = "INSERT INTO usuarios (usuario) VALUES (?)"
+    cur = db.cursor()
+    try:
+        cur.execute(cmd, (nombre,))
+        db.commit()
+    except sqlite3.DatabaseError:
+        return f"error: '{nombre}' no creado"
+    return f"ok: '{nombre}' creado"

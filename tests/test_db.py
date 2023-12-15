@@ -28,3 +28,13 @@ def test_agrega_area_error(database):
     result = colabora.db.agrega_area(database, 'area1')
     result = colabora.db.agrega_area(database, 'area1')
     assert "error: 'area1' no creada" == result
+
+
+def test_agrega_usuario_ok(database):
+    result = colabora.db.agrega_usuario(database, 'usuario1')
+    assert "ok: 'usuario1' creado" == result
+
+def test_agrega_usuario_error(database):
+    result = colabora.db.agrega_usuario(database, 'usuario1')
+    result = colabora.db.agrega_usuario(database, 'usuario1')
+    assert "error: 'usuario1' no creado" == result

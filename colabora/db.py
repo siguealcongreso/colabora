@@ -27,6 +27,13 @@ def close_connection(exception):
         db.close()
 
 
+def iniciativas_asignadas(db, usuario):
+    cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas WHERE autor=?"
+    cur = db.cursor()
+    cur.execute(cmd, (usuario,))
+    records = cur.fetchall()
+    return records
+
 
 def agrega_iniciativa(db, legislatura, numero, cambios, tema, resumen,
                       tags, comentario, autor, estado):

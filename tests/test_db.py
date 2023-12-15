@@ -7,6 +7,10 @@ from colabora.db import get_db, init_db
 import colabora.db
 
 
+with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
+    _data_sql = f.read().decode()
+
+
 @pytest.fixture
 def database():
     db_fd, db_path = tempfile.mkstemp()
@@ -18,6 +22,18 @@ def database():
         yield db
     os.close(db_fd)
     os.unlink(db_path)
+
+
+def test_iniciativas_asignadas_ok(database):
+    database.executescript(_data_sql)
+    result = colabora.db.iniciativas_asignadas(database, 'autor1')
+    assert len(result) == 1
+    assert "1" == result[0]["numero"]
+
+def test_iniciativas_asignadas_vacio(database):
+    database.executescript(_data_sql)
+    result = colabora.db.iniciativas_asignadas(database, 'autor2')
+    assert len(result) == 0
 
 
 def test_agrega_iniciativa_ok(database):

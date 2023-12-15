@@ -27,6 +27,20 @@ def close_connection(exception):
         db.close()
 
 
+
+def agrega_iniciativa(db, legislatura, numero, cambios, tema, resumen,
+                      tags, comentario, autor, estado):
+    cmd = "INSERT INTO iniciativas (legislatura, numero, cambios, tema, resumen, tags, comentario, autor, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+    cur = db.cursor()
+    try:
+        cur.execute(cmd, (legislatura, numero, cambios, tema, resumen,
+                          tags, comentario, autor, estado))
+        db.commit()
+    except sqlite3.DatabaseError:
+        return f"error: iniciativa {numero} no creada"
+    return f"ok: iniciativa {numero} creada"
+
+
 def agrega_area(db, nombre):
     cmd = "INSERT INTO areas (nombre) VALUES (?)"
     cur = db.cursor()

@@ -20,6 +20,19 @@ def database():
     os.unlink(db_path)
 
 
+def test_agrega_iniciativa_ok(database):
+    result = colabora.db.agrega_iniciativa(database, 'I', '1', 'cambios', '', '', '',
+                                           '', '', '')
+    assert "ok: iniciativa 1 creada" == result
+
+def test_agrega_iniciativa_error(database):
+    result = colabora.db.agrega_iniciativa(database, 'I', '1', 'cambios', '', '', '',
+                                           '', '', '')
+    result = colabora.db.agrega_iniciativa(database, 'I', '1', 'cambios', '', '', '',
+                                           '', '', '')
+    assert "error: iniciativa 1 no creada" == result
+
+
 def test_agrega_area_ok(database):
     result = colabora.db.agrega_area(database, 'area1')
     assert "ok: 'area1' creada" == result

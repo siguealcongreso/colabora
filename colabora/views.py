@@ -7,7 +7,7 @@ from flask import session
 from .app import app
 from .db import get_db
 from .db import iniciativas_asignadas
-from .db import iniciativas
+from .db import iniciativas, areas as dbareas
 
 
 def login_required(view):
@@ -25,9 +25,8 @@ def valores(records, cur):
     ""
     tags = {r["numero"]: r["tags"].split("|") for r in records}
     comentarios = {r["numero"]: r["comentario"].split('\n') for r in records}
-    cmd = "SELECT nombre FROM areas"
-    cur.execute(cmd)
-    areas = cur.fetchall()
+    db = get_db()
+    areas = dbareas(db)
     cur.execute("SELECT usuario FROM usuarios")
     users = [usuario['usuario'] for usuario in cur.fetchall()]
     cmd = "SELECT autor, count(numero) as asignadas FROM iniciativas GROUP BY autor"

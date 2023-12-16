@@ -7,6 +7,7 @@ from flask import session
 from .app import app
 from .db import get_db
 from .db import iniciativas_asignadas
+from .db import iniciativas
 
 
 def login_required(view):
@@ -44,9 +45,7 @@ def lista():
     if 'username' in session and request.path == '/iniciativas':
         records = iniciativas_asignadas(db, session['username'])
     else:
-        cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas"
-        cur.execute(cmd)
-    records = cur.fetchall()
+        records = iniciativas(db)
     tags, comentarios, areas, users, asignadas = valores(records, cur)
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,

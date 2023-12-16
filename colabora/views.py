@@ -88,10 +88,6 @@ def asigna():
 def crea(numero):
     db = get_db()
     cur = db.cursor()
-    cmd = "SELECT * FROM iniciativas WHERE numero=?"
-    cur.execute(cmd, (numero,))
-    if cur.fetchone():
-        return f"error: {numero} existe"
     cambios = request.form['cambios']
     result = agrega_iniciativa(db, "LXIII", numero, cambios, tema="", resumen="",
                                tags="", comentario="", autor="", estado="")

@@ -60,7 +60,7 @@ def test_crea_ok(client):
 
 def test_crea_error(client):
     response = client.post('/crea/1', data={'cambios': 'cambios1'})
-    assert b'error: 1 existe' == response.data
+    assert b'error: iniciativa 1 no creada' == response.data
 
 def test_edita(client):
     with client:

@@ -27,6 +27,14 @@ def close_connection(exception):
         db.close()
 
 
+def usuarios(db):
+    cmd = "SELECT usuario FROM usuarios"
+    cur = db.cursor()
+    cur.execute(cmd)
+    records = cur.fetchall()
+    return records
+
+
 def areas(db):
     cmd = "SELECT nombre FROM areas"
     cur = db.cursor()

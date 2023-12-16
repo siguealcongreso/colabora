@@ -24,6 +24,13 @@ def database():
     os.unlink(db_path)
 
 
+def test_usuarios(database):
+    database.executescript(_data_sql)
+    result = colabora.db.usuarios(database)
+    assert len(result) == 1
+    assert "autor1" == result[0]["usuario"]
+
+
 def test_areas(database):
     database.executescript(_data_sql)
     result = colabora.db.areas(database)

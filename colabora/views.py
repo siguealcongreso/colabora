@@ -25,7 +25,7 @@ def login_required(view):
     return wrapped_view
 
 
-def valores(records, cur):
+def valores(records):
     ""
     tags = {r["numero"]: r["tags"].split("|") for r in records}
     comentarios = {r["numero"]: r["comentario"].split('\n') for r in records}
@@ -41,12 +41,11 @@ def valores(records, cur):
 @app.route("/")
 def lista():
     db = get_db()
-    cur = db.cursor()
     if 'username' in session and request.path == '/iniciativas':
         records = iniciativas_asignadas(db, session['username'])
     else:
         records = iniciativas(db)
-    tags, comentarios, areas, users, asignadas = valores(records, cur)
+    tags, comentarios, areas, users, asignadas = valores(records)
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
         comentarios=comentarios, users=users, asignadas=asignadas
@@ -73,12 +72,11 @@ def logout():
 @login_required
 def asigna():
     db = get_db()
-    cur = db.cursor()
     if request.method == 'POST':
         for numero in request.form.getlist('numero'):
             result = dbasigna(db, 'LXIII', numero, request.form['autor'])
     records = iniciativas_asignadas(db, usuario='')
-    tags, comentarios, areas, users, asignadas = valores(records, cur)
+    tags, comentarios, areas, users, asignadas = valores(records)
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
         comentarios=comentarios, users=users, asignadas=asignadas
@@ -88,7 +86,6 @@ def asigna():
 @app.route("/crea/<numero>", methods=['POST'])
 def crea(numero):
     db = get_db()
-    cur = db.cursor()
     cambios = request.form['cambios']
     result = agrega_iniciativa(db, "LXIII", numero, cambios, tema="", resumen="",
                                tags="", comentario="", autor="", estado="")
@@ -99,7 +96,6 @@ def crea(numero):
 @login_required
 def edita(numero):
     db = get_db()
-    cur = db.cursor()
     record = iniciativa(db, numero)
     comentarios = record["comentario"].split('\n')
     areas = dbareas(db)

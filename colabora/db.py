@@ -42,6 +42,15 @@ def iniciativas_asignadas(db, usuario):
     records = cur.fetchall()
     return records
 
+def asigna(db, legislatura, numero, autor):
+    cmd = "UPDATE iniciativas SET autor=? WHERE legislatura=? AND numero=?"
+    cur = db.cursor()
+    cur.execute(cmd, (autor, legislatura, numero))
+    if cur.rowcount:
+        db. commit()
+        return f"ok: iniciativa {numero} asignada a {autor}"
+    else:
+        return f"error: iniciativa {numero} no asignada a {autor}"
 
 def agrega_iniciativa(db, legislatura, numero, cambios, tema, resumen,
                       tags, comentario, autor, estado):

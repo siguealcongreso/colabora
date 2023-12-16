@@ -1,6 +1,6 @@
 INSERT INTO iniciativas (legislatura, numero, cambios, tema, resumen, tags,
 comentario, autor, estado)
-VALUES ('LXIII', '1', 'cambios', 'tema1', 'resumen1', 'tag1|tag2', 'comentario1',
+VALUES ('legislatura1', '1', 'cambios', 'tema1', 'resumen1', 'tag1|tag2', 'comentario1',
 'autor1', 'estado1');
 
 INSERT INTO areas (nombre)

@@ -46,6 +46,17 @@ def test_iniciativas_asignadas_vacio(database):
     assert len(result) == 0
 
 
+def test_asigna_una(database):
+    database.executescript(_data_sql)
+    result = colabora.db.asigna(database, 'legislatura1', '1', 'autor2')
+    assert f"ok: iniciativa 1 asignada a autor2" == result
+
+def test_asigna_ninguna(database):
+    database.executescript(_data_sql)
+    result = colabora.db.asigna(database, 'legislatura1', '2', 'autor2')
+    assert f"error: iniciativa 2 no asignada a autor2" == result
+
+
 def test_agrega_iniciativa_ok(database):
     result = colabora.db.agrega_iniciativa(database, 'I', '1', 'cambios', '', '', '',
                                            '', '', '')

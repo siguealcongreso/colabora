@@ -75,9 +75,7 @@ def asigna():
     if request.method == 'POST':
         for numero in request.form.getlist('numero'):
             result = dbasigna(db, 'LXIII', numero, request.form['autor'])
-    cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas WHERE autor=''"
-    cur.execute(cmd)
-    records = cur.fetchall()
+    records = iniciativas_asignadas(db, usuario='')
     tags, comentarios, areas, users, asignadas = valores(records, cur)
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,

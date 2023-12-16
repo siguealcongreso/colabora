@@ -11,6 +11,7 @@ from .db import iniciativas, areas as dbareas, usuarios
 from .db import asignadas_por_autor
 from .db import asigna as dbasigna
 from .db import agrega_iniciativa
+from .db import iniciativa
 
 
 def login_required(view):
@@ -99,9 +100,7 @@ def crea(numero):
 def edita(numero):
     db = get_db()
     cur = db.cursor()
-    cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas WHERE numero=?"
-    cur.execute(cmd, (numero,))
-    record = cur.fetchone()
+    record = iniciativa(db, numero)
     comentarios = record["comentario"].split('\n')
     areas = dbareas(db)
     return render_template('edita.html',

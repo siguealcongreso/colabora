@@ -43,6 +43,14 @@ def areas(db):
     return records
 
 
+def asignadas_por_autor(db):
+    cmd = "SELECT autor, count(numero) as asignadas FROM iniciativas GROUP BY autor"
+    cur = db.cursor()
+    cur.execute(cmd)
+    records = cur.fetchall()
+    return records
+
+
 def iniciativas(db):
     cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas"
     cur = db.cursor()

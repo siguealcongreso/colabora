@@ -38,6 +38,14 @@ def test_areas(database):
     assert "area1" == result[0]["nombre"]
 
 
+def test_asignadas_por_autor(database):
+    database.executescript(_data_sql)
+    result = colabora.db.asignadas_por_autor(database)
+    assert len(result) == 1
+    assert "autor1" == result[0]["autor"]
+    assert 1 == result[0]["asignadas"]
+
+
 def test_iniciativas(database):
     database.executescript(_data_sql)
     result = colabora.db.iniciativas(database)

@@ -6,6 +6,7 @@ from flask import redirect, url_for
 from flask import session
 from .app import app
 from .db import get_db
+from .db import iniciativas_asignadas
 
 
 def login_required(view):
@@ -41,9 +42,7 @@ def lista():
     db = get_db()
     cur = db.cursor()
     if 'username' in session and request.path == '/iniciativas':
-        params = (session['username'],)
-        cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas WHERE autor=?"
-        cur.execute(cmd, params)
+        records = iniciativas_asignadas(db, session['username'])
     else:
         cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas"
         cur.execute(cmd)

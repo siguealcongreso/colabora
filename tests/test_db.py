@@ -24,6 +24,13 @@ def database():
     os.unlink(db_path)
 
 
+def test_areas(database):
+    database.executescript(_data_sql)
+    result = colabora.db.areas(database)
+    assert len(result) == 1
+    assert "area1" == result[0]["nombre"]
+
+
 def test_iniciativas(database):
     database.executescript(_data_sql)
     result = colabora.db.iniciativas(database)

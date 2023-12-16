@@ -50,6 +50,12 @@ def asignadas_por_autor(db):
     records = cur.fetchall()
     return records
 
+def iniciativa(db, numero):
+    cur = db.cursor()
+    cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas WHERE numero=?"
+    cur.execute(cmd, (numero,))
+    record = cur.fetchone()
+    return record
 
 def iniciativas(db):
     cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas"

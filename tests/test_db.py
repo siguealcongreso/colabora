@@ -46,6 +46,17 @@ def test_asignadas_por_autor(database):
     assert 1 == result[0]["asignadas"]
 
 
+def test_iniciativa_ok(database):
+    database.executescript(_data_sql)
+    result = colabora.db.iniciativa(database, numero='1')
+    assert "tema1" == result['tema']
+
+def test_iniciativa_none(database):
+    database.executescript(_data_sql)
+    result = colabora.db.iniciativa(database, numero='2')
+    assert None == result
+
+
 def test_iniciativas(database):
     database.executescript(_data_sql)
     result = colabora.db.iniciativas(database)

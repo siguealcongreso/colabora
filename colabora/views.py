@@ -9,6 +9,7 @@ from .db import get_db
 from .db import iniciativas_asignadas
 from .db import iniciativas, areas as dbareas, usuarios
 from .db import asignadas_por_autor
+from .db import asigna as dbasigna
 
 
 def login_required(view):
@@ -73,10 +74,7 @@ def asigna():
     cur = db.cursor()
     if request.method == 'POST':
         for numero in request.form.getlist('numero'):
-            params = (request.form['autor'], 'LXIII', numero)
-            cmd = "UPDATE iniciativas SET autor=? WHERE legislatura=? AND numero=?"
-            cur.execute(cmd, params)
-            db.commit()
+            result = dbasigna(db, 'LXIII', numero, request.form['autor'])
     cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas WHERE autor=''"
     cur.execute(cmd)
     records = cur.fetchall()

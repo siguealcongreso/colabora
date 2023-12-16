@@ -8,6 +8,7 @@ from .app import app
 from .db import get_db
 from .db import iniciativas_asignadas
 from .db import iniciativas, areas as dbareas, usuarios
+from .db import asignadas_por_autor
 
 
 def login_required(view):
@@ -28,9 +29,7 @@ def valores(records, cur):
     db = get_db()
     areas = dbareas(db)
     users = [usuario['usuario'] for usuario in usuarios(db)]
-    cmd = "SELECT autor, count(numero) as asignadas FROM iniciativas GROUP BY autor"
-    cur.execute(cmd)
-    rows = cur.fetchall()
+    rows = asignadas_por_autor(db)
     asignadas = {row['autor']: row['asignadas'] for row in rows}
     return tags, comentarios, areas, users, asignadas
 

@@ -56,7 +56,7 @@ def test_asigna_enviar(client):
 
 def test_crea_ok(client):
     response = client.post('/crea/2', data={'cambios': 'cambios2'})
-    assert b'ok: 2 creada' == response.data
+    assert b'ok: iniciativa 2 creada' == response.data
 
 def test_crea_error(client):
     response = client.post('/crea/1', data={'cambios': 'cambios1'})

@@ -10,6 +10,7 @@ from .db import iniciativas_asignadas
 from .db import iniciativas, areas as dbareas, usuarios
 from .db import asignadas_por_autor
 from .db import asigna as dbasigna
+from .db import agrega_iniciativa
 
 
 def login_required(view):
@@ -92,11 +93,9 @@ def crea(numero):
     if cur.fetchone():
         return f"error: {numero} existe"
     cambios = request.form['cambios']
-    params = ('LXIII', numero, cambios)
-    cmd = "INSERT INTO iniciativas (legislatura, numero, cambios) VALUES (?, ?, ?)"
-    cur.execute(cmd, params)
-    db.commit()
-    return f"ok: {numero} creada"
+    result = agrega_iniciativa(db, "LXIII", numero, cambios, tema="", resumen="",
+                               tags="", comentario="", autor="", estado="")
+    return result
 
 
 @app.route("/edita/<numero>")

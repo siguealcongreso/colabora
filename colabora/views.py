@@ -97,14 +97,13 @@ def crea(numero):
 @app.route("/edita/<numero>")
 @login_required
 def edita(numero):
-    cur = get_db().cursor()
+    db = get_db()
+    cur = db.cursor()
     cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas WHERE numero=?"
     cur.execute(cmd, (numero,))
     record = cur.fetchone()
     comentarios = record["comentario"].split('\n')
-    cmd = "SELECT nombre FROM areas"
-    cur.execute(cmd)
-    areas = cur.fetchall()
+    areas = dbareas(db)
     return render_template('edita.html',
                            r=record,
                            tags=record['tags'],

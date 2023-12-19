@@ -164,3 +164,13 @@ def test_agrega_estado_error(database):
     result = colabora.db.agrega_estado(database, 'estado1')
     result = colabora.db.agrega_estado(database, 'estado1')
     assert "error: 'estado1' no creado" == result
+
+
+def test_agrega_legislatura_ok(database):
+    result = colabora.db.agrega_legislatura(database, 'legislatura1')
+    assert "ok: 'legislatura1' creado" == result
+
+def test_agrega_legislatura_error(database):
+    result = colabora.db.agrega_legislatura(database, 'legislatura1')
+    result = colabora.db.agrega_legislatura(database, 'legislatura1')
+    assert "error: 'legislatura1' no creado" == result

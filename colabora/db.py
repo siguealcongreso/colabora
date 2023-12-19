@@ -181,3 +181,14 @@ def agrega_estado(db, nombre):
     except sqlite3.DatabaseError:
         return f"error: '{nombre}' no creado"
     return f"ok: '{nombre}' creado"
+
+
+def agrega_legislatura(db, nombre):
+    cmd = "INSERT INTO legislatura (nombre) VALUES (?)"
+    cur = db.cursor()
+    try:
+        cur.execute(cmd, (nombre,))
+        db.commit()
+    except sqlite3.DatabaseError:
+        return f"error: '{nombre}' no creado"
+    return f"ok: '{nombre}' creado"

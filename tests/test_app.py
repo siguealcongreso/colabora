@@ -1,5 +1,9 @@
 from flask import session
 from colabora.main import app
+import colabora.views
+
+colabora.views.ENTIDAD = 'estado1'
+colabora.views.LEGISLATURA = 'legislatura1'
 
 
 def test_list(client):

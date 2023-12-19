@@ -50,7 +50,7 @@ def test_usuarios(database):
 def test_areas(database):
     database.executescript(_data_sql)
     result = colabora.db.areas(database)
-    assert len(result) == 1
+    assert len(result) == 2
     assert "area1" == result[0]["nombre"]
 
 def test_areas_por_iniciativa(database):

@@ -19,6 +19,9 @@ INSERT INTO clasificacion (estado_id, legislatura_id, numero, area_id) VALUES
  (SELECT area_id FROM areas WHERE nombre='area1')
 );
 
+INSERT INTO areas (nombre)
+VALUES ('area2');
+
 
 INSERT INTO usuarios (usuario)
 VALUES ('usuario1');

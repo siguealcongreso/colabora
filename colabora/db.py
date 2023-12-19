@@ -132,6 +132,23 @@ def asigna(db, estado, legislatura, numero, usuario):
         return f"error: iniciativa {numero} no asignada a {usuario}"
     return f"ok: iniciativa {numero} asignada a {usuario}"
 
+
+def clasifica(db, estado, legislatura, numero, area):
+    cmd = ("INSERT INTO clasificacion (estado_id, legislatura_id, numero, area_id) "
+           "VALUES"
+           "((SELECT estado_id FROM estado WHERE nombre=?), "
+           "(SELECT legislatura_id FROM legislatura WHERE nombre=?), "
+           "?, "
+           "(SELECT area_id FROM areas WHERE nombre=?))")
+    cur = db.cursor()
+    try:
+        cur.execute(cmd, (estado, legislatura, numero, area))
+        db. commit()
+    except sqlite3.DatabaseError:
+        return f"error: iniciativa {numero} no asignada a {area}"
+    return f"ok: iniciativa {numero} asignada a {area}"
+
+
 def agrega_iniciativa(db, entidad, legislatura, numero, cambios, tema, resumen,
                       comentario, estado):
     cmd = ("INSERT INTO iniciativas (estado_id, legislatura_id, numero, "

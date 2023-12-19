@@ -123,6 +123,17 @@ def test_asigna_ninguna(database):
     assert f"error: iniciativa 2 no asignada a usuario1" == result
 
 
+def test_clasifica_una(database):
+    database.executescript(_data_sql)
+    result = colabora.db.clasifica(database, 'estado1', 'legislatura1', 1, 'area2')
+    assert f"ok: iniciativa 1 asignada a area2" == result
+
+def test_clasifica_ninguna(database):
+    database.executescript(_data_sql)
+    result = colabora.db.clasifica(database, 'estado1', 'legislatura1', 2, 'area1')
+    assert f"error: iniciativa 2 no asignada a area1" == result
+
+
 def test_agrega_iniciativa_ok(database):
     database.executescript(_data_sql)
     result = colabora.db.agrega_iniciativa(database, 'estado1', 'legislatura1', 2,

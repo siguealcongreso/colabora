@@ -8,6 +8,7 @@ def get_db():
     db = getattr(g, "_database", None)
     if db is None:
         db = g._database = sqlite3.connect(app.config["DATABASE"])
+        db.execute('PRAGMA foreign_keys = ON')
     db.row_factory = sqlite3.Row
     return db
 

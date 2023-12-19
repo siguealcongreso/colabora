@@ -24,6 +24,22 @@ def database():
     os.unlink(db_path)
 
 
+def test_a_dict():
+    records = [
+    (1, 10, 100, 1000),
+    (1, 10, 100, 1001),
+    (1, 11, 110, 1100),
+    (2, 10, 100, 2100),
+    ]
+    result = colabora.db.a_dict(records)
+    assert result == {1: {10: {100: [1000, 1001]},
+                          11: {110: [1100]}
+                          },
+                      2: {10: {100: [2100]}
+                          }
+                      }
+
+
 def test_usuarios(database):
     database.executescript(_data_sql)
     result = colabora.db.usuarios(database)

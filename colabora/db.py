@@ -28,6 +28,18 @@ def close_connection(exception):
         db.close()
 
 
+def a_dict(records):
+    "Convierte lista de tuplas a diccionario anidado."
+    d = {}
+    for record in records:
+        a, b, c, l = record
+        d.setdefault(a, dict())
+        d[a].setdefault(b, dict())
+        d[a][b].setdefault(c, [])
+        d[a][b][c].append(l)
+    return d
+
+
 def usuarios(db):
     cmd = "SELECT usuario FROM usuarios"
     cur = db.cursor()

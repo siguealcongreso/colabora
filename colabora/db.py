@@ -45,51 +45,81 @@ def areas(db):
 
 
 def asignadas_por_autor(db):
-    cmd = "SELECT autor, count(numero) as asignadas FROM iniciativas GROUP BY autor"
+    cmd = ("SELECT usuario, count(numero) as asignadas FROM iniciativas "
+           "JOIN asignacion USING (estado_id, legislatura_id, numero) "
+           "JOIN usuarios USING (usuario_id) "
+           "GROUP BY usuario")
     cur = db.cursor()
     cur.execute(cmd)
     records = cur.fetchall()
     return records
 
-def iniciativa(db, numero):
+def iniciativa(db, estado, legislatura, numero):
     cur = db.cursor()
-    cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas WHERE numero=?"
-    cur.execute(cmd, (numero,))
+    cmd = ("SELECT numero, cambios, tema, resumen, estado, comentario, usuario "
+           "FROM iniciativas "
+           "LEFT JOIN asignacion USING (estado_id, legislatura_id, numero) "
+           "LEFT JOIN usuarios USING (usuario_id) "
+           "WHERE estado_id=(SELECT estado_id FROM estado WHERE nombre=?) AND "
+           "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?) AND "
+           "numero=?")
+    cur.execute(cmd, (estado, legislatura, numero))
     record = cur.fetchone()
     return record
 
-def iniciativas(db):
-    cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas"
+def iniciativas(db, estado, legislatura):
+    cmd = ("SELECT numero, cambios, tema, resumen, estado, comentario, usuario "
+           "FROM iniciativas "
+           "LEFT JOIN asignacion USING (estado_id, legislatura_id, numero) "
+           "LEFT JOIN usuarios USING (usuario_id) "
+           "WHERE estado_id=(SELECT estado_id FROM estado WHERE nombre=?) AND "
+           "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?)")
     cur = db.cursor()
-    cur.execute(cmd)
+    cur.execute(cmd,(estado, legislatura))
     records = cur.fetchall()
     return records
 
 
-def iniciativas_asignadas(db, usuario):
-    cmd = "SELECT numero, cambios, tema, resumen, tags, autor, estado, comentario FROM iniciativas WHERE autor=?"
+def iniciativas_asignadas(db, estado, legislatura, usuario):
+    cmd = ("SELECT numero, cambios, tema, resumen, estado, comentario, usuario "
+           "FROM iniciativas "
+           "LEFT JOIN asignacion USING (estado_id, legislatura_id, numero) "
+           "LEFT JOIN usuarios USING (usuario_id) "
+           "WHERE estado_id=(SELECT estado_id FROM estado WHERE nombre=?) AND "
+           "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?) AND "
+           "usuario=?")
     cur = db.cursor()
-    cur.execute(cmd, (usuario,))
+    cur.execute(cmd, (estado, legislatura, usuario))
     records = cur.fetchall()
     return records
 
-def asigna(db, legislatura, numero, autor):
-    cmd = "UPDATE iniciativas SET autor=? WHERE legislatura=? AND numero=?"
-    cur = db.cursor()
-    cur.execute(cmd, (autor, legislatura, numero))
-    if cur.rowcount:
-        db. commit()
-        return f"ok: iniciativa {numero} asignada a {autor}"
-    else:
-        return f"error: iniciativa {numero} no asignada a {autor}"
-
-def agrega_iniciativa(db, legislatura, numero, cambios, tema, resumen,
-                      tags, comentario, autor, estado):
-    cmd = "INSERT INTO iniciativas (legislatura, numero, cambios, tema, resumen, tags, comentario, autor, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+def asigna(db, estado, legislatura, numero, usuario):
+    cmd = ("INSERT INTO asignacion (estado_id, legislatura_id, numero, usuario_id) "
+           "VALUES"
+           "((SELECT estado_id FROM estado WHERE nombre=?), "
+           "(SELECT legislatura_id FROM legislatura WHERE nombre=?), "
+           "?, "
+           "(SELECT usuario_id FROM usuarios WHERE usuario=?))")
     cur = db.cursor()
     try:
-        cur.execute(cmd, (legislatura, numero, cambios, tema, resumen,
-                          tags, comentario, autor, estado))
+        cur.execute(cmd, (estado, legislatura, numero, usuario))
+        db. commit()
+    except sqlite3.DatabaseError:
+        return f"error: iniciativa {numero} no asignada a {usuario}"
+    return f"ok: iniciativa {numero} asignada a {usuario}"
+
+def agrega_iniciativa(db, entidad, legislatura, numero, cambios, tema, resumen,
+                      comentario, estado):
+    cmd = ("INSERT INTO iniciativas (estado_id, legislatura_id, numero, "
+           "cambios, tema, resumen, comentario, estado) "
+           "VALUES "
+           "((SELECT estado_id FROM estado WHERE nombre=?), "
+           "(SELECT legislatura_id FROM legislatura WHERE nombre=?), "
+           "?, ?, ?, ?, ?, ?)")
+    cur = db.cursor()
+    try:
+        cur.execute(cmd, (entidad, legislatura, numero, cambios, tema, resumen,
+                          comentario, estado))
         db.commit()
     except sqlite3.DatabaseError:
         return f"error: iniciativa {numero} no creada"

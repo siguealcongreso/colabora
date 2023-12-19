@@ -27,8 +27,8 @@ def database():
 def test_usuarios(database):
     database.executescript(_data_sql)
     result = colabora.db.usuarios(database)
-    assert len(result) == 1
-    assert "autor1" == result[0]["usuario"]
+    assert len(result) == 2
+    assert "usuario1" == result[0]["usuario"]
 
 
 def test_areas(database):
@@ -42,64 +42,75 @@ def test_asignadas_por_autor(database):
     database.executescript(_data_sql)
     result = colabora.db.asignadas_por_autor(database)
     assert len(result) == 1
-    assert "autor1" == result[0]["autor"]
+    assert "usuario1" == result[0]["usuario"]
     assert 1 == result[0]["asignadas"]
 
 
 def test_iniciativa_ok(database):
     database.executescript(_data_sql)
-    result = colabora.db.iniciativa(database, numero='1')
+    result = colabora.db.iniciativa(database, estado='estado1' ,
+                                    legislatura='legislatura1',
+                                    numero=1)
     assert "tema1" == result['tema']
 
 def test_iniciativa_none(database):
     database.executescript(_data_sql)
-    result = colabora.db.iniciativa(database, numero='2')
+    result = colabora.db.iniciativa(database, estado='estado1',
+                                    legislatura='legislatura1',
+                                    numero=2)
     assert None == result
 
 
 def test_iniciativas(database):
     database.executescript(_data_sql)
-    result = colabora.db.iniciativas(database)
+    result = colabora.db.iniciativas(database, estado='estado1',
+                                     legislatura='legislatura1')
     assert len(result) == 1
 
 def test_iniciativas_no_asignadas_vacio(database):
     database.executescript(_data_sql)
-    result = colabora.db.iniciativas_asignadas(database, '')
+    result = colabora.db.iniciativas_asignadas(database, estado='estado1',
+                                               legislatura='legislatura1',
+                                               usuario='')
     assert len(result) == 0
 
 def test_iniciativas_asignadas_ok(database):
     database.executescript(_data_sql)
-    result = colabora.db.iniciativas_asignadas(database, 'autor1')
+    result = colabora.db.iniciativas_asignadas(database, estado='estado1',
+                                               legislatura='legislatura1',
+                                               usuario='usuario1')
     assert len(result) == 1
-    assert "1" == result[0]["numero"]
+    assert 1 == result[0]["numero"]
 
 def test_iniciativas_asignadas_vacio(database):
     database.executescript(_data_sql)
-    result = colabora.db.iniciativas_asignadas(database, 'autor2')
+    result = colabora.db.iniciativas_asignadas(database, estado='estado1',
+                                               legislatura='legislatura1',
+                                               usuario='usuario2')
     assert len(result) == 0
 
 
 def test_asigna_una(database):
     database.executescript(_data_sql)
-    result = colabora.db.asigna(database, 'legislatura1', '1', 'autor2')
-    assert f"ok: iniciativa 1 asignada a autor2" == result
+    result = colabora.db.asigna(database, 'estado1', 'legislatura1', 1, 'usuario2')
+    assert f"ok: iniciativa 1 asignada a usuario2" == result
 
 def test_asigna_ninguna(database):
     database.executescript(_data_sql)
-    result = colabora.db.asigna(database, 'legislatura1', '2', 'autor2')
-    assert f"error: iniciativa 2 no asignada a autor2" == result
+    result = colabora.db.asigna(database, 'estado1', 'legislatura1', 2, 'usuario1')
+    assert f"error: iniciativa 2 no asignada a usuario1" == result
 
 
 def test_agrega_iniciativa_ok(database):
-    result = colabora.db.agrega_iniciativa(database, 'I', '1', 'cambios', '', '', '',
-                                           '', '', '')
-    assert "ok: iniciativa 1 creada" == result
+    database.executescript(_data_sql)
+    result = colabora.db.agrega_iniciativa(database, 'estado1', 'legislatura1', 2,
+                                           'cambios', '', '', '', '')
+    assert "ok: iniciativa 2 creada" == result
 
 def test_agrega_iniciativa_error(database):
-    result = colabora.db.agrega_iniciativa(database, 'I', '1', 'cambios', '', '', '',
-                                           '', '', '')
-    result = colabora.db.agrega_iniciativa(database, 'I', '1', 'cambios', '', '', '',
-                                           '', '', '')
+    database.executescript(_data_sql)
+    result = colabora.db.agrega_iniciativa(database, 'estado1', 'legislatura1', 1,
+                                           'cambios', '', '', '', '')
     assert "error: iniciativa 1 no creada" == result
 
 

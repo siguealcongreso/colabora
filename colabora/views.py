@@ -12,6 +12,10 @@ from .db import asignadas_por_autor
 from .db import asigna as dbasigna
 from .db import agrega_iniciativa
 from .db import iniciativa
+from .db import areas_por_iniciativa
+
+ENTIDAD = 'Jalisco'
+LEGISLATURA = 'LXIII'
 
 
 def login_required(view):
@@ -27,13 +31,13 @@ def login_required(view):
 
 def valores(records):
     ""
-    tags = {r["numero"]: r["tags"].split("|") for r in records}
     comentarios = {r["numero"]: r["comentario"].split('\n') for r in records}
     db = get_db()
+    tags = areas_por_iniciativa(db).get(ENTIDAD, {}).get(LEGISLATURA, {})
     areas = dbareas(db)
     users = [usuario['usuario'] for usuario in usuarios(db)]
     rows = asignadas_por_autor(db)
-    asignadas = {row['autor']: row['asignadas'] for row in rows}
+    asignadas = {row['usuario']: row['asignadas'] for row in rows}
     return tags, comentarios, areas, users, asignadas
 
 
@@ -42,9 +46,10 @@ def valores(records):
 def lista():
     db = get_db()
     if 'username' in session and request.path == '/iniciativas':
-        records = iniciativas_asignadas(db, session['username'])
+        records = iniciativas_asignadas(db, ENTIDAD, LEGISLATURA,
+                                        session['username'])
     else:
-        records = iniciativas(db)
+        records = iniciativas(db, ENTIDAD, LEGISLATURA)
     tags, comentarios, areas, users, asignadas = valores(records)
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
@@ -74,8 +79,10 @@ def asigna():
     db = get_db()
     if request.method == 'POST':
         for numero in request.form.getlist('numero'):
-            result = dbasigna(db, 'LXIII', numero, request.form['autor'])
-    records = iniciativas_asignadas(db, usuario='')
+            result = dbasigna(db, ENTIDAD, LEGISLATURA,
+                              numero, request.form['autor'])
+    records = iniciativas_asignadas(db, ENTIDAD, LEGISLATURA,
+                                    usuario='')
     tags, comentarios, areas, users, asignadas = valores(records)
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
@@ -87,8 +94,9 @@ def asigna():
 def crea(numero):
     db = get_db()
     cambios = request.form['cambios']
-    result = agrega_iniciativa(db, "LXIII", numero, cambios, tema="", resumen="",
-                               tags="", comentario="", autor="", estado="")
+    result = agrega_iniciativa(db, ENTIDAD, LEGISLATURA,
+                               numero, cambios, tema="", resumen="",
+                               comentario="", estado="")
     return result
 
 
@@ -96,11 +104,12 @@ def crea(numero):
 @login_required
 def edita(numero):
     db = get_db()
-    record = iniciativa(db, numero)
+    record = iniciativa(db, ENTIDAD, LEGISLATURA, numero)
     comentarios = record["comentario"].split('\n')
     areas = dbareas(db)
+    tags = areas_por_iniciativa(db)[ENTIDAD][LEGISLATURA][int(numero)]
     return render_template('edita.html',
                            r=record,
-                           tags=record['tags'],
+                           tags=tags,
                            comentarios=comentarios,
                            areas=areas)

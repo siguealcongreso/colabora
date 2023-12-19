@@ -154,3 +154,13 @@ def test_agrega_usuario_error(database):
     result = colabora.db.agrega_usuario(database, 'usuario1')
     result = colabora.db.agrega_usuario(database, 'usuario1')
     assert "error: 'usuario1' no creado" == result
+
+
+def test_agrega_estado_ok(database):
+    result = colabora.db.agrega_estado(database, 'estado1')
+    assert "ok: 'estado1' creado" == result
+
+def test_agrega_estado_error(database):
+    result = colabora.db.agrega_estado(database, 'estado1')
+    result = colabora.db.agrega_estado(database, 'estado1')
+    assert "error: 'estado1' no creado" == result

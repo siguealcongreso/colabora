@@ -1,6 +1,7 @@
 from flask import session
 from colabora.main import app
 import colabora.views
+import colabora.db
 
 colabora.views.ENTIDAD = 'estado1'
 colabora.views.LEGISLATURA = 'legislatura1'
@@ -71,6 +72,22 @@ def test_edita(client):
         response = client.post('/login',
                                data={'username': 'autor1'})
         response = client.get('/edita/1')
+        assert b'trata?' in response.data
+
+def test_edita_no_existe(client):
+    with client:
+        colabora.db.init_db()
+        response = client.post('/login',
+                               data={'username': 'autor1'})
+        response = client.get('/edita/2')
+        assert 404 == response.status_code
+        assert b'Not Found' in response.data
+
+def test_edita_sin_area(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'autor1'})
+        response = client.get('/edita/3')
         assert b'trata?' in response.data
 
 def test_edita_reenvia_a_login(client):

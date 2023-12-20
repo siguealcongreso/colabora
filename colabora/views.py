@@ -3,6 +3,7 @@ import functools
 from flask import render_template
 from flask import request
 from flask import redirect, url_for
+from flask import abort
 from flask import session
 from .app import app
 from .db import get_db
@@ -105,9 +106,11 @@ def crea(numero):
 def edita(numero):
     db = get_db()
     record = iniciativa(db, ENTIDAD, LEGISLATURA, numero)
+    if not record:
+        abort(404)
     comentarios = record["comentario"].split('\n')
     areas = dbareas(db)
-    tags = areas_por_iniciativa(db)[ENTIDAD][LEGISLATURA][int(numero)]
+    tags = areas_por_iniciativa(db).get(ENTIDAD, {}).get(LEGISLATURA, {}).get(int(numero), [])
     return render_template('edita.html',
                            r=record,
                            tags=tags,

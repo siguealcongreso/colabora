@@ -28,7 +28,6 @@
               <b>Cambios</b> {{ r.cambios }}
                 (<a href="https://siguealcongreso.org/monitoreo/iniciativas/lxiii/{{ r.numero }}/" title="Ver ficha">{{ r.numero }}</a>)
             <a href="https://congresoweb.congresojal.gob.mx/infolej/sistemaintegral/infolej/../../agendakioskos/documentos/sistemaintegral/estados/R_52806.pdf" target="_blank" title="Leer el documento">🖹</a>
-          <span class="btn-link">Salvar</span>
           </div>
         </div>
       </div>
@@ -59,6 +58,11 @@
 	      {% for c in comentarios[r.numero] %}
 	      {{ c }}<br>
 	      {% endfor %}
+        </div>
+      </div>
+      <div class="row py-2 border border-top-0 bg-light">
+        <div class="">
+	   <button type="submit" class="btn btn-secondary">Guardar</button>
         </div>
       </div>
     </div>

@@ -50,6 +50,7 @@ def test_asigna_despliega(client):
                            data={'username': 'autor1'})
     response = client.get('/asigna')
     assert b'cc' in response.data
+    assert b"mero</b> 3" in response.data
 
 def test_asigna_enviar(client):
     response = client.post('/login',

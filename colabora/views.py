@@ -82,8 +82,8 @@ def asigna():
         for numero in request.form.getlist('numero'):
             result = dbasigna(db, ENTIDAD, LEGISLATURA,
                               numero, request.form['autor'])
-    records = iniciativas_asignadas(db, ENTIDAD, LEGISLATURA,
-                                    usuario='')
+    records = iniciativas(db, ENTIDAD, LEGISLATURA,
+                          solo_sin_asignar=True)
     tags, comentarios, areas, users, asignadas = valores(records)
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,

@@ -59,6 +59,10 @@ def test_areas_por_iniciativa(database):
     assert len(result) == 1
     assert result['estado1']['legislatura1'][1] == ['area1']
 
+def test_areas_por_iniciativa_vacio(database):
+    result = colabora.db.areas_por_iniciativa(database)
+    assert result == {}
+
 
 def test_asignadas_por_autor(database):
     database.executescript(_data_sql)

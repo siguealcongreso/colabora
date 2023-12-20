@@ -4,6 +4,7 @@ from flask import render_template
 from flask import request
 from flask import redirect, url_for
 from flask import abort
+from flask import flash
 from flask import session
 from .app import app
 from .db import get_db
@@ -23,6 +24,7 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if 'username' not in session:
+            flash("Por favor ingresa a sesión")
             return redirect(url_for('login_get'))
 
         return view(**kwargs)
@@ -67,11 +69,13 @@ def login_get():
 def login_post():
     session['username'] = request.form['username']
     session.permanent = True
+    flash('¡Has ingresado correctamente!')
     return redirect(url_for('lista', _method="GET"))
 
 @app.route("/logout")
 def logout():
     session.pop('username', None)
+    flash('¡Terminaste tu sesión correctamente!')
     return redirect(url_for('lista'))
 
 @app.route("/asigna", methods=["GET", "POST"])

@@ -91,13 +91,15 @@ def iniciativa(db, estado, legislatura, numero):
     record = cur.fetchone()
     return record
 
-def iniciativas(db, estado, legislatura):
+def iniciativas(db, estado, legislatura, solo_sin_asignar=False):
     cmd = ("SELECT numero, cambios, tema, resumen, estado, comentario, usuario "
            "FROM iniciativas "
            "LEFT JOIN asignacion USING (estado_id, legislatura_id, numero) "
            "LEFT JOIN usuarios USING (usuario_id) "
            "WHERE estado_id=(SELECT estado_id FROM estado WHERE nombre=?) AND "
            "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?)")
+    if solo_sin_asignar:
+        cmd += " AND usuario ISNULL"
     cur = db.cursor()
     cur.execute(cmd,(estado, legislatura))
     records = cur.fetchall()

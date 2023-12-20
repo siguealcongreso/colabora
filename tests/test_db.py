@@ -93,6 +93,15 @@ def test_iniciativas(database):
                                      legislatura='legislatura1')
     assert len(result) == 2
 
+
+def test_iniciativas_solo_no_asignadas(database):
+    database.executescript(_data_sql)
+    result = colabora.db.iniciativas(database, estado='estado1',
+                                     legislatura='legislatura1',
+                                     solo_sin_asignar=True)
+    assert len(result) == 1
+
+
 def test_iniciativas_no_asignadas_vacio(database):
     database.executescript(_data_sql)
     result = colabora.db.iniciativas_asignadas(database, estado='estado1',

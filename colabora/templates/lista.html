@@ -43,11 +43,11 @@
 	  {% if request.path == '/asigna' %}
           <div class="form-check">
 	    <input class="form-check-input" type="checkbox" name="numero" value="{{ r.numero }}" id="c{{ r.numero }}">
-	    <label class="form-check-label" for="c{{ r.numero }}"><b>Asignar</b> {{ r.autor }}</label>
+	    <label class="form-check-label" for="c{{ r.numero }}"><b>Asignar</b> {{ r.usuario }}</label>
 	    <div class="valid-feedback">Ok</div>
 	    <div class="invalid-feedback">Selecciona una o más iniciativas</div>
 	  {% else %}
-          <div class=""><b>Asignada</b> {{ r.autor }}
+          <div class=""><b>Asignada</b> {{ r.usuario }}
 	  {% endif %}
           </div>
         </div>

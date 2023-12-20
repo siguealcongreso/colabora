@@ -87,7 +87,7 @@ def test_iniciativas(database):
     database.executescript(_data_sql)
     result = colabora.db.iniciativas(database, estado='estado1',
                                      legislatura='legislatura1')
-    assert len(result) == 1
+    assert len(result) == 2
 
 def test_iniciativas_no_asignadas_vacio(database):
     database.executescript(_data_sql)

@@ -35,3 +35,13 @@ INSERT INTO asignacion (estado_id, legislatura_id, numero, usuario_id) VALUES
 
 INSERT INTO usuarios (usuario)
 VALUES ('usuario2');
+
+
+
+INSERT INTO iniciativas (estado_id, legislatura_id, numero,
+cambios, tema, resumen, comentario, estado)
+VALUES
+((SELECT estado_id FROM estado WHERE nombre='estado1'),
+ (SELECT legislatura_id FROM legislatura WHERE nombre='legislatura1'),
+ 3, 'Cambios 3', 'tema3', 'resumen3', 'comentario3', 'estado3'
+);

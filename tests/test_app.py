@@ -101,8 +101,11 @@ def test_edita_guardar(client):
     with client:
         response = client.post('/login',
                                data={'username': 'autor1'})
-        response = client.post('/edita/1', data={'tema': 'TEMA', 'resumen': 'RESUMEN'},
+        response = client.post('/edita/1', data={'tema': 'TEMA', 'resumen': 'RESUMEN',
+                                                 'area': ['1', '2']},
                                follow_redirects=True)
         assert 200 == response.status_code
         assert b'TEMA' in response.data
         assert b'RESUMEN' in response.data
+        assert b'area1' in response.data
+        assert b'area2' in response.data

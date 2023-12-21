@@ -16,6 +16,8 @@ from .db import agrega_iniciativa
 from .db import iniciativa
 from .db import areas_por_iniciativa
 from .db import actualiza_iniciativa
+from .db import clasifica
+from .db import desclasifica
 
 ENTIDAD = 'Jalisco'
 LEGISLATURA = 'LXIII'
@@ -132,5 +134,8 @@ def edita_post(numero):
     areas = dbareas(db)
     result = actualiza_iniciativa(db, ENTIDAD, LEGISLATURA, numero,
                                   tema=tema, resumen=resumen)
+    desclasifica(db, ENTIDAD, LEGISLATURA, numero)
+    for i, nombre in zip(area, areas):
+        clasifica(db, ENTIDAD, LEGISLATURA, numero, areas[int(i)-1]['nombre'])
     flash("Información guardada")
     return redirect(url_for('edita', numero=numero))

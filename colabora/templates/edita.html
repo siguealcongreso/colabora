@@ -34,15 +34,15 @@
       </div>
       <div class="row py-2 border border-top-0 bg-light">
           <div class="col-md-3"><b>Tema</b>
-            <textarea class="form-control">{{ r.tema }}</textarea>
+            <textarea class="form-control" name="tema">{{ r.tema }}</textarea>
             <span class="form-text">¿De qué trata?</span>
           </div>
           <div class="col-md-6"><b>Resumen</b>
-            <textarea class="form-control" rows="5">{{ r.resumen }}</textarea>
+            <textarea class="form-control" rows="5" name="resumen">{{ r.resumen }}</textarea>
             <span class="form-text">¿Qué propone?</span>
           </div>
           <div class="col-md-3"><b>Área</b>
-            <select class="form-select" required multiple>
+            <select class="form-select" name="area" required multiple>
               <option value="">Seleccionar...</option>
               {% for area in areas %}
 	      {% if area.nombre in tags %}

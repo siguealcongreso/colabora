@@ -198,3 +198,22 @@ def test_agrega_legislatura_error(database):
     result = colabora.db.agrega_legislatura(database, 'legislatura1')
     result = colabora.db.agrega_legislatura(database, 'legislatura1')
     assert "error: 'legislatura1' no creado" == result
+
+def test_actualiza_iniciativa_ok(database):
+    database.executescript(_data_sql)
+    result = colabora.db.actualiza_iniciativa(database, 'estado1', 'legislatura1', 1,
+                                              tema='TEMA')
+    assert result == 'ok: iniciativa 1 actualizada'
+
+def test_actualiza_iniciativa_todo_ok(database):
+    database.executescript(_data_sql)
+    result = colabora.db.actualiza_iniciativa(database, 'estado1', 'legislatura1', 1,
+                                              tema='TEMA', resumen='RESUMEN',
+                                              comentario='COMENTARIO')
+    assert result == 'ok: iniciativa 1 actualizada'
+
+def test_actualiza_iniciativa_error(database):
+    database.executescript(_data_sql)
+    result = colabora.db.actualiza_iniciativa(database, 'estado1', 'legislatura1', 4,
+                                              tema='TEMA')
+    assert result == 'error: iniciativa 4 no actualizada'

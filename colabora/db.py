@@ -211,3 +211,29 @@ def agrega_legislatura(db, nombre):
     except sqlite3.DatabaseError:
         return f"error: '{nombre}' no creado"
     return f"ok: '{nombre}' creado"
+
+def actualiza_iniciativa(db, entidad, legislatura, numero, tema=None, resumen=None,
+                         comentario=None):
+    fields = []
+    values = []
+    if tema:
+        fields.append(f"tema=?")
+        values.append(tema)
+    if resumen:
+        fields.append(f"resumen=?")
+        values.append(resumen)
+    if comentario:
+        fields.append(f"comentario=?")
+        values.append(comentario)
+    sets = ', '.join(fields)
+    cmd = (f"UPDATE iniciativas SET {sets} WHERE "
+           "estado_id=(SELECT estado_id FROM estado WHERE nombre=?) "
+           "AND legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?) "
+           "AND numero=?")
+    values.extend([entidad, legislatura, numero])
+    cur = db.cursor()
+    cur.execute(cmd, values)
+    if cur.rowcount == 1:
+        db.commit()
+        return f"ok: iniciativa {numero} actualizada"
+    return f"error: iniciativa {numero} no actualizada"

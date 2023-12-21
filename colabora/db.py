@@ -150,6 +150,17 @@ def clasifica(db, estado, legislatura, numero, area):
         return f"error: iniciativa {numero} no asignada a {area}"
     return f"ok: iniciativa {numero} asignada a {area}"
 
+def desclasifica(db, entidad, legislatura, numero):
+    cmd = ("DELETE FROM clasificacion WHERE "
+           "estado_id=(SELECT estado_id FROM estado WHERE nombre=?) AND "
+           "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?) AND "
+           "numero=?")
+    cur = db.cursor()
+    cur.execute(cmd, (entidad, legislatura, numero))
+    if cur.rowcount == 1:
+        db. commit()
+        return f"ok: se removieron areas de iniciativa {numero}"
+    return f"error: no se removieron areas de iniciativa {numero}"
 
 def agrega_iniciativa(db, entidad, legislatura, numero, cambios, tema, resumen,
                       comentario, estado):

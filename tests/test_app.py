@@ -96,3 +96,13 @@ def test_edita_reenvia_a_login(client):
     assert len(response.history) == 1
     assert response.history[0].status == '302 FOUND'
     assert response.request.path == "/login"
+
+def test_edita_guardar(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'autor1'})
+        response = client.post('/edita/1', data={'tema': 'TEMA', 'resumen': 'RESUMEN'},
+                               follow_redirects=True)
+        assert 200 == response.status_code
+        assert b'TEMA' in response.data
+        assert b'RESUMEN' in response.data

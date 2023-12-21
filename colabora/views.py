@@ -15,6 +15,7 @@ from .db import asigna as dbasigna
 from .db import agrega_iniciativa
 from .db import iniciativa
 from .db import areas_por_iniciativa
+from .db import actualiza_iniciativa
 
 ENTIDAD = 'Jalisco'
 LEGISLATURA = 'LXIII'
@@ -120,3 +121,16 @@ def edita(numero):
                            tags=tags,
                            comentarios=comentarios,
                            areas=areas)
+
+@app.route("/edita/<numero>", methods=["POST"])
+@login_required
+def edita_post(numero):
+    db = get_db()
+    tema = request.form['tema']
+    resumen = request.form['resumen']
+    area = request.form.getlist('area')
+    areas = dbareas(db)
+    result = actualiza_iniciativa(db, ENTIDAD, LEGISLATURA, numero,
+                                  tema=tema, resumen=resumen)
+    flash("Información guardada")
+    return redirect(url_for('edita', numero=numero))

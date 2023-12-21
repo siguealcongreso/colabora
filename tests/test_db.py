@@ -67,9 +67,13 @@ def test_areas_por_iniciativa_vacio(database):
 def test_asignadas_por_autor(database):
     database.executescript(_data_sql)
     result = colabora.db.asignadas_por_autor(database)
-    assert len(result) == 1
-    assert "usuario1" == result[0]["usuario"]
+    assert len(result) == 3
+    assert None == result[0]["usuario"]
     assert 1 == result[0]["asignadas"]
+    assert "usuario1" == result[1]["usuario"]
+    assert 1 == result[1]["asignadas"]
+    assert "usuario2" == result[2]["usuario"]
+    assert 0 == result[2]["asignadas"]
 
 
 def test_iniciativa_ok(database):

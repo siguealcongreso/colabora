@@ -70,8 +70,8 @@ def areas_por_iniciativa(db):
 
 def asignadas_por_autor(db):
     cmd = ("SELECT usuario, count(numero) as asignadas FROM iniciativas "
-           "JOIN asignacion USING (estado_id, legislatura_id, numero) "
-           "JOIN usuarios USING (usuario_id) "
+           "LEFT JOIN asignacion USING (estado_id, legislatura_id, numero) "
+           "FULL JOIN usuarios USING (usuario_id) "
            "GROUP BY usuario")
     cur = db.cursor()
     cur.execute(cmd)

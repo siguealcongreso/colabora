@@ -28,7 +28,7 @@
 	{% endif %}
 	</div>
         {% endfor %}
-	{{ asignadas[''] }} por asignar
+	{{ asignadas[None] }} por asignar
 	{% endif %}
       </p>
     </div>
@@ -47,7 +47,7 @@
 	    <div class="valid-feedback">Ok</div>
 	    <div class="invalid-feedback">Selecciona una o más iniciativas</div>
 	  {% else %}
-          <div class=""><b>Asignada</b> {{ r.usuario }}
+          <div class=""><b>Asignada</b> {% if r.usuario != None %}{{ r.usuario }}{% endif %}
 	  {% endif %}
           </div>
         </div>

@@ -7,11 +7,22 @@ colabora.views.ENTIDAD = 'estado1'
 colabora.views.LEGISLATURA = 'legislatura1'
 
 
-def test_list(client):
+def test_list_sin_sesion(client):
     response = client.get('/')
     assert b'tema1' in response.data
     assert b'resumen1' in response.data
     assert 'Iniciar sesión' in response.data.decode()
+    assert b'title="Editar"' not in response.data
+
+def test_list_en_sesion(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario1'})
+        response = client.get('/')
+        assert b'tema1' in response.data
+        assert b'resumen1' in response.data
+        assert 'Terminar sesión' in response.data.decode()
+        assert b'title="Editar"' in response.data
 
 def test_login_despliega(client):
     response = client.get('/login')
@@ -40,6 +51,8 @@ def test_iniciativas_normal(client):
     app.autor = 'autor1'
     response = client.get('/iniciativas')
     assert b'resumen1' in response.data
+    assert 'Iniciar sesión' in response.data.decode()
+    assert b'title="Editar"' not in response.data
 
 def test_asigna_reenvia_a_login(client):
     response = client.get('asigna', follow_redirects=True)

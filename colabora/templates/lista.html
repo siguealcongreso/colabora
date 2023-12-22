@@ -6,6 +6,9 @@
 	{% if 'username' in session %}
 	{{ session['username'] }}
 	{% if request.path == '/' %}
+	{% if roles[session['username']] == 'admin' %}
+	<a class="btn-link" href="asigna">Asignar</a>
+	{% endif %}
 	<a class="btn-link" href="iniciativas">Mis iniciativas</a>
 	{% else %}
 	<a class="btn-link" href=".">Todas las iniciativas</a>

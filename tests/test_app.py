@@ -36,6 +36,18 @@ def test_list_en_sesion_editor(client):
         assert b'1" title="Editar"' in response.data
         assert b'3" title="Editar"' in response.data
 
+def test_list_en_sesion_admin(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario3'})
+        response = client.get('/')
+        assert b'tema1' in response.data
+        assert b'resumen1' in response.data
+        assert 'Terminar sesión' in response.data.decode()
+        assert b'1" title="Editar"' in response.data
+        assert b'3" title="Editar"' in response.data
+        assert b'href="asigna"' in response.data
+
 def test_login_despliega(client):
     response = client.get('/login')
     assert b'username' in response.data

@@ -84,10 +84,17 @@ def test_asigna_reenvia_a_login(client):
 
 def test_asigna_despliega(client):
     response = client.post('/login',
-                           data={'username': 'autor1'})
+                           data={'username': 'usuario3'})
     response = client.get('/asigna')
-    assert b'usuario1' in response.data
+    assert b'usuario3' in response.data
     assert b"mero</b> 3" in response.data
+
+def test_asigna_acceso_denegado(client):
+    response = client.post('/login',
+                           data={'username': 'usuario1'})
+    response = client.get('/asigna')
+    assert 403 == response.status_code
+    assert b'Forbidden' in response.data
 
 def test_asigna_enviar(client):
     response = client.post('/login',

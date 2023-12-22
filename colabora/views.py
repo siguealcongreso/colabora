@@ -86,6 +86,9 @@ def logout():
 @login_required
 def asigna():
     db = get_db()
+    roles = {d['usuario']: d['rol'] for d in usuarios(db)}
+    if roles[session['username']] != 'admin':
+        abort(403)
     if request.method == 'POST':
         for numero in request.form.getlist('numero'):
             result = dbasigna(db, ENTIDAD, LEGISLATURA,
@@ -93,7 +96,6 @@ def asigna():
     records = iniciativas(db, ENTIDAD, LEGISLATURA,
                           solo_sin_asignar=True)
     tags, comentarios, areas, users, asignadas = valores(records)
-    roles = {d['usuario']: d['rol'] for d in usuarios(db)}
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
         comentarios=comentarios, users=users, asignadas=asignadas, roles=roles

@@ -45,6 +45,9 @@ def test_usuarios(database):
     result = colabora.db.usuarios(database)
     assert len(result) == 2
     assert "usuario1" == result[0]["usuario"]
+    assert "escritor" == result[0]["rol"]
+    assert "usuario2" == result[1]["usuario"]
+    assert "editor" == result[1]["rol"]
 
 
 def test_areas(database):

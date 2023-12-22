@@ -41,7 +41,12 @@ def a_dict(records):
 
 
 def usuarios(db):
-    cmd = "SELECT usuario FROM usuarios"
+    """Regresa una lista de los usuarios
+
+    Cada elemento es un diccionario con
+    `usuario` y `rol`.
+    """
+    cmd = "SELECT usuario, rol FROM usuarios"
     cur = db.cursor()
     cur.execute(cmd)
     records = cur.fetchall()

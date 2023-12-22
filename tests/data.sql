@@ -23,8 +23,8 @@ INSERT INTO areas (nombre)
 VALUES ('area2');
 
 
-INSERT INTO usuarios (usuario)
-VALUES ('usuario1');
+INSERT INTO usuarios (usuario, rol)
+VALUES ('usuario1', 'escritor');
 
 INSERT INTO asignacion (estado_id, legislatura_id, numero, usuario_id) VALUES
 ((SELECT estado_id FROM estado WHERE nombre='estado1'),
@@ -33,8 +33,8 @@ INSERT INTO asignacion (estado_id, legislatura_id, numero, usuario_id) VALUES
  (SELECT usuario_id FROM usuarios WHERE usuario='usuario1')
 );
 
-INSERT INTO usuarios (usuario)
-VALUES ('usuario2');
+INSERT INTO usuarios (usuario, rol)
+VALUES ('usuario2', 'editor');
 
 
 

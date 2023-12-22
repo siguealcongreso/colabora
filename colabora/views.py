@@ -41,7 +41,7 @@ def valores(records):
     db = get_db()
     tags = areas_por_iniciativa(db).get(ENTIDAD, {}).get(LEGISLATURA, {})
     areas = dbareas(db)
-    users = [usuario['usuario'] for usuario in usuarios(db)]
+    users = usuarios(db)
     rows = asignadas_por_autor(db)
     asignadas = {row['usuario']: row['asignadas'] for row in rows}
     return tags, comentarios, areas, users, asignadas

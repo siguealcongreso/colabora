@@ -36,6 +36,8 @@ INSERT INTO asignacion (estado_id, legislatura_id, numero, usuario_id) VALUES
 INSERT INTO usuarios (usuario, rol)
 VALUES ('usuario2', 'editor');
 
+INSERT INTO usuarios (usuario, rol)
+VALUES ('usuario3', 'admin');
 
 
 INSERT INTO iniciativas (estado_id, legislatura_id, numero,

@@ -56,9 +56,18 @@
       </div>
       <div class="row py-2 border border-top-0 bg-light">
         <div class=""><b>Comentario</b>
+	  {% if roles[session['username']] in ('editor',) %}
+          <textarea class="form-control" name="comentario">
 	      {% for c in comentarios[r.numero] %}
 	      {{ c }}<br>
 	      {% endfor %}
+	  </textarea>
+            <span class="form-text">¿Cómo mejorar el tema o resumen?</span>
+          {% else %}
+	      {% for c in comentarios[r.numero] %}
+	      {{ c }}<br>
+	      {% endfor %}
+	  {% endif %}
         </div>
       </div>
       <div class="row py-2 border border-top-0 bg-light">

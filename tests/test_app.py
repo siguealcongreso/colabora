@@ -71,9 +71,18 @@ def test_crea_error(client):
 def test_edita(client):
     with client:
         response = client.post('/login',
-                               data={'username': 'autor1'})
+                               data={'username': 'usuario1'})
         response = client.get('/edita/1')
         assert b'trata?' in response.data
+        assert b'name="comentario"' not in response.data
+
+def test_edita_comentario(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario2'})
+        response = client.get('/edita/1')
+        assert b'trata?' in response.data
+        assert b'name="comentario"' in response.data
 
 def test_edita_no_existe(client):
     with client:
@@ -87,7 +96,7 @@ def test_edita_no_existe(client):
 def test_edita_sin_area(client):
     with client:
         response = client.post('/login',
-                               data={'username': 'autor1'})
+                               data={'username': 'usuario1'})
         response = client.get('/edita/3')
         assert b'trata?' in response.data
 
@@ -100,7 +109,7 @@ def test_edita_reenvia_a_login(client):
 def test_edita_guardar(client):
     with client:
         response = client.post('/login',
-                               data={'username': 'autor1'})
+                               data={'username': 'usuario1'})
         response = client.post('/edita/1', data={'tema': 'TEMA', 'resumen': 'RESUMEN',
                                                  'area': ['1', '2']},
                                follow_redirects=True)

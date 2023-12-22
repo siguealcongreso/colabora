@@ -14,7 +14,7 @@ def test_list_sin_sesion(client):
     assert 'Iniciar sesión' in response.data.decode()
     assert b'title="Editar"' not in response.data
 
-def test_list_en_sesion(client):
+def test_list_en_sesion_escritor(client):
     with client:
         response = client.post('/login',
                                data={'username': 'usuario1'})
@@ -22,7 +22,19 @@ def test_list_en_sesion(client):
         assert b'tema1' in response.data
         assert b'resumen1' in response.data
         assert 'Terminar sesión' in response.data.decode()
-        assert b'title="Editar"' in response.data
+        assert b'1" title="Editar"' in response.data
+        assert b'3" title="Editar"' not in response.data
+
+def test_list_en_sesion_editor(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario2'})
+        response = client.get('/')
+        assert b'tema1' in response.data
+        assert b'resumen1' in response.data
+        assert 'Terminar sesión' in response.data.decode()
+        assert b'1" title="Editar"' in response.data
+        assert b'3" title="Editar"' in response.data
 
 def test_login_despliega(client):
     response = client.get('/login')
@@ -67,9 +79,9 @@ def test_asigna_despliega(client):
 
 def test_asigna_enviar(client):
     response = client.post('/login',
-                           data={'username': 'autor1'})
+                           data={'username': 'usuario1'})
     response = client.post('/asigna',
-                           data={'autor': 'autor1', 'numero': '1'}
+                           data={'autor': 'usuario1', 'numero': '1'}
                            )
     assert b'cc' in response.data
 

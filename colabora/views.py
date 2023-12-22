@@ -117,11 +117,13 @@ def edita(numero):
         abort(404)
     comentarios = record["comentario"].split('\n')
     areas = dbareas(db)
+    roles = {d['usuario']: d['rol'] for d in usuarios(db)}
     tags = areas_por_iniciativa(db).get(ENTIDAD, {}).get(LEGISLATURA, {}).get(int(numero), [])
     return render_template('edita.html',
                            r=record,
                            tags=tags,
                            comentarios=comentarios,
+                           roles=roles,
                            areas=areas)
 
 @app.route("/edita/<numero>", methods=["POST"])

@@ -98,11 +98,11 @@ def test_asigna_acceso_denegado(client):
 
 def test_asigna_enviar(client):
     response = client.post('/login',
-                           data={'username': 'usuario1'})
+                           data={'username': 'usuario3'})
     response = client.post('/asigna',
-                           data={'autor': 'usuario1', 'numero': '1'}
+                           data={'autor': 'usuario3', 'numero': '1'}
                            )
-    assert b'cc' in response.data
+    assert b'usuario3' in response.data
 
 def test_crea_ok(client):
     response = client.post('/crea/2', data={'cambios': 'cambios2'})

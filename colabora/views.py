@@ -57,9 +57,10 @@ def lista():
     else:
         records = iniciativas(db, ENTIDAD, LEGISLATURA)
     tags, comentarios, areas, users, asignadas = valores(records)
+    roles = {d['usuario']: d['rol'] for d in usuarios(db)}
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
-        comentarios=comentarios, users=users, asignadas=asignadas
+        comentarios=comentarios, users=users, asignadas=asignadas, roles=roles
     )
 
 @app.get("/login")
@@ -92,9 +93,10 @@ def asigna():
     records = iniciativas(db, ENTIDAD, LEGISLATURA,
                           solo_sin_asignar=True)
     tags, comentarios, areas, users, asignadas = valores(records)
+    roles = {d['usuario']: d['rol'] for d in usuarios(db)}
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
-        comentarios=comentarios, users=users, asignadas=asignadas
+        comentarios=comentarios, users=users, asignadas=asignadas, roles=roles
     )
 
 

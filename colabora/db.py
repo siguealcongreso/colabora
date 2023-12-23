@@ -61,11 +61,11 @@ def areas(db):
     return records
 
 def areas_por_iniciativa(db):
-    cmd = ("SELECT estado.nombre, legislatura.nombre, numero, areas.nombre "
+    cmd = ("SELECT entidad.nombre, legislatura.nombre, numero, areas.nombre "
            "FROM clasificacion "
-           "LEFT JOIN iniciativas USING (estado_id, legislatura_id, numero) "
+           "LEFT JOIN iniciativas USING (entidad_id, legislatura_id, numero) "
            "JOIN areas USING (area_id) "
-           "JOIN estado USING (estado_id) "
+           "JOIN entidad USING (entidad_id) "
            "JOIN legislatura USING (legislatura_id)")
     cur = db.cursor()
     cur.execute(cmd)
@@ -75,86 +75,86 @@ def areas_por_iniciativa(db):
 
 def asignadas_por_autor(db):
     cmd = ("SELECT usuario, count(numero) as asignadas FROM iniciativas "
-           "LEFT JOIN asignacion USING (estado_id, legislatura_id, numero) "
+           "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
            "LEFT JOIN usuarios USING (usuario_id) "
            "GROUP BY usuario "
            "UNION "
            "SELECT usuario, count(numero) as asignadas FROM usuarios "
            "LEFT JOIN asignacion USING (usuario_id) "
-           "LEFT JOIN iniciativas USING (estado_id, legislatura_id, numero) "
+           "LEFT JOIN iniciativas USING (entidad_id, legislatura_id, numero) "
            "GROUP BY usuario ")
     cur = db.cursor()
     cur.execute(cmd)
     records = cur.fetchall()
     return records
 
-def iniciativa(db, estado, legislatura, numero):
+def iniciativa(db, entidad, legislatura, numero):
     cur = db.cursor()
     cmd = ("SELECT numero, cambios, tema, resumen, estado, comentario, usuario "
            "FROM iniciativas "
-           "LEFT JOIN asignacion USING (estado_id, legislatura_id, numero) "
+           "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
            "LEFT JOIN usuarios USING (usuario_id) "
-           "WHERE estado_id=(SELECT estado_id FROM estado WHERE nombre=?) AND "
+           "WHERE entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) AND "
            "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?) AND "
            "numero=?")
-    cur.execute(cmd, (estado, legislatura, numero))
+    cur.execute(cmd, (entidad, legislatura, numero))
     record = cur.fetchone()
     return record
 
-def iniciativas(db, estado, legislatura, solo_sin_asignar=False):
+def iniciativas(db, entidad, legislatura, solo_sin_asignar=False):
     cmd = ("SELECT numero, cambios, tema, resumen, estado, comentario, usuario "
            "FROM iniciativas "
-           "LEFT JOIN asignacion USING (estado_id, legislatura_id, numero) "
+           "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
            "LEFT JOIN usuarios USING (usuario_id) "
-           "WHERE estado_id=(SELECT estado_id FROM estado WHERE nombre=?) AND "
+           "WHERE entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) AND "
            "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?)")
     if solo_sin_asignar:
         cmd += " AND usuario ISNULL"
     cur = db.cursor()
-    cur.execute(cmd,(estado, legislatura))
+    cur.execute(cmd,(entidad, legislatura))
     records = cur.fetchall()
     return records
 
 
-def iniciativas_asignadas(db, estado, legislatura, usuario):
+def iniciativas_asignadas(db, entidad, legislatura, usuario):
     cmd = ("SELECT numero, cambios, tema, resumen, estado, comentario, usuario "
            "FROM iniciativas "
-           "LEFT JOIN asignacion USING (estado_id, legislatura_id, numero) "
+           "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
            "LEFT JOIN usuarios USING (usuario_id) "
-           "WHERE estado_id=(SELECT estado_id FROM estado WHERE nombre=?) AND "
+           "WHERE entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) AND "
            "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?) AND "
            "usuario=?")
     cur = db.cursor()
-    cur.execute(cmd, (estado, legislatura, usuario))
+    cur.execute(cmd, (entidad, legislatura, usuario))
     records = cur.fetchall()
     return records
 
-def asigna(db, estado, legislatura, numero, usuario):
-    cmd = ("INSERT INTO asignacion (estado_id, legislatura_id, numero, usuario_id) "
+def asigna(db, entidad, legislatura, numero, usuario):
+    cmd = ("INSERT INTO asignacion (entidad_id, legislatura_id, numero, usuario_id) "
            "VALUES"
-           "((SELECT estado_id FROM estado WHERE nombre=?), "
+           "((SELECT entidad_id FROM entidad WHERE nombre=?), "
            "(SELECT legislatura_id FROM legislatura WHERE nombre=?), "
            "?, "
            "(SELECT usuario_id FROM usuarios WHERE usuario=?))")
     cur = db.cursor()
     try:
-        cur.execute(cmd, (estado, legislatura, numero, usuario))
+        cur.execute(cmd, (entidad, legislatura, numero, usuario))
         db. commit()
     except sqlite3.DatabaseError:
         return f"error: iniciativa {numero} no asignada a {usuario}"
     return f"ok: iniciativa {numero} asignada a {usuario}"
 
 
-def clasifica(db, estado, legislatura, numero, area):
-    cmd = ("INSERT INTO clasificacion (estado_id, legislatura_id, numero, area_id) "
+def clasifica(db, entidad, legislatura, numero, area):
+    cmd = ("INSERT INTO clasificacion (entidad_id, legislatura_id, numero, area_id) "
            "VALUES"
-           "((SELECT estado_id FROM estado WHERE nombre=?), "
+           "((SELECT entidad_id FROM entidad WHERE nombre=?), "
            "(SELECT legislatura_id FROM legislatura WHERE nombre=?), "
            "?, "
            "(SELECT area_id FROM areas WHERE nombre=?))")
     cur = db.cursor()
     try:
-        cur.execute(cmd, (estado, legislatura, numero, area))
+        cur.execute(cmd, (entidad, legislatura, numero, area))
         db. commit()
     except sqlite3.DatabaseError:
         return f"error: iniciativa {numero} no asignada a {area}"
@@ -162,7 +162,7 @@ def clasifica(db, estado, legislatura, numero, area):
 
 def desclasifica(db, entidad, legislatura, numero):
     cmd = ("DELETE FROM clasificacion WHERE "
-           "estado_id=(SELECT estado_id FROM estado WHERE nombre=?) AND "
+           "entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) AND "
            "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?) AND "
            "numero=?")
     cur = db.cursor()
@@ -174,10 +174,10 @@ def desclasifica(db, entidad, legislatura, numero):
 
 def agrega_iniciativa(db, entidad, legislatura, numero, cambios, tema, resumen,
                       comentario, estado):
-    cmd = ("INSERT INTO iniciativas (estado_id, legislatura_id, numero, "
+    cmd = ("INSERT INTO iniciativas (entidad_id, legislatura_id, numero, "
            "cambios, tema, resumen, comentario, estado) "
            "VALUES "
-           "((SELECT estado_id FROM estado WHERE nombre=?), "
+           "((SELECT entidad_id FROM entidad WHERE nombre=?), "
            "(SELECT legislatura_id FROM legislatura WHERE nombre=?), "
            "?, ?, ?, ?, ?, ?)")
     cur = db.cursor()
@@ -212,8 +212,8 @@ def agrega_usuario(db, nombre, contrasena, rol):
     return f"ok: '{nombre}' creado"
 
 
-def agrega_estado(db, nombre):
-    cmd = "INSERT INTO estado (nombre) VALUES (?)"
+def agrega_entidad(db, nombre):
+    cmd = "INSERT INTO entidad (nombre) VALUES (?)"
     cur = db.cursor()
     try:
         cur.execute(cmd, (nombre,))
@@ -248,7 +248,7 @@ def actualiza_iniciativa(db, entidad, legislatura, numero, tema=None, resumen=No
         values.append(comentario)
     sets = ', '.join(fields)
     cmd = (f"UPDATE iniciativas SET {sets} WHERE "
-           "estado_id=(SELECT estado_id FROM estado WHERE nombre=?) "
+           "entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) "
            "AND legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?) "
            "AND numero=?")
     values.extend([entidad, legislatura, numero])

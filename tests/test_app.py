@@ -3,7 +3,7 @@ from colabora.main import app
 import colabora.views
 import colabora.db
 
-colabora.views.ENTIDAD = 'estado1'
+colabora.views.ENTIDAD = 'entidad1'
 colabora.views.LEGISLATURA = 'legislatura1'
 
 

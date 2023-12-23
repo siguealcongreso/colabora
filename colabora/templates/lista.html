@@ -2,21 +2,22 @@
 {% block title %}Iniciativas sin resumen - Legislatura LXIII{% endblock %}
 {% block content %}
     <div class="container">
-      <p><span>¡Ayúdanos a escribir el resumen de una de estas iniciativas! <a href="/colabora/">¿Cómo?</a></span> -
+      <p>
 	{% if 'username' in session %}
-	{{ session['username'] }}
-	{% if request.path == '/' %}
 	{% if roles[session['username']] == 'admin' %}
-	<a class="btn-link" href="asigna">Asignar</a>
+	<a class="btn btn-outline-primary" href="asigna">Asignar</a>
 	{% endif %}
-	<a class="btn-link" href="iniciativas">Mis iniciativas</a>
+	{% if request.path == '/' %}
+	<a class="btn btn-outline-primary" href="iniciativas">Ver mis asignadas</a>
 	{% else %}
-	<a class="btn-link" href=".">Todas las iniciativas</a>
+	<a class="btn btn-outline-primary" href=".">Ver todas las iniciativas</a>
 	{% endif %}
-	<a class="btn-link" href="logout">Terminar sesión</a>
+	<a class="btn btn-outline-primary float-end" href="logout">Terminar sesión</a>
+	<span class="btn btn-outline-secondary float-end disabled">Usuario: {{ session['username'] }}</span>
 	{% else %}
-	<a class="btn-link" href="login">Iniciar sesión</a>
+	<a class="btn btn-outline-primary" href="login">Iniciar sesión</a>
 	{% endif %}
+      </p>
 	{% if request.path == '/asigna' %}
 	<form class="needs-validation" novalidate method="post">
         <button class="btn btn-secondary" type="submit">Asignar</button>
@@ -33,7 +34,6 @@
         {% endfor %}
 	{{ asignadas[None] }} por asignar
 	{% endif %}
-      </p>
     </div>
         {% for r in records %}
     <div class="container px-4">

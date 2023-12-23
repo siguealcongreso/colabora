@@ -62,8 +62,8 @@ def areas(db):
 
 def areas_por_iniciativa(db):
     cmd = ("SELECT estado.nombre, legislatura.nombre, numero, areas.nombre "
-           "FROM iniciativas "
-           "RIGHT JOIN clasificacion USING (estado_id, legislatura_id, numero) "
+           "FROM clasificacion "
+           "LEFT JOIN iniciativas USING (estado_id, legislatura_id, numero) "
            "JOIN areas USING (area_id) "
            "JOIN estado USING (estado_id) "
            "JOIN legislatura USING (legislatura_id)")
@@ -76,8 +76,13 @@ def areas_por_iniciativa(db):
 def asignadas_por_autor(db):
     cmd = ("SELECT usuario, count(numero) as asignadas FROM iniciativas "
            "LEFT JOIN asignacion USING (estado_id, legislatura_id, numero) "
-           "FULL JOIN usuarios USING (usuario_id) "
-           "GROUP BY usuario")
+           "LEFT JOIN usuarios USING (usuario_id) "
+           "GROUP BY usuario "
+           "UNION "
+           "SELECT usuario, count(numero) as asignadas FROM usuarios "
+           "LEFT JOIN asignacion USING (usuario_id) "
+           "LEFT JOIN iniciativas USING (estado_id, legislatura_id, numero) "
+           "GROUP BY usuario ")
     cur = db.cursor()
     cur.execute(cmd)
     records = cur.fetchall()

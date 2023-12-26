@@ -40,6 +40,13 @@ def a_dict(records):
     return d
 
 
+def usuario_por_id(db, usuario_id):
+    cmd = "SELECT * FROM usuarios WHERE usuario_id=?"
+    cur = db.cursor()
+    cur.execute(cmd, (usuario_id,))
+    return cur.fetchone()
+
+
 def usuarios(db):
     """Regresa una lista de los usuarios
 

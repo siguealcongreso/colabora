@@ -1,6 +1,7 @@
 import sqlite3
 
 from flask import g
+from werkzeug.security import generate_password_hash
 from .app import app
 
 
@@ -212,7 +213,7 @@ def agrega_usuario(db, nombre, contrasena, rol):
     cmd = "INSERT INTO usuarios (usuario, contrasena, rol) VALUES (?, ?, ?)"
     cur = db.cursor()
     try:
-        cur.execute(cmd, (nombre, contrasena, rol))
+        cur.execute(cmd, (nombre, generate_password_hash(contrasena), rol))
         db.commit()
     except sqlite3.DatabaseError:
         return f"error: '{nombre}' no creado"

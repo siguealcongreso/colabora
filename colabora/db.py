@@ -48,6 +48,13 @@ def usuario_por_id(db, usuario_id):
     return cur.fetchone()
 
 
+def usuario(db, usuario):
+    cmd = "SELECT * FROM usuarios WHERE usuario=?"
+    cur = db.cursor()
+    cur.execute(cmd, (usuario,))
+    return cur.fetchone()
+
+
 def usuarios(db):
     """Regresa una lista de los usuarios
 

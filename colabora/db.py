@@ -53,7 +53,7 @@ def usuarios(db):
     Cada elemento es un diccionario con
     `usuario` y `rol`.
     """
-    cmd = "SELECT usuario, rol FROM usuarios"
+    cmd = "SELECT * FROM usuarios"
     cur = db.cursor()
     cur.execute(cmd)
     records = cur.fetchall()

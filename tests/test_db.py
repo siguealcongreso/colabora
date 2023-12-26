@@ -57,6 +57,7 @@ def test_usuarios(database):
     assert len(result) == 3
     assert "usuario1" == result[0]["usuario"]
     assert "escritor" == result[0]["rol"]
+    assert 1 == result[0]["usuario_id"]
     assert "usuario2" == result[1]["usuario"]
     assert "editor" == result[1]["rol"]
 

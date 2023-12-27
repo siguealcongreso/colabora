@@ -18,7 +18,8 @@ def test_list_sin_sesion(client):
 def test_list_en_sesion_escritor(client):
     with client:
         response = client.post('/login',
-                               data={'username': 'usuario1'})
+                               data={'username': 'usuario1',
+                                     'password': 'contrasena1'})
         response = client.get('/')
         assert b'tema1' in response.data
         assert b'resumen1' in response.data
@@ -29,7 +30,8 @@ def test_list_en_sesion_escritor(client):
 def test_list_en_sesion_editor(client):
     with client:
         response = client.post('/login',
-                               data={'username': 'usuario2'})
+                               data={'username': 'usuario2',
+                                     'password': 'contrasena2'})
         response = client.get('/')
         assert b'tema1' in response.data
         assert b'resumen1' in response.data
@@ -40,7 +42,8 @@ def test_list_en_sesion_editor(client):
 def test_list_en_sesion_admin(client):
     with client:
         response = client.post('/login',
-                               data={'username': 'usuario3'})
+                               data={'username': 'usuario3',
+                                     'password': 'contrasena3'})
         response = client.get('/')
         assert b'tema1' in response.data
         assert b'resumen1' in response.data
@@ -85,7 +88,8 @@ def test_logout(client):
 def test_iniciativas_vacio(client):
     with client:
         response = client.post('/login',
-                               data={'username': 'xx'})
+                               data={'username': 'usuario3',
+                                     'password': 'contrasena3'})
         response = client.get('/iniciativas')
         assert b'resumen1' not in response.data
 
@@ -102,21 +106,24 @@ def test_asigna_reenvia_a_login(client):
 
 def test_asigna_despliega(client):
     response = client.post('/login',
-                           data={'username': 'usuario3'})
+                           data={'username': 'usuario3',
+                                 'password': 'contrasena3'})
     response = client.get('/asigna')
     assert b'usuario3' in response.data
     assert b"mero</b> 3" in response.data
 
 def test_asigna_acceso_denegado(client):
     response = client.post('/login',
-                           data={'username': 'usuario1'})
+                           data={'username': 'usuario1',
+                                 'password': 'contrasena1'})
     response = client.get('/asigna')
     assert 403 == response.status_code
     assert b'Forbidden' in response.data
 
 def test_asigna_enviar(client):
     response = client.post('/login',
-                           data={'username': 'usuario3'})
+                           data={'username': 'usuario3',
+                                 'password': 'contrasena3'})
     response = client.post('/asigna',
                            data={'autor': 'usuario3', 'numero': '1'}
                            )
@@ -133,7 +140,8 @@ def test_crea_error(client):
 def test_edita(client):
     with client:
         response = client.post('/login',
-                               data={'username': 'usuario1'})
+                               data={'username': 'usuario1',
+                                     'password': 'contrasena1'})
         response = client.get('/edita/1')
         assert b'trata?' in response.data
         assert b'name="comentario"' not in response.data
@@ -141,16 +149,17 @@ def test_edita(client):
 def test_edita_comentario(client):
     with client:
         response = client.post('/login',
-                               data={'username': 'usuario2'})
+                               data={'username': 'usuario2',
+                                     'password': 'contrasena2'})
         response = client.get('/edita/1')
         assert b'trata?' in response.data
         assert b'name="comentario"' in response.data
 
 def test_edita_no_existe(client):
     with client:
-        colabora.db.init_db()
         response = client.post('/login',
-                               data={'username': 'autor1'})
+                               data={'username': 'usuario1',
+                                     'password': 'contrasena1'})
         response = client.get('/edita/2')
         assert 404 == response.status_code
         assert b'Not Found' in response.data
@@ -158,7 +167,8 @@ def test_edita_no_existe(client):
 def test_edita_sin_area(client):
     with client:
         response = client.post('/login',
-                               data={'username': 'usuario1'})
+                               data={'username': 'usuario1',
+                                     'password': 'contrasena1'})
         response = client.get('/edita/3')
         assert b'trata?' in response.data
 
@@ -171,7 +181,8 @@ def test_edita_reenvia_a_login(client):
 def test_edita_guardar(client):
     with client:
         response = client.post('/login',
-                               data={'username': 'usuario1'})
+                               data={'username': 'usuario1',
+                                     'password': 'contrasena1'})
         response = client.post('/edita/1', data={'tema': 'TEMA', 'resumen': 'RESUMEN',
                                                  'area': ['1', '2']},
                                follow_redirects=True)

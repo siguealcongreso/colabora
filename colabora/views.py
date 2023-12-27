@@ -6,6 +6,7 @@ from flask import redirect, url_for
 from flask import abort
 from flask import flash
 from flask import session
+from flask import g
 from .app import app
 from .db import get_db
 from .db import iniciativas_asignadas
@@ -18,6 +19,8 @@ from .db import areas_por_iniciativa
 from .db import actualiza_iniciativa
 from .db import clasifica
 from .db import desclasifica
+from .db import usuario_por_id
+
 
 ENTIDAD = 'Jalisco'
 LEGISLATURA = 'LXIII'
@@ -145,3 +148,14 @@ def edita_post(numero):
         clasifica(db, ENTIDAD, LEGISLATURA, numero, areas[int(i)-1]['nombre'])
     flash("Información guardada")
     return redirect(url_for('edita', numero=numero))
+
+
+@app.before_request
+def load_logged_in_user():
+    usuario_id = session.get('uid')
+
+    if usuario_id is None:
+        g.user = None
+    else:
+        db = get_db()
+        g.user = usuario_por_id(db, usuario_id)

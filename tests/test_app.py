@@ -1,4 +1,5 @@
 from flask import session
+from flask import g
 from colabora.main import app
 import colabora.views
 import colabora.db
@@ -162,3 +163,15 @@ def test_edita_guardar(client):
         assert b'RESUMEN' in response.data
         assert b'area1' in response.data
         assert b'area2' in response.data
+
+
+def test_load_logged_in_user_none(client):
+    with app.test_request_context():
+        result = colabora.views.load_logged_in_user()
+        assert g.user == None
+
+def test_load_logged_in_user_valid(client):
+    with app.test_request_context():
+        session['uid'] = 1
+        result = colabora.views.load_logged_in_user()
+        assert g.user['usuario_id'] == 1

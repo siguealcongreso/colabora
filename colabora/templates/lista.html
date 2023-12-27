@@ -3,8 +3,8 @@
 {% block content %}
     <div class="container">
       <p>
-	{% if 'username' in session %}
-	{% if roles[session['username']] == 'admin' %}
+	{% if g.user %}
+	{% if g.user['rol'] == 'admin' %}
 	<a class="btn btn-outline-primary" href="asigna">Asignar</a>
 	{% endif %}
 	{% if request.path == '/' %}
@@ -13,7 +13,7 @@
 	<a class="btn btn-outline-primary" href=".">Ver todas las iniciativas</a>
 	{% endif %}
 	<a class="btn btn-outline-primary float-end" href="logout">Terminar sesión</a>
-	<span class="btn btn-outline-secondary float-end disabled">Usuario: {{ session['username'] }}</span>
+	<span class="btn btn-outline-secondary float-end disabled">Usuario: {{ g.user['usuario'] }}</span>
 	{% else %}
 	<a class="btn btn-outline-primary" href="login">Iniciar sesión</a>
 	{% endif %}
@@ -65,7 +65,7 @@
               <b>Cambios</b> {{ r.cambios }}
                 (<a href="https://siguealcongreso.org/monitoreo/iniciativas/lxiii/{{ r.numero }}/" title="Ver ficha">{{ r.numero }}</a>)
             <a href="https://congresoweb.congresojal.gob.mx/infolej/sistemaintegral/infolej/../../agendakioskos/documentos/sistemaintegral/estados/R_52806.pdf" target="_blank" title="Leer el documento">🖹</a>
-            {% if 'username' in session and (r.usuario == session['username'] or roles[session['username']] in ('editor', 'admin')) %}
+            {% if g.user and (r.usuario == g.user['usuario'] or g.user['rol'] in ('editor', 'admin')) %}
 	    <a href="edita/{{ r.numero }}" title="Editar">✏</a>
 	    {% endif %}
           </div>

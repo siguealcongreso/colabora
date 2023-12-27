@@ -184,6 +184,7 @@ def test_edita_guardar(client):
                                data={'username': 'usuario1',
                                      'password': 'contrasena1'})
         response = client.post('/edita/1', data={'tema': 'TEMA', 'resumen': 'RESUMEN',
+                                                 'comentario': 'COMENTARIO',
                                                  'area': ['1', '2']},
                                follow_redirects=True)
         assert 200 == response.status_code

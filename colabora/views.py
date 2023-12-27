@@ -155,10 +155,12 @@ def edita_post(numero):
     db = get_db()
     tema = request.form['tema']
     resumen = request.form['resumen']
+    comentario = request.form['comentario']
     area = request.form.getlist('area')
     areas = dbareas(db)
     result = actualiza_iniciativa(db, ENTIDAD, LEGISLATURA, numero,
-                                  tema=tema, resumen=resumen)
+                                  tema=tema, resumen=resumen,
+                                  comentario=comentario)
     desclasifica(db, ENTIDAD, LEGISLATURA, numero)
     for i, nombre in zip(area, areas):
         clasifica(db, ENTIDAD, LEGISLATURA, numero, areas[int(i)-1]['nombre'])

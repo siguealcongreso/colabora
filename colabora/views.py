@@ -7,6 +7,7 @@ from flask import abort
 from flask import flash
 from flask import session
 from flask import g
+from werkzeug.security import check_password_hash
 from .app import app
 from .db import get_db
 from .db import iniciativas_asignadas
@@ -19,6 +20,7 @@ from .db import areas_por_iniciativa
 from .db import actualiza_iniciativa
 from .db import clasifica
 from .db import desclasifica
+from .db import usuario
 from .db import usuario_por_id
 
 
@@ -74,14 +76,28 @@ def login_get():
 
 @app.post("/login")
 def login_post():
-    session['username'] = request.form['username']
-    session.permanent = True
-    flash('¡Has ingresado correctamente!')
-    return redirect(url_for('lista', _method="GET"))
+    username = request.form['username']
+    password = request.form['password']
+    db = get_db()
+    error = None
+    user = usuario(db, username)
+    if user is None:
+        error = 'Usuario incorrecto.'
+    elif not check_password_hash(user['contrasena'], password):
+        error = 'Contraseña incorrecta.'
+
+    if error is None:
+        session.clear()
+        session['uid'] = user['usuario_id']
+        session.permanent = True
+        flash('¡Has ingresado correctamente!')
+        return redirect(url_for('lista', _method="GET"))
+    flash(error)
+    return redirect(url_for('login_get'))
 
 @app.route("/logout")
 def logout():
-    session.pop('username', None)
+    session.clear()
     flash('¡Terminaste tu sesión correctamente!')
     return redirect(url_for('lista'))
 

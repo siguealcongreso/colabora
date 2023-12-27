@@ -57,13 +57,30 @@ def test_login_despliega(client):
 def test_login_enviar(client):
     with client:
         response = client.post('/login',
-                               data={'username': 'autor1'})
-        assert session['username'] == 'autor1'
+                               data={'username': 'usuario1',
+                                     'password':'contrasena1'})
+        assert session['uid'] == 1
+
+def test_login_enviar_usuario_incorrecto(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario5',
+                                     'password':'contrasena5'},
+                               follow_redirects=True)
+        assert session['_flashes'][0][1] == 'Usuario incorrecto.'
+        assert response.request.path == '/login'
+
+def test_login_enviar_contrasena_incorrecta(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario1',
+                                     'password':'contrasena2'})
+        assert session['_flashes'][0][1] == 'Contraseña incorrecta.'
 
 def test_logout(client):
     with client:
         response = client.get('logout')
-        assert 'username' not in session
+        assert 'uid' not in session
 
 def test_iniciativas_vacio(client):
     with client:

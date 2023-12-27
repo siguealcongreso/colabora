@@ -259,8 +259,13 @@ def test_actualiza_iniciativa_error(database):
                                               tema='TEMA')
     assert result == 'error: iniciativa 4 no actualizada'
 
+def test_actualiza_iniciativa_omitir(database):
+    database.executescript(_data_sql)
+    result = colabora.db.actualiza_iniciativa(database, 'entidad1', 'legislatura1', 1)
+    assert result == 'error: iniciativa 1 no actualizada'
+
 def test_actualiza_iniciativa_vacios(database):
     database.executescript(_data_sql)
     result = colabora.db.actualiza_iniciativa(database, 'entidad1', 'legislatura1', 1,
                                               tema='', resumen='')
-    assert result == 'error: iniciativa 1 no actualizada'
+    assert result == 'ok: iniciativa 1 actualizada'

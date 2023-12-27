@@ -252,13 +252,13 @@ def actualiza_iniciativa(db, entidad, legislatura, numero, tema=None, resumen=No
                          comentario=None):
     fields = []
     values = []
-    if tema:
+    if tema != None:
         fields.append(f"tema=?")
         values.append(tema)
-    if resumen:
+    if resumen != None:
         fields.append(f"resumen=?")
         values.append(resumen)
-    if comentario:
+    if comentario != None:
         fields.append(f"comentario=?")
         values.append(comentario)
     sets = ', '.join(fields)

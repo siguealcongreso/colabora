@@ -145,6 +145,7 @@ def test_edita(client):
         response = client.get('/edita/1')
         assert b'trata?' in response.data
         assert b'name="comentario"' not in response.data
+        assert b'comentario1' in response.data
 
 def test_edita_comentario(client):
     with client:
@@ -154,6 +155,7 @@ def test_edita_comentario(client):
         response = client.get('/edita/1')
         assert b'trata?' in response.data
         assert b'name="comentario"' in response.data
+        assert b'comentario1' in response.data
 
 def test_edita_no_existe(client):
     with client:

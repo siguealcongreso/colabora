@@ -31,7 +31,7 @@ LEGISLATURA = 'LXIII'
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
-        if 'username' not in session:
+        if 'uid' not in session:
             flash("Por favor ingresa a sesión")
             return redirect(url_for('login_get'))
 
@@ -56,9 +56,9 @@ def valores(records):
 @app.route("/")
 def lista():
     db = get_db()
-    if 'username' in session and request.path == '/iniciativas':
+    if 'uid' in session and request.path == '/iniciativas':
         records = iniciativas_asignadas(db, ENTIDAD, LEGISLATURA,
-                                        session['username'])
+                                        g.user['usuario'])
     else:
         records = iniciativas(db, ENTIDAD, LEGISLATURA)
     tags, comentarios, areas, users, asignadas = valores(records)
@@ -106,7 +106,7 @@ def logout():
 def asigna():
     db = get_db()
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
-    if roles[session['username']] != 'admin':
+    if g.user['rol'] != 'admin':
         abort(403)
     if request.method == 'POST':
         for numero in request.form.getlist('numero'):

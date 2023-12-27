@@ -2,9 +2,18 @@
 {% block title %}Iniciativas sin resumen - Legislatura LXIII{% endblock %}
 {% block content %}
     <div class="container">
-      <p><span>¡Ayúdanos a escribir el resumen de una de estas iniciativas! <a href="/colabora/">¿Cómo?</a></span> -
-	{{ session['username'] }}
-	<a class="btn-link" href="/logout">Terminar sesión</a>
+      <p>
+	{% if g.user %}
+	{% if g.user['rol'] == 'admin' %}
+	<a class="btn btn-outline-primary" href="asigna">Asignar</a>
+	{% endif %}
+	<a class="btn btn-outline-primary" href="../iniciativas">Ver mis asignadas</a>
+	<a class="btn btn-outline-primary" href="..">Ver todas las iniciativas</a>
+	<a class="btn btn-outline-primary float-end" href="../logout">Terminar sesión</a>
+	<span class="btn btn-outline-secondary float-end disabled">Usuario: {{ g.user['usuario'] }}</span>
+	{% else %}
+	<a class="btn btn-outline-primary" href="login">Iniciar sesión</a>
+	{% endif %}
       </p>
     </div>
     <form method="post">

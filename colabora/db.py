@@ -262,14 +262,15 @@ def actualiza_iniciativa(db, entidad, legislatura, numero, tema=None, resumen=No
         fields.append(f"comentario=?")
         values.append(comentario)
     sets = ', '.join(fields)
-    cmd = (f"UPDATE iniciativas SET {sets} WHERE "
-           "entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) "
-           "AND legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?) "
-           "AND numero=?")
-    values.extend([entidad, legislatura, numero])
-    cur = db.cursor()
-    cur.execute(cmd, values)
-    if cur.rowcount == 1:
-        db.commit()
-        return f"ok: iniciativa {numero} actualizada"
+    if sets:
+        cmd = (f"UPDATE iniciativas SET {sets} WHERE "
+               "entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) "
+               "AND legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?) "
+               "AND numero=?")
+        values.extend([entidad, legislatura, numero])
+        cur = db.cursor()
+        cur.execute(cmd, values)
+        if cur.rowcount == 1:
+            db.commit()
+            return f"ok: iniciativa {numero} actualizada"
     return f"error: iniciativa {numero} no actualizada"

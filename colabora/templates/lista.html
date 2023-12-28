@@ -7,6 +7,9 @@
 	{% if g.user['rol'] == 'admin' %}
 	<a class="btn btn-outline-primary" href="asigna">Asignar</a>
 	{% endif %}
+	{% if request.path == '/asigna' %}
+	<a class="btn btn-outline-primary" href="iniciativas">Ver mis asignadas</a>
+	{% endif %}
 	{% if request.path == '/' %}
 	<a class="btn btn-outline-primary" href="iniciativas">Ver mis asignadas</a>
 	{% else %}

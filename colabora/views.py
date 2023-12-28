@@ -42,6 +42,8 @@ def login_required(view):
 
 def valores(records):
     ""
+    temas = {r["numero"]: r["tema"].split('\n') for r in records}
+    resumenes = {r["numero"]: r["resumen"].split('\n') for r in records}
     comentarios = {r["numero"]: r["comentario"].split('\n') for r in records}
     db = get_db()
     tags = areas_por_iniciativa(db).get(ENTIDAD, {}).get(LEGISLATURA, {})
@@ -49,7 +51,7 @@ def valores(records):
     users = usuarios(db)
     rows = asignadas_por_autor(db)
     asignadas = {row['usuario']: row['asignadas'] for row in rows}
-    return tags, comentarios, areas, users, asignadas
+    return tags, comentarios, areas, users, asignadas, temas, resumenes
 
 
 @app.route("/iniciativas")
@@ -61,11 +63,12 @@ def lista():
                                         g.user['usuario'])
     else:
         records = iniciativas(db, ENTIDAD, LEGISLATURA)
-    tags, comentarios, areas, users, asignadas = valores(records)
+    tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
-        comentarios=comentarios, users=users, asignadas=asignadas, roles=roles
+        comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
+        temas=temas, resumenes=resumenes
     )
 
 @app.get("/login")
@@ -114,10 +117,11 @@ def asigna():
                               numero, request.form['autor'])
     records = iniciativas(db, ENTIDAD, LEGISLATURA,
                           solo_sin_asignar=True)
-    tags, comentarios, areas, users, asignadas = valores(records)
+    tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
-        comentarios=comentarios, users=users, asignadas=asignadas, roles=roles
+        comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
+        temas=temas, resumenes=resumenes
     )
 
 

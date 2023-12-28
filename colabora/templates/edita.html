@@ -66,13 +66,9 @@
       <div class="row py-2 border border-top-0 bg-light">
         <div class=""><b>Comentario</b>
 	  {% if g.user['rol'] in ('editor',) %}
-          <textarea class="form-control" name="comentario">{% for c in comentarios %}{{ c }}<br>{% endfor %}</textarea>
+          <textarea class="form-control" name="comentario">{{ r.comentario }}</textarea>
             <span class="form-text">¿Cómo mejorar el tema o resumen?</span>
-          {% else %}
-	      {% for c in comentarios %}
-	      {{ c }}<br>
-	      {% endfor %}
-	  {% endif %}
+          {% else %}{{ r.comentario }}{% endif %}
         </div>
       </div>
       <div class="row py-2 border border-top-0 bg-light">

@@ -157,7 +157,7 @@ def edita_post(numero):
     db = get_db()
     tema = request.form['tema']
     resumen = request.form['resumen']
-    comentario = request.form['comentario']
+    comentario = request.form.get('comentario')
     area = request.form.getlist('area')
     areas = dbareas(db)
     result = actualiza_iniciativa(db, ENTIDAD, LEGISLATURA, numero,

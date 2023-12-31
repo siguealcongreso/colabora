@@ -72,6 +72,13 @@ def test_usuarios(database):
     assert "editor" == result[1]["rol"]
 
 
+def test_estados(database):
+    database.executescript(_data_sql)
+    result = colabora.db.estados(database)
+    assert len(result) == 1
+    assert "estado1" == result[0]["estado"]
+
+
 def test_areas(database):
     database.executescript(_data_sql)
     result = colabora.db.areas(database)

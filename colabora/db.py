@@ -67,6 +67,12 @@ def usuarios(db):
     records = cur.fetchall()
     return records
 
+def estados(db):
+    cmd = "SELECT * FROM estado"
+    cur = db.cursor()
+    cur.execute(cmd)
+    records = cur.fetchall()
+    return records
 
 def areas(db):
     cmd = "SELECT nombre FROM areas"

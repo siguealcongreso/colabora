@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS legislatura;
 DROP TABLE IF EXISTS iniciativas;
 DROP TABLE IF EXISTS areas;
 DROP TABLE IF EXISTS usuarios;
+DROP TABLE IF EXISTS estado;
 
 CREATE TABLE entidad (
     entidad_id INTEGER PRIMARY KEY,
@@ -24,7 +25,7 @@ CREATE TABLE iniciativas (
     tema TEXT DEFAULT '',
     resumen TEXT DEFAULT '',
     comentario TEXT DEFAULT '',
-    estado TEXT DEFAULT '',
+    estado_id INTEGER REFERENCES estado(estado_id),
     PRIMARY KEY (entidad_id, legislatura_id, numero)
     );
 
@@ -57,4 +58,9 @@ CREATE TABLE asignacion (
     usuario_id INTEGER NOT NULL REFERENCES usuarios(usuario_id),
     PRIMARY KEY (entidad_id, legislatura_id, numero, usuario_id),
     FOREIGN KEY (entidad_id, legislatura_id, numero) REFERENCES iniciativas
+);
+
+CREATE TABLE estado (
+    estado_id INTEGER PRIMARY KEY,
+    estado TEXT NOT NULL UNIQUE
 );

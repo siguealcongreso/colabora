@@ -1,7 +1,7 @@
 from flask import Flask, Response
 import secure
 
-secure_headers = secure.Secure()
+secure_headers = secure.Secure(server=secure.Server())
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object("defaults")

@@ -113,6 +113,7 @@ def iniciativa(db, entidad, legislatura, numero):
     cur = db.cursor()
     cmd = ("SELECT numero, cambios, tema, resumen, estado, comentario, usuario "
            "FROM iniciativas "
+           "LEFT JOIN estado USING (estado_id) "
            "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
            "LEFT JOIN usuarios USING (usuario_id) "
            "WHERE entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) AND "
@@ -125,6 +126,7 @@ def iniciativa(db, entidad, legislatura, numero):
 def iniciativas(db, entidad, legislatura, solo_sin_asignar=False):
     cmd = ("SELECT numero, cambios, tema, resumen, estado, comentario, usuario "
            "FROM iniciativas "
+           "LEFT JOIN estado USING (estado_id) "
            "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
            "LEFT JOIN usuarios USING (usuario_id) "
            "WHERE entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) AND "
@@ -140,6 +142,7 @@ def iniciativas(db, entidad, legislatura, solo_sin_asignar=False):
 def iniciativas_asignadas(db, entidad, legislatura, usuario):
     cmd = ("SELECT numero, cambios, tema, resumen, estado, comentario, usuario "
            "FROM iniciativas "
+           "LEFT JOIN estado USING (estado_id) "
            "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
            "LEFT JOIN usuarios USING (usuario_id) "
            "WHERE entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) AND "

@@ -22,6 +22,7 @@ from .db import clasifica
 from .db import desclasifica
 from .db import usuario
 from .db import usuario_por_id
+from .db import estados as dbestados
 
 
 ENTIDAD = 'Jalisco'
@@ -143,11 +144,13 @@ def edita(numero):
     if not record:
         abort(404)
     areas = dbareas(db)
+    estados = dbestados(db)
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
     tags = areas_por_iniciativa(db).get(ENTIDAD, {}).get(LEGISLATURA, {}).get(int(numero), [])
     return render_template('edita.html',
                            r=record,
                            tags=tags,
+                           estados=estados,
                            roles=roles,
                            areas=areas)
 

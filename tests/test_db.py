@@ -218,6 +218,16 @@ def test_agrega_area_error(database):
     assert "error: 'area1' no creada" == result
 
 
+def test_agrega_estado_ok(database):
+    result = colabora.db.agrega_estado(database, 'estado1')
+    assert "ok: 'estado1' creada" == result
+
+def test_agrega_estado_error(database):
+    result = colabora.db.agrega_estado(database, 'estado1')
+    result = colabora.db.agrega_estado(database, 'estado1')
+    assert "error: 'estado1' no creada" == result
+
+
 def test_agrega_usuario_ok(database):
     result = colabora.db.agrega_usuario(database, 'usuario1', 'contrasena1', 'rol1')
     assert "ok: 'usuario1' creado" == result

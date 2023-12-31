@@ -222,6 +222,17 @@ def agrega_area(db, nombre):
     return f"ok: '{nombre}' creada"
 
 
+def agrega_estado(db, estado):
+    cmd = "INSERT INTO estado (estado) VALUES (?)"
+    cur = db.cursor()
+    try:
+        cur.execute(cmd, (estado,))
+        db.commit()
+    except sqlite3.DatabaseError:
+        return f"error: '{estado}' no creada"
+    return f"ok: '{estado}' creada"
+
+
 def agrega_usuario(db, nombre, contrasena, rol):
     cmd = "INSERT INTO usuarios (usuario, contrasena, rol) VALUES (?, ?, ?)"
     cur = db.cursor()

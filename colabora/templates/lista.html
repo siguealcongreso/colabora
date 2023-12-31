@@ -58,7 +58,7 @@
           </div>
         </div>
         <div class="col-md-6">
-          <div class=""><b>Estado</b> {{ r.estado }}
+          <div class=""><b>Estado</b> {% if r.estado != None %}{{ r.estado }}{% endif %}
           </div>
         </div>
       </div>

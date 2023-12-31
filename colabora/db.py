@@ -197,17 +197,17 @@ def desclasifica(db, entidad, legislatura, numero):
     return f"error: no se removieron areas de iniciativa {numero}"
 
 def agrega_iniciativa(db, entidad, legislatura, numero, cambios, tema, resumen,
-                      comentario, estado):
+                      comentario):
     cmd = ("INSERT INTO iniciativas (entidad_id, legislatura_id, numero, "
-           "cambios, tema, resumen, comentario, estado) "
+           "cambios, tema, resumen, comentario) "
            "VALUES "
            "((SELECT entidad_id FROM entidad WHERE nombre=?), "
            "(SELECT legislatura_id FROM legislatura WHERE nombre=?), "
-           "?, ?, ?, ?, ?, ?)")
+           "?, ?, ?, ?, ?)")
     cur = db.cursor()
     try:
         cur.execute(cmd, (entidad, legislatura, numero, cambios, tema, resumen,
-                          comentario, estado))
+                          comentario))
         db.commit()
     except sqlite3.DatabaseError:
         return f"error: iniciativa {numero} no creada"

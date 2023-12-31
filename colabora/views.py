@@ -131,7 +131,7 @@ def crea(numero):
     cambios = request.form['cambios']
     result = agrega_iniciativa(db, ENTIDAD, LEGISLATURA,
                                numero, cambios, tema="", resumen="",
-                               comentario="", estado="")
+                               comentario="")
     return result
 
 

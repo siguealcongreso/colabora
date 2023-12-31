@@ -198,13 +198,13 @@ def test_desclasifica_ninguna(database):
 def test_agrega_iniciativa_ok(database):
     database.executescript(_data_sql)
     result = colabora.db.agrega_iniciativa(database, 'entidad1', 'legislatura1', 2,
-                                           'cambios', '', '', '', '')
+                                           'cambios', '', '', '')
     assert "ok: iniciativa 2 creada" == result
 
 def test_agrega_iniciativa_error(database):
     database.executescript(_data_sql)
     result = colabora.db.agrega_iniciativa(database, 'entidad1', 'legislatura1', 1,
-                                           'cambios', '', '', '', '')
+                                           'cambios', '', '', '')
     assert "error: iniciativa 1 no creada" == result
 
 

@@ -270,6 +270,12 @@ def test_actualiza_iniciativa_todo_ok(database):
                                               comentario='COMENTARIO')
     assert result == 'ok: iniciativa 1 actualizada'
 
+def test_actualiza_iniciativa_estado(database):
+    database.executescript(_data_sql)
+    result = colabora.db.actualiza_iniciativa(database, 'entidad1', 'legislatura1', 1,
+                                              estado_id=1)
+    assert result == 'ok: iniciativa 1 actualizada'
+
 def test_actualiza_iniciativa_error(database):
     database.executescript(_data_sql)
     result = colabora.db.actualiza_iniciativa(database, 'entidad1', 'legislatura1', 4,

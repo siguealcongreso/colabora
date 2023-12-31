@@ -269,7 +269,7 @@ def agrega_legislatura(db, nombre):
     return f"ok: '{nombre}' creado"
 
 def actualiza_iniciativa(db, entidad, legislatura, numero, tema=None, resumen=None,
-                         comentario=None):
+                         comentario=None, estado_id=None):
     fields = []
     values = []
     if tema != None:
@@ -281,6 +281,9 @@ def actualiza_iniciativa(db, entidad, legislatura, numero, tema=None, resumen=No
     if comentario != None:
         fields.append(f"comentario=?")
         values.append(comentario)
+    if estado_id != None:
+        fields.append(f"estado_id=?")
+        values.append(estado_id)
     sets = ', '.join(fields)
     if sets:
         cmd = (f"UPDATE iniciativas SET {sets} WHERE "

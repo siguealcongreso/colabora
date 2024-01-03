@@ -111,7 +111,7 @@ def asignadas_por_autor(db):
 
 def iniciativa(db, entidad, legislatura, numero):
     cur = db.cursor()
-    cmd = ("SELECT numero, cambios, tema, resumen, estado, comentario, usuario "
+    cmd = ("SELECT numero, cambios, documento, tema, resumen, estado, comentario, usuario "
            "FROM iniciativas "
            "LEFT JOIN estado USING (estado_id) "
            "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
@@ -124,7 +124,7 @@ def iniciativa(db, entidad, legislatura, numero):
     return record
 
 def iniciativas(db, entidad, legislatura, solo_sin_asignar=False):
-    cmd = ("SELECT numero, cambios, tema, resumen, estado, comentario, usuario "
+    cmd = ("SELECT numero, cambios, documento, tema, resumen, estado, comentario, usuario "
            "FROM iniciativas "
            "LEFT JOIN estado USING (estado_id) "
            "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
@@ -140,7 +140,7 @@ def iniciativas(db, entidad, legislatura, solo_sin_asignar=False):
 
 
 def iniciativas_asignadas(db, entidad, legislatura, usuario):
-    cmd = ("SELECT numero, cambios, tema, resumen, estado, comentario, usuario "
+    cmd = ("SELECT numero, cambios, documento, tema, resumen, estado, comentario, usuario "
            "FROM iniciativas "
            "LEFT JOIN estado USING (estado_id) "
            "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
@@ -196,18 +196,18 @@ def desclasifica(db, entidad, legislatura, numero):
         return f"ok: se removieron areas de iniciativa {numero}"
     return f"error: no se removieron areas de iniciativa {numero}"
 
-def agrega_iniciativa(db, entidad, legislatura, numero, cambios, tema, resumen,
-                      comentario):
+def agrega_iniciativa(db, entidad, legislatura, numero, cambios, documento,
+                      tema, resumen, comentario):
     cmd = ("INSERT INTO iniciativas (entidad_id, legislatura_id, numero, "
-           "cambios, tema, resumen, comentario) "
+           "cambios, documento, tema, resumen, comentario) "
            "VALUES "
            "((SELECT entidad_id FROM entidad WHERE nombre=?), "
            "(SELECT legislatura_id FROM legislatura WHERE nombre=?), "
-           "?, ?, ?, ?, ?)")
+           "?, ?, ?, ?, ?, ?)")
     cur = db.cursor()
     try:
-        cur.execute(cmd, (entidad, legislatura, numero, cambios, tema, resumen,
-                          comentario))
+        cur.execute(cmd, (entidad, legislatura, numero, cambios, documento,
+                          tema, resumen, comentario))
         db.commit()
     except sqlite3.DatabaseError:
         return f"error: iniciativa {numero} no creada"

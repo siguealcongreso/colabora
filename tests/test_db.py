@@ -115,6 +115,7 @@ def test_iniciativa_ok(database):
                                     legislatura='legislatura1',
                                     numero=1)
     assert "tema1" == result['tema']
+    assert "documento1" == result['documento']
 
 def test_iniciativa_none(database):
     database.executescript(_data_sql)
@@ -129,6 +130,7 @@ def test_iniciativas(database):
     result = colabora.db.iniciativas(database, entidad='entidad1',
                                      legislatura='legislatura1')
     assert len(result) == 2
+    assert result[0]['documento'] == 'documento1'
 
 
 def test_iniciativas_solo_no_asignadas(database):
@@ -153,6 +155,7 @@ def test_iniciativas_asignadas_ok(database):
                                                usuario='usuario1')
     assert len(result) == 1
     assert 1 == result[0]["numero"]
+    assert 'documento1' == result[0]["documento"]
 
 def test_iniciativas_asignadas_vacio(database):
     database.executescript(_data_sql)
@@ -198,13 +201,13 @@ def test_desclasifica_ninguna(database):
 def test_agrega_iniciativa_ok(database):
     database.executescript(_data_sql)
     result = colabora.db.agrega_iniciativa(database, 'entidad1', 'legislatura1', 2,
-                                           'cambios', '', '', '')
+                                           'cambios', 'documento1',  '', '', '')
     assert "ok: iniciativa 2 creada" == result
 
 def test_agrega_iniciativa_error(database):
     database.executescript(_data_sql)
     result = colabora.db.agrega_iniciativa(database, 'entidad1', 'legislatura1', 1,
-                                           'cambios', '', '', '')
+                                           'cambios', 'documento1', '', '', '')
     assert "error: iniciativa 1 no creada" == result
 
 

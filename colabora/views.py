@@ -130,8 +130,9 @@ def asigna():
 def crea(numero):
     db = get_db()
     cambios = request.form['cambios']
+    documento = request.form['documento']
     result = agrega_iniciativa(db, ENTIDAD, LEGISLATURA,
-                               numero, cambios, tema="", resumen="",
+                               numero, cambios, documento, tema="", resumen="",
                                comentario="")
     return result
 

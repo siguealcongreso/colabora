@@ -22,6 +22,7 @@ CREATE TABLE iniciativas (
     legislatura_id INTEGER NOT NULL,
     numero INTEGER NOT NULL,
     cambios TEXT DEFAULT '',
+    documento TEXT DEFAULT '',
     tema TEXT DEFAULT '',
     resumen TEXT DEFAULT '',
     comentario TEXT DEFAULT '',

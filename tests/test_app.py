@@ -10,10 +10,12 @@ colabora.views.LEGISLATURA = 'legislatura1'
 
 def test_list_sin_sesion(client):
     response = client.get('/')
-    assert b'tema1' in response.data
-    assert b'resumen1' in response.data
+    assert b'tema1' not in response.data
+    assert b'resumen1' not in response.data
     assert 'Iniciar sesión' in response.data.decode()
     assert b'title="Editar"' not in response.data
+    assert b'tema3' in response.data
+    assert b'resumen3' in response.data
 
 def test_list_en_sesion_escritor(client):
     with client:
@@ -94,9 +96,8 @@ def test_iniciativas_vacio(client):
         assert b'resumen1' not in response.data
 
 def test_iniciativas_normal(client):
-    app.autor = 'autor1'
     response = client.get('/iniciativas')
-    assert b'resumen1' in response.data
+    assert b'resumen1' not in response.data
     assert 'Iniciar sesión' in response.data.decode()
     assert b'title="Editar"' not in response.data
 

@@ -59,11 +59,15 @@ def valores(records):
 @app.route("/")
 def lista():
     db = get_db()
-    if 'uid' in session and request.path == '/iniciativas':
-        records = iniciativas_asignadas(db, ENTIDAD, LEGISLATURA,
-                                        g.user['usuario'])
+    if 'uid' in session:
+        if request.path == '/iniciativas':
+            records = iniciativas_asignadas(db, ENTIDAD, LEGISLATURA,
+                                            g.user['usuario'])
+        else:
+            records = iniciativas(db, ENTIDAD, LEGISLATURA)
     else:
-        records = iniciativas(db, ENTIDAD, LEGISLATURA)
+        records = iniciativas(db, ENTIDAD, LEGISLATURA,
+                              solo_sin_asignar=True)
     tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
     return render_template(

@@ -7,7 +7,7 @@ from flask import abort
 from flask import flash
 from flask import session
 from flask import g
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 from .app import app
 from .db import get_db
 from .db import iniciativas_asignadas
@@ -23,6 +23,7 @@ from .db import desclasifica
 from .db import usuario
 from .db import usuario_por_id
 from .db import estados as dbestados
+from .db import agrega_usuario
 
 
 ENTIDAD = 'Jalisco'
@@ -75,6 +76,32 @@ def lista():
         comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
         temas=temas, resumenes=resumenes
     )
+
+@app.route("/registro", methods=('GET', 'POST'))
+def registro():
+
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        db = get_db()
+        error = None
+
+        if not username:
+            error = 'Se requiere un usuario.'
+        elif not password:
+            error = 'Se requiere una contraseña.'
+
+        if error is None:
+            res = agrega_usuario(db, username, password, 'escritor')
+            if res.startswith('error'):
+                error = f"El usuario {username} ya existe."
+            else:
+                flash("¡Usuario creado correctamente!")
+                return redirect(url_for("login_get"))
+        flash(error)
+
+    return render_template("registro.html")
+
 
 @app.get("/login")
 def login_get():

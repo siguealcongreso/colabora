@@ -54,6 +54,27 @@ def test_list_en_sesion_admin(client):
         assert b'3" title="Editar"' in response.data
         assert b'href="asigna"' in response.data
 
+
+def test_registra_despliega(client):
+    response = client.get('/registro')
+    assert b'Registro' in response.data
+
+def test_registra_enviar_ok(client):
+    response = client.post('/registro', follow_redirects=True,
+                           data={'username': 'usuario5',
+                                 'password': 'contrasena5'})
+    assert len(response.history) == 1
+    assert response.history[0].status == '302 FOUND'
+    assert response.request.path == "/login"
+    assert b'Usuario creado' in response.data
+
+def test_registra_enviar_usuario_ya_existe(client):
+    response = client.post('/registro', follow_redirects=True,
+                           data={'username': 'usuario1',
+                                 'password': 'contrasena1'})
+    assert b'El usuario usuario1 ya existe' in response.data
+
+
 def test_login_despliega(client):
     response = client.get('/login')
     assert b'username' in response.data

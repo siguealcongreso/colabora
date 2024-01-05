@@ -134,6 +134,7 @@ def test_asigna_despliega(client):
     response = client.get('/asigna')
     assert b'usuario3' in response.data
     assert b"mero</b> 3" in response.data
+    assert b'Asignar iniciativas' not in response.data
 
 def test_asigna_acceso_denegado(client):
     response = client.post('/login',

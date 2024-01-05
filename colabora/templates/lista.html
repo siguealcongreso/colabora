@@ -4,8 +4,8 @@
     <div class="container">
       <p>
 	{% if g.user %}
-	{% if g.user['rol'] == 'admin' %}
-	<a class="btn btn-outline-primary" href="asigna">Asignar</a>
+	{% if g.user['rol'] == 'admin' and request.path != '/asigna' %}
+	<a class="btn btn-outline-primary" href="asigna">Asignar iniciativas</a>
 	{% endif %}
 	{% if request.path == '/asigna' %}
 	<a class="btn btn-outline-primary" href="iniciativas">Ver mis asignadas</a>

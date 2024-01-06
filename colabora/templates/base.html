@@ -43,7 +43,7 @@
 
 
 </head>
-<body lang="en">
+<body lang="en"{% if request.path == "/registro" %} onload="load();"{% endif %}>
 <div class="wrapper-masthead">
   <div class="container">
     <header class="masthead clearfix">

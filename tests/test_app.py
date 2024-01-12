@@ -69,6 +69,18 @@ def test_registra_enviar_ok(client):
     assert response.request.path == "/login"
     assert b'Usuario creado' in response.data
 
+def test_registra_falta_usuario(client):
+    response = client.post('/registro', follow_redirects=True,
+                           data={'username': '',
+                                 'password': 'contrasena5'})
+    assert b'Se requiere un usuario' in response.data
+
+def test_registra_falta_contrasena(client):
+    response = client.post('/registro', follow_redirects=True,
+                           data={'username': 'usuario5',
+                                 'password': ''})
+    assert 'Se requiere una contraseña' in response.data.decode()
+
 def test_registra_enviar_usuario_ya_existe(client):
     response = client.post('/registro', follow_redirects=True,
                            data={'username': 'usuario1',

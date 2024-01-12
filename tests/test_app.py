@@ -206,7 +206,7 @@ def test_edita_reenvia_a_login(client):
     assert response.history[0].status == '302 FOUND'
     assert response.request.path == "/login"
 
-def test_edita_guardar(client):
+def test_edita_guardar_area_multiple(client):
     with client:
         response = client.post('/login',
                                data={'username': 'usuario1',
@@ -218,8 +218,38 @@ def test_edita_guardar(client):
         assert 200 == response.status_code
         assert b'TEMA' in response.data
         assert b'RESUMEN' in response.data
-        assert b'area1' in response.data
-        assert b'area2' in response.data
+        assert b'value="1" selected' in response.data
+        assert b'value="2" selected' in response.data
+
+def test_edita_guardar_area_sin_seleccionar(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario1',
+                                     'password': 'contrasena1'})
+        response = client.post('/edita/1', data={'tema': 'TEMA', 'resumen': 'RESUMEN',
+                                                 'comentario': 'COMENTARIO',
+                                                 'area': []},
+                               follow_redirects=True)
+        assert 200 == response.status_code
+        assert b'TEMA' in response.data
+        assert b'RESUMEN' in response.data
+        assert b'value="1">' in response.data
+        assert b'value="2">' in response.data
+
+def test_edita_guardar_area_eliminar(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario1',
+                                     'password': 'contrasena1'})
+        response = client.post('/edita/1', data={'tema': 'TEMA', 'resumen': 'RESUMEN',
+                                                 'comentario': 'COMENTARIO',
+                                                 'area': ['0']},
+                               follow_redirects=True)
+        assert 200 == response.status_code
+        assert b'TEMA' in response.data
+        assert b'RESUMEN' in response.data
+        assert b'value="1">' in response.data
+        assert b'value="2">' in response.data
 
 
 def test_load_logged_in_user_none(client):

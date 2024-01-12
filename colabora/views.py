@@ -201,7 +201,9 @@ def edita_post(numero):
                                   comentario=comentario,
                                   estado_id=estado_id)
     desclasifica(db, ENTIDAD, LEGISLATURA, numero)
-    for i, nombre in zip(area, areas):
+    if "0" in area:
+        area.remove("0")
+    for i in area:
         clasifica(db, ENTIDAD, LEGISLATURA, numero, areas[int(i)-1]['nombre'])
     flash("Información guardada")
     return redirect(url_for('edita', numero=numero))

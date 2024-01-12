@@ -191,7 +191,7 @@ def desclasifica(db, entidad, legislatura, numero):
            "numero=?")
     cur = db.cursor()
     cur.execute(cmd, (entidad, legislatura, numero))
-    if cur.rowcount == 1:
+    if cur.rowcount >= 1:
         db. commit()
         return f"ok: se removieron areas de iniciativa {numero}"
     return f"error: no se removieron areas de iniciativa {numero}"

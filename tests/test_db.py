@@ -197,6 +197,10 @@ def test_desclasifica_ninguna(database):
     result = colabora.db.desclasifica(database, 'entidad1', 'legislatura1', 2)
     assert f"error: no se removieron areas de iniciativa 2" == result
 
+def test_desclasifica_dos(database):
+    database.executescript(_data_sql)
+    result = colabora.db.desclasifica(database, 'entidad1', 'legislatura1', 3)
+    assert f"ok: se removieron areas de iniciativa 3" == result
 
 def test_agrega_iniciativa_ok(database):
     database.executescript(_data_sql)

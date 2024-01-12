@@ -23,7 +23,6 @@ INSERT INTO clasificacion (entidad_id, legislatura_id, numero, area_id) VALUES
 INSERT INTO areas (nombre)
 VALUES ('area2');
 
-
 INSERT INTO usuarios (usuario, rol, contrasena)
 VALUES ('usuario1', 'escritor', 'pbkdf2:sha256:260000$tO9sZi75hb37KUJx$31b698118aeaa310216e3817187df664592d953a7e509ef1b143e61d6e1a3ee6');
 
@@ -47,4 +46,18 @@ VALUES
 ((SELECT entidad_id FROM entidad WHERE nombre='entidad1'),
  (SELECT legislatura_id FROM legislatura WHERE nombre='legislatura1'),
  3, 'Cambios 3', 'documento3', 'tema3', 'resumen3', 'comentario3'
+);
+
+INSERT INTO clasificacion (entidad_id, legislatura_id, numero, area_id) VALUES
+((SELECT entidad_id FROM entidad WHERE nombre='entidad1'),
+ (SELECT legislatura_id FROM legislatura WHERE nombre='legislatura1'),
+ 3,
+ (SELECT area_id FROM areas WHERE nombre='area1')
+);
+
+INSERT INTO clasificacion (entidad_id, legislatura_id, numero, area_id) VALUES
+((SELECT entidad_id FROM entidad WHERE nombre='entidad1'),
+ (SELECT legislatura_id FROM legislatura WHERE nombre='legislatura1'),
+ 3,
+ (SELECT area_id FROM areas WHERE nombre='area2')
 );

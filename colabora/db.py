@@ -193,7 +193,7 @@ def desclasifica(db, entidad, legislatura, numero):
     cur.execute(cmd, (entidad, legislatura, numero))
     if cur.rowcount >= 1:
         db. commit()
-        return f"ok: se removieron areas de iniciativa {numero}"
+        return f"ok: se removieron {cur.rowcount} areas de iniciativa {numero}"
     return f"error: no se removieron areas de iniciativa {numero}"
 
 def agrega_iniciativa(db, entidad, legislatura, numero, cambios, documento,

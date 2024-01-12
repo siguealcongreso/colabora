@@ -190,7 +190,7 @@ def test_clasifica_ninguna(database):
 def test_desclasifica_una(database):
     database.executescript(_data_sql)
     result = colabora.db.desclasifica(database, 'entidad1', 'legislatura1', 1)
-    assert f"ok: se removieron areas de iniciativa 1" == result
+    assert f"ok: se removieron 1 areas de iniciativa 1" == result
 
 def test_desclasifica_ninguna(database):
     database.executescript(_data_sql)
@@ -200,7 +200,7 @@ def test_desclasifica_ninguna(database):
 def test_desclasifica_dos(database):
     database.executescript(_data_sql)
     result = colabora.db.desclasifica(database, 'entidad1', 'legislatura1', 3)
-    assert f"ok: se removieron areas de iniciativa 3" == result
+    assert f"ok: se removieron 2 areas de iniciativa 3" == result
 
 def test_agrega_iniciativa_ok(database):
     database.executescript(_data_sql)

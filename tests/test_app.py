@@ -226,6 +226,15 @@ def test_edita(client):
         assert b'name="comentario"' not in response.data
         assert b'comentario1' in response.data
 
+def test_edita_sin_permiso(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario4',
+                                     'password': 'contrasena4'})
+        response = client.get('/edita/1', follow_redirects=True)
+        assert 403 == response.status_code
+        assert b'Forbidden' in response.data
+
 def test_edita_comentario(client):
     with client:
         response = client.post('/login',

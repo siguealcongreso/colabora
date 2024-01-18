@@ -175,6 +175,8 @@ def edita(numero):
     record = iniciativa(db, ENTIDAD, LEGISLATURA, numero)
     if not record:
         abort(404)
+    if record['usuario'] != g.user['usuario'] and g.user['rol'] not in ('editor', 'admin'):
+        abort(403)
     areas = dbareas(db)
     estados = dbestados(db)
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}

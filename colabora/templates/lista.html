@@ -4,16 +4,18 @@
     <div class="container">
       <p>
 	{% if g.user %}
+	&nbsp;
 	{% if g.user['rol'] == 'admin' and request.path != '/asigna' %}
 	<a class="btn btn-outline-primary" href="asigna">Asignar iniciativas</a>
 	{% endif %}
 	{% if request.path == '/asigna' %}
-	<a class="btn btn-outline-primary" href="iniciativas">Ver mis asignadas</a>
+	<a class="btn btn-outline-primary" href=".">Ver mis asignadas</a>
 	{% endif %}
-	{% if request.path == '/' %}
-	<a class="btn btn-outline-primary" href="iniciativas">Ver mis asignadas</a>
-	{% else %}
-	<a class="btn btn-outline-primary" href=".">Ver todas las iniciativas</a>
+	{% if request.path in ('/', '/asigna') and g.user['rol'] != 'escritor' %}
+	<a class="btn btn-outline-primary" href="iniciativas">Ver todas las iniciativas</a>
+	{% endif %}
+	{% if request.path == '/iniciativas' %}
+	<a class="btn btn-outline-primary" href=".">Ver mis asignadas</a>
 	{% endif %}
 	<a class="btn btn-outline-primary float-end" href="logout">Terminar sesión</a>
 	<span class="btn btn-outline-secondary float-end disabled">Usuario: {{ g.user['usuario'] }}</span>

@@ -165,7 +165,7 @@ def test_logout(client):
 def test_iniciativas_vacio(client):
     with client:
         response = client.post('/login',
-                               data={'username': 'usuario3',
+                               data={'username': 'usuario4',
                                      'password': 'contrasena3'})
         response = client.get('/iniciativas')
         assert b'resumen1' not in response.data
@@ -257,8 +257,8 @@ def test_edita_no_existe(client):
 def test_edita_sin_area(client):
     with client:
         response = client.post('/login',
-                               data={'username': 'usuario1',
-                                     'password': 'contrasena1'})
+                               data={'username': 'usuario2',
+                                     'password': 'contrasena2'})
         response = client.get('/edita/3')
         assert b'trata?' in response.data
 

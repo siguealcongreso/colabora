@@ -61,3 +61,6 @@ INSERT INTO clasificacion (entidad_id, legislatura_id, numero, area_id) VALUES
  3,
  (SELECT area_id FROM areas WHERE nombre='area2')
 );
+
+INSERT INTO usuarios (usuario, rol, contrasena)
+VALUES ('usuario4', 'escritor', 'scrypt:32768:8:1$1ZiDdTY36Dbkix1O$3f183443e6791621fce2a2f8c1d99acd6cae21424fa2e6d45850eec462bd66adc9986ff447cbeb9da5252ce1bee55c70fd595c52cb62278a9e71197291b7ca71');

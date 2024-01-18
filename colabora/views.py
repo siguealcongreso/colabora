@@ -61,11 +61,11 @@ def valores(records):
 def lista():
     db = get_db()
     if 'uid' in session:
-        if request.path == '/iniciativas':
+        if request.path == '/iniciativas' and g.user['rol'] != 'escritor':
+            records = iniciativas(db, ENTIDAD, LEGISLATURA)
+        else:
             records = iniciativas_asignadas(db, ENTIDAD, LEGISLATURA,
                                             g.user['usuario'])
-        else:
-            records = iniciativas(db, ENTIDAD, LEGISLATURA)
     else:
         records = iniciativas(db, ENTIDAD, LEGISLATURA,
                               solo_sin_asignar=True)

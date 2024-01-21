@@ -58,6 +58,13 @@ def test_list_en_sesion_admin_asignadas(client):
         assert b'href="asigna"' in response.data
 
 
+def test_lista_todas_sin_sesion(client):
+    with client:
+        response = client.get('/iniciativas', follow_redirects=True)
+        assert len(response.history) == 1
+        assert response.history[0].status == '302 FOUND'
+        assert response.request.path == "/login"
+
 def test_lista_todas_en_sesion_escritor_asignadas(client):
     with client:
         response = client.post('/login',
@@ -170,12 +177,6 @@ def test_iniciativas_vacio(client):
                                      'password': 'contrasena3'})
         response = client.get('/iniciativas')
         assert b'resumen1' not in response.data
-
-def test_iniciativas_normal(client):
-    response = client.get('/iniciativas')
-    assert b'resumen1' not in response.data
-    assert 'Iniciar sesión' in response.data.decode()
-    assert b'title="Editar"' not in response.data
 
 def test_asigna_reenvia_a_login(client):
     response = client.get('asigna', follow_redirects=True)

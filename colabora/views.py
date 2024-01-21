@@ -75,17 +75,14 @@ def lista():
     )
 
 @app.route("/iniciativas")
+@login_required
 def lista_todas():
     db = get_db()
-    if 'uid' in session:
-        if g.user['rol'] != 'escritor':
-            records = iniciativas(db, ENTIDAD, LEGISLATURA)
-        else:
-            records = iniciativas_asignadas(db, ENTIDAD, LEGISLATURA,
-                                            g.user['usuario'])
+    if g.user['rol'] != 'escritor':
+        records = iniciativas(db, ENTIDAD, LEGISLATURA)
     else:
-        records = iniciativas(db, ENTIDAD, LEGISLATURA,
-                              solo_sin_asignar=True)
+        records = iniciativas_asignadas(db, ENTIDAD, LEGISLATURA,
+                                        g.user['usuario'])
     tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
     return render_template(

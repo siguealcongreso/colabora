@@ -65,19 +65,14 @@ def test_lista_todas_sin_sesion(client):
         assert response.history[0].status == '302 FOUND'
         assert response.request.path == "/login"
 
-def test_lista_todas_en_sesion_escritor_asignadas(client):
+def test_lista_todas_en_sesion_escritor_no_acceso(client):
     with client:
         response = client.post('/login',
                                data={'username': 'usuario1',
                                      'password': 'contrasena1'})
         response = client.get('/iniciativas')
-        assert b'tema1' in response.data
-        assert b'resumen1' in response.data
-        assert 'Terminar sesión' in response.data.decode()
-        assert b'1" title="Editar"' in response.data
-        assert b"mero</b> 2" not in response.data
-        assert b"mero</b> 3" not in response.data
-        assert b'3" title="Editar"' not in response.data
+        assert 403 == response.status_code
+        assert b'Forbidden' in response.data
 
 def test_lista_todas_en_sesion_editor(client):
     with client:

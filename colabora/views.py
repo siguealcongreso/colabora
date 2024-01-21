@@ -79,10 +79,8 @@ def lista():
 def lista_todas():
     db = get_db()
     if g.user['rol'] == 'escritor':
-        records = iniciativas_asignadas(db, ENTIDAD, LEGISLATURA,
-                                        g.user['usuario'])
-    else:
-        records = iniciativas(db, ENTIDAD, LEGISLATURA)
+        abort(403)
+    records = iniciativas(db, ENTIDAD, LEGISLATURA)
     tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
     return render_template(

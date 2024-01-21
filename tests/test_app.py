@@ -104,6 +104,14 @@ def test_lista_todas_en_sesion_admin(client):
         assert b'3" title="Editar"' in response.data
         assert b'href="asigna"' in response.data
 
+def test_iniciativas_vacio(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario4',
+                                     'password': 'contrasena3'})
+        response = client.get('/iniciativas')
+        assert b'resumen1' not in response.data
+
 
 def test_registra_despliega(client):
     response = client.get('/registro')
@@ -169,14 +177,6 @@ def test_logout(client):
     with client:
         response = client.get('logout')
         assert 'uid' not in session
-
-def test_iniciativas_vacio(client):
-    with client:
-        response = client.post('/login',
-                               data={'username': 'usuario4',
-                                     'password': 'contrasena3'})
-        response = client.get('/iniciativas')
-        assert b'resumen1' not in response.data
 
 def test_asigna_reenvia_a_login(client):
     response = client.get('asigna', follow_redirects=True)

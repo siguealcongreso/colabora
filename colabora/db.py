@@ -94,7 +94,7 @@ def areas_por_iniciativa(db):
     return a_dict(records)
 
 
-def asignadas_por_autor(db):
+def cantidad_asignadas_por_usuario(db):
     cmd = ("SELECT usuario, count(numero) as asignadas FROM iniciativas "
            "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
            "LEFT JOIN usuarios USING (usuario_id) "

@@ -12,7 +12,7 @@ from .app import app
 from .db import get_db
 from .db import iniciativas_asignadas
 from .db import iniciativas, areas as dbareas, usuarios
-from .db import asignadas_por_autor
+from .db import cantidad_asignadas_por_usuario
 from .db import asigna as dbasigna
 from .db import agrega_iniciativa
 from .db import iniciativa
@@ -51,7 +51,7 @@ def valores(records):
     tags = areas_por_iniciativa(db).get(ENTIDAD, {}).get(LEGISLATURA, {})
     areas = dbareas(db)
     users = usuarios(db)
-    rows = asignadas_por_autor(db)
+    rows = cantidad_asignadas_por_usuario(db)
     asignadas = {row['usuario']: row['asignadas'] for row in rows}
     return tags, comentarios, areas, users, asignadas, temas, resumenes
 

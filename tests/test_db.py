@@ -96,9 +96,9 @@ def test_areas_por_iniciativa_vacio(database):
     assert result == {}
 
 
-def test_asignadas_por_autor(database):
+def test_cantidad_asignadas_por_usuario(database):
     database.executescript(_data_sql)
-    result = colabora.db.asignadas_por_autor(database)
+    result = colabora.db.cantidad_asignadas_por_usuario(database)
     assert len(result) == 5
     assert None == result[0]["usuario"]
     assert 1 == result[0]["asignadas"]

@@ -41,7 +41,27 @@
 	{{ asignadas[None] }} por asignar
 	{% endif %}
     </div>
-        {% for r in records %}
+  <div class="container">
+    <section class="section">
+      <table class="table table-hover">
+	<tr class="tl"><th>Usuario</th><th>Cantidad</th></tr>
+      {% for usuario in asignadas_usuario|sort %}
+        <tr>
+	  <td><a href="#h{{ loop.index }}">{% if usuario == '' %}Sin asignar{% else %}{{ usuario }}{% endif %}</a></td>
+	  <td>{{ asignadas_usuario[usuario]|length }}</td>
+	</tr>
+      {% endfor %}
+      </table>
+  </div>
+    {% for usuario in asignadas_usuario|sort %}
+    <div class="container">
+      {% if usuario == '' %}
+      <h2 id="h{{ loop.index }}">Sin asignar  - {{ asignadas_usuario[usuario]|length }}</h2>
+      {% else %}
+      <h2 id="h{{ loop.index }}">{{ usuario }} - {{ asignadas_usuario[usuario]|length }}</h2>
+      {% endif %}
+    </div>
+    {% for r in asignadas_usuario[usuario] %}
     <div class="container px-4">
       <div class="row py-2 bg-light border-bottom-0 border">
         <div class="col-md-3">
@@ -111,6 +131,7 @@
 </div>
 </div>
 <br>
+      {% endfor %}
       {% endfor %}
       </form>
 {% endblock %}

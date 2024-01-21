@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}Iniciativas sin resumen - Legislatura LXIII{% endblock %}
+{% block content %}
+    <div class="container">
+      <p>
+	{% if g.user %}
+	&nbsp;
+	{% if g.user['rol'] == 'admin' and request.path != '/asigna' %}
+	<a class="btn btn-outline-primary" href="asigna">Asignar iniciativas</a>
+	{% endif %}
+	{% if request.path == '/asigna' %}
+	<a class="btn btn-outline-primary" href=".">Ver mis asignadas</a>
+	{% endif %}
+	{% if request.path in ('/', '/asigna') and g.user['rol'] != 'escritor' %}
+	<a class="btn btn-outline-primary" href="iniciativas">Ver todas las iniciativas</a>
+	{% endif %}
+	{% if request.path == '/iniciativas' %}
+	<a class="btn btn-outline-primary" href=".">Ver mis asignadas</a>
+	{% endif %}
+	<a class="btn btn-outline-primary float-end" href="logout">Terminar sesión</a>
+	<span class="btn btn-outline-secondary float-end disabled">Usuario: {{ g.user['usuario'] }}</span>
+	{% else %}
+	<a class="btn btn-outline-primary" href="login">Iniciar sesión</a>
+	<a class="btn btn-outline-primary" href="registro">Registrar nuevo usuario</a>
+	{% endif %}
+      </p>
+	{% if request.path == '/asigna' %}
+	<form class="needs-validation" novalidate method="post">
+        <button class="btn btn-secondary" type="submit">Asignar</button>
+	{% for user in users %}
+	<div class="form-check">
+        <input class="form-check-input" type="radio" name="autor" value="{{ user.usuario }}" id="id{{ user.usuario }}" required>
+	<label class="form-check-label" for="id{{ user.usuario }}">{{ user.usuario }} {{ asignadas[user.usuario] }}
+	</label>
+	{% if loop.last %}
+	<div class="valid-feedback">Ok</div>
+	<div class="invalid-feedback">Selecciona un usuario</div>
+	{% endif %}
+	</div>
+        {% endfor %}
+	{{ asignadas[None] }} por asignar
+	{% endif %}
+    </div>
+        {% for r in records %}
+    <div class="container px-4">
+      <div class="row py-2 bg-light border-bottom-0 border">
+        <div class="col-md-3">
+          <div class=""><b>Número</b> {{ r.numero }}
+          </div>
+        </div>
+        <div class="col-md-3">
+	  {% if request.path == '/asigna' %}
+          <div class="form-check">
+	    <input class="form-check-input" type="checkbox" name="numero" value="{{ r.numero }}" id="c{{ r.numero }}">
+	    <label class="form-check-label" for="c{{ r.numero }}"><b>Asignar</b></label>
+	    <div class="valid-feedback">Ok</div>
+	    <div class="invalid-feedback">Selecciona una o más iniciativas</div>
+	  {% else %}
+          <div class=""><b>Asignada</b> {% if r.usuario != None %}{{ r.usuario }}{% endif %}
+	  {% endif %}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class=""><b>Estado</b> {% if r.estado != None %}{{ r.estado }}{% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="row py-2 border border-top-0 bg-light">
+        <div class="">
+          <div class="">
+              <b>Cambios</b> {{ r.cambios }}
+                (<a href="https://siguealcongreso.org/monitoreo/iniciativas/lxiii/{{ r.numero }}/" title="Ver ficha">{{ r.numero }}</a>)
+            <a href="https://congresoweb.congresojal.gob.mx/infolej/sistemaintegral/infolej/{{ r.documento }}" target="_blank" title="Leer el documento">🖹</a>
+            {% if g.user and (r.usuario == g.user['usuario'] or g.user['rol'] in ('editor', 'admin')) %}
+	    <a href="edita/{{ r.numero }}" title="Editar">✏</a>
+	    {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="row py-2 border border-top-0 bg-light">
+          <div class="col-md-3">
+            <div class=""><b>Tema</b>
+	      {% for t in temas[r.numero] %}
+	      {{ t }}<br>
+	      {% endfor %}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class=""><b>Resumen</b>
+	      {% for r in resumenes[r.numero] %}
+	      {{ r }}<br>
+	      {% endfor %}
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class=""><b>Área</b>
+              {% for area in tags[r.numero] %}
+               {{ area }}
+              {% endfor %}
+            </div>
+          </div>
+      </div>
+      <div class="row py-2 border border-top-0 bg-light">
+        <div class=""><b>Comentario</b>
+	      {% for c in comentarios[r.numero] %}
+	      {{ c }}<br>
+	      {% endfor %}
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+<br>
+      {% endfor %}
+      </form>
+{% endblock %}

@@ -64,7 +64,7 @@ def test_usuario_no_encontrado(database):
 def test_usuarios(database):
     database.executescript(_data_sql)
     result = colabora.db.usuarios(database)
-    assert len(result) == 3
+    assert len(result) == 4
     assert "usuario1" == result[0]["usuario"]
     assert "escritor" == result[0]["rol"]
     assert 1 == result[0]["usuario_id"]
@@ -99,7 +99,7 @@ def test_areas_por_iniciativa_vacio(database):
 def test_asignadas_por_autor(database):
     database.executescript(_data_sql)
     result = colabora.db.asignadas_por_autor(database)
-    assert len(result) == 4
+    assert len(result) == 5
     assert None == result[0]["usuario"]
     assert 1 == result[0]["asignadas"]
     assert "usuario1" == result[1]["usuario"]

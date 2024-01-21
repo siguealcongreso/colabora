@@ -32,7 +32,7 @@ def test_list_en_sesion_escritor(client):
         assert b"mero</b> 3" not in response.data
         assert b'3" title="Editar"' not in response.data
 
-def test_list_en_sesion_escritor_asignadas(client):
+def test_lista_todas_en_sesion_escritor_asignadas(client):
     with client:
         response = client.post('/login',
                                data={'username': 'usuario1',
@@ -46,7 +46,7 @@ def test_list_en_sesion_escritor_asignadas(client):
         assert b"mero</b> 3" not in response.data
         assert b'3" title="Editar"' not in response.data
 
-def test_list_en_sesion_editor(client):
+def test_lista_todas_en_sesion_editor(client):
     with client:
         response = client.post('/login',
                                data={'username': 'usuario2',
@@ -70,7 +70,7 @@ def test_list_en_sesion_editor_asignadas(client):
         assert b'1" title="Editar"' not in response.data
         assert b'3" title="Editar"' not in response.data
 
-def test_list_en_sesion_admin(client):
+def test_lista_todas_en_sesion_admin(client):
     with client:
         response = client.post('/login',
                                data={'username': 'usuario3',

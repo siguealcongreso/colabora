@@ -56,7 +56,7 @@ def valores(records):
     return tags, comentarios, areas, users, asignadas, temas, resumenes
 
 
-@app.route("/iniciativas")
+
 @app.route("/")
 def lista():
     db = get_db()
@@ -73,6 +73,26 @@ def lista():
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
+        comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
+        temas=temas, resumenes=resumenes
+    )
+
+@app.route("/iniciativas")
+def lista_todas():
+    db = get_db()
+    if 'uid' in session:
+        if request.path == '/iniciativas' and g.user['rol'] != 'escritor':
+            records = iniciativas(db, ENTIDAD, LEGISLATURA)
+        else:
+            records = iniciativas_asignadas(db, ENTIDAD, LEGISLATURA,
+                                            g.user['usuario'])
+    else:
+        records = iniciativas(db, ENTIDAD, LEGISLATURA,
+                              solo_sin_asignar=True)
+    tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
+    roles = {d['usuario']: d['rol'] for d in usuarios(db)}
+    return render_template(
+        "lista_todas.html", records=records, tags=tags, areas=areas,
         comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
         temas=temas, resumenes=resumenes
     )

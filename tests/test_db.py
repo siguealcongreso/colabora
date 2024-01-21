@@ -109,6 +109,13 @@ def test_cantidad_asignadas_por_usuario(database):
     assert "usuario3" == result[3]["usuario"]
     assert 0 == result[3]["asignadas"]
 
+def test_asignadas_por_usuario(database):
+    database.executescript(_data_sql)
+    result = colabora.db.asignadas_por_usuario(database, 'entidad1', 'legislatura1')
+    assert len(result) == 2
+    assert result['usuario1'][0]['numero'] == 1
+    assert result[''][0]['numero'] == 3
+
 def test_iniciativa_ok(database):
     database.executescript(_data_sql)
     result = colabora.db.iniciativa(database, entidad='entidad1' ,

@@ -1,4 +1,5 @@
 import sqlite3
+from collections import defaultdict
 
 from flask import g
 from werkzeug.security import generate_password_hash
@@ -108,6 +109,25 @@ def cantidad_asignadas_por_usuario(db):
     cur.execute(cmd)
     records = cur.fetchall()
     return records
+
+def asignadas_por_usuario(db, entidad, legislatura):
+    cmd = ("SELECT numero, cambios, documento, tema, resumen, estado, comentario, usuario "
+           "FROM iniciativas "
+           "LEFT JOIN estado USING (estado_id) "
+           "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
+           "LEFT JOIN usuarios USING (usuario_id) "
+           "WHERE entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) AND "
+           "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?)")
+    cur = db.cursor()
+    cur.execute(cmd, (entidad, legislatura))
+    records = cur.fetchall()
+    asignadas = defaultdict(list)
+    for row in records:
+        usuario = row['usuario']
+        if usuario == None:
+            usuario = ''
+        asignadas[usuario].append(row)
+    return asignadas
 
 def iniciativa(db, entidad, legislatura, numero):
     cur = db.cursor()

@@ -24,6 +24,7 @@ from .db import usuario
 from .db import usuario_por_id
 from .db import estados as dbestados
 from .db import agrega_usuario
+from .db import asignadas_por_usuario
 
 
 ENTIDAD = 'Jalisco'
@@ -83,10 +84,11 @@ def lista_todas():
     records = iniciativas(db, ENTIDAD, LEGISLATURA)
     tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
+    asignadas_usuario = asignadas_por_usuario(db, ENTIDAD, LEGISLATURA)
     return render_template(
         "lista_todas.html", records=records, tags=tags, areas=areas,
         comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
-        temas=temas, resumenes=resumenes
+        temas=temas, resumenes=resumenes, asignadas_usuario=asignadas_usuario
     )
 
 @app.route("/registro", methods=('GET', 'POST'))

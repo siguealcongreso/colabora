@@ -49,7 +49,7 @@ def usuario_por_id(db, usuario_id):
     return cur.fetchone()
 
 
-def usuario(db, usuario):
+def obten_usuario(db, usuario):
     cmd = "SELECT * FROM usuarios WHERE usuario=?"
     cur = db.cursor()
     cur.execute(cmd, (usuario,))

@@ -20,7 +20,7 @@ from .db import areas_por_iniciativa
 from .db import actualiza_iniciativa
 from .db import clasifica
 from .db import desclasifica
-from .db import usuario
+from .db import obten_usuario
 from .db import usuario_por_id
 from .db import estados as dbestados
 from .db import agrega_usuario
@@ -129,7 +129,7 @@ def login_post():
     password = request.form['password']
     db = get_db()
     error = None
-    user = usuario(db, username)
+    user = obten_usuario(db, username)
     if user is None:
         error = 'Usuario incorrecto.'
     elif not check_password_hash(user['contrasena'], password):

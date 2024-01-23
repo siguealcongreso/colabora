@@ -52,12 +52,12 @@ def test_usuario_por_id_no_encontrado(database):
 
 def test_usuario_encontrado(database):
     database.executescript(_data_sql)
-    result = colabora.db.usuario(database, 'usuario1')
+    result = colabora.db.obten_usuario(database, 'usuario1')
     assert result['usuario_id'] == 1
 
 def test_usuario_no_encontrado(database):
     database.executescript(_data_sql)
-    result = colabora.db.usuario(database, 5)
+    result = colabora.db.obten_usuario(database, 5)
     assert result == None
 
 

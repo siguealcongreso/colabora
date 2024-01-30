@@ -322,3 +322,15 @@ def test_load_logged_in_user_valid(client):
         session['uid'] = 1
         result = colabora.views.load_logged_in_user()
         assert g.user['usuario_id'] == 1
+
+def test_usuario(client):
+    with client:
+        response = client.get('/usuario')
+
+def test_confirma(client):
+    with client:
+        response = client.get('/confirma')
+
+def test_nueva(client):
+    with client:
+        response = client.get('/nueva')

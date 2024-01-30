@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Iniciativas sin resumen - Legislatura LXIII{% endblock %}
+{% block content %}
+
+<div class="container">
+	<a class="btn btn-outline-primary" href=".">Ver mis asignadas</a>
+	<a class="btn btn-outline-primary" href="iniciativas">Ver todas las iniciativas</a>
+	<a class="btn btn-outline-primary float-end" href="logout">Terminar sesión</a>
+	<span class="btn btn-outline-secondary float-end disabled">Usuario: {{ g.user['usuario'] }}</span>
+	<p>
+  <form method="post" class="needs-validation" novalidate>
+    <div>
+    <label class="form-label" for="password">Contraseña actual</label>
+    <input class="form-control" type="password" name="password" id="password" required>
+    <div class="invalid-feedback">Por favor escribe tu contraseña actual</div>
+    <input class="mt-3 btn btn-secondary" type="submit" value="Continuar">
+    </div>
+  </form>
+</div>
+
+{% endblock %}

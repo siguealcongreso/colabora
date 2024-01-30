@@ -150,6 +150,28 @@ def logout():
     flash('¡Terminaste tu sesión correctamente!')
     return redirect(url_for('lista'))
 
+@app.route("/usuario")
+def usuario():
+    db = get_db()
+    users = usuarios(db)
+    return render_template("usuario.html", users=users)
+
+@app.route("/confirma", methods=('GET', 'POST'))
+def confirma():
+    db = get_db()
+    users = usuarios(db)
+    if request.method == 'POST':
+        return redirect(url_for('nueva', _method="GET"))
+    return render_template("confirma.html", users=users)
+
+@app.route("/nueva", methods=('GET', 'POST'))
+def nueva():
+    if request.method == 'POST':
+        db = get_db()
+        users = usuarios(db)
+    return render_template("nueva.html")
+
+
 @app.route("/asigna", methods=["GET", "POST"])
 @login_required
 def asigna():

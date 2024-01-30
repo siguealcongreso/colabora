@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/@zxcvbn-ts/core@2.0.0/dist/zxcvbn-ts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@zxcvbn-ts/language-common@2.0.0/dist/zxcvbn-ts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@zxcvbn-ts/language-en@2.0.0/dist/zxcvbn-ts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@zxcvbn-ts/language-es-es@2.0.0/dist/zxcvbn-ts.js"></script>
+
+<div class="container">
+	<a class="btn btn-outline-primary" href=".">Ver mis asignadas</a>
+	<a class="btn btn-outline-primary" href="iniciativas">Ver todas las iniciativas</a>
+	<a class="btn btn-outline-primary float-end" href="logout">Terminar sesión</a>
+	<span class="btn btn-outline-secondary float-end disabled">Usuario: {{ g.user['usuario'] }}</span>
+	<p>
+  <h1>{% block title %}Establecer nueva contraseña{% endblock %}</h1>
+  <form method="post" class="needs-validation" novalidate id="form">
+    <div>
+    <label class="form-label" for="password">Contraseña nueva</label>
+    <input class="form-control" type="password" name="password" id="password" required>
+    <p><meter value="0" min="0" low="3" high="4" optimum="5" max="5" id="meter"></meter>
+      <span id="info"></span>
+      <div class="invalid-feedback">Por favor escribe tu contraseña nueva</div>
+    </div>
+    <input class="mt-3 btn btn-secondary" type="submit" value="Enviar">
+  </form>
+</div>
+
+<script>
+      ;(function () {
+        // all package will be available under zxcvbnts
+        const options = {
+          translations: zxcvbnts['language-es-es'].translations,
+          graphs: zxcvbnts['language-common'].adjacencyGraphs,
+          dictionary: {
+            ...zxcvbnts['language-common'].dictionary,
+            ...zxcvbnts['language-en'].dictionary,
+	    ...zxcvbnts['language-es-es'].dictionary,
+          },
+        }
+        zxcvbnts.core.zxcvbnOptions.setOptions(options)
+      })()
+    </script>
+
+<script>
+  function load() {
+      const form = document.getElementById('form');
+      form.addEventListener('keyup', validate, false);
+  }
+
+  function validate(event){
+      calificacion = zxcvbnts.core.zxcvbn(form.password.value).score;
+      console.log(calificacion)
+      const meter = document.getElementById('meter');
+      if(form.password.value == '')
+	  meter.setAttribute('value', '0')
+      else
+	  meter.setAttribute('value', calificacion+1);
+      const info = document.getElementById('info');
+      if (calificacion != '4')
+	  if (form.password.value != '')
+	      info.innerHTML = 'Escribe una contraseña más compleja';
+          else
+	  info.innerHTML = '';
+      else
+	  info.innerHTML = 'La contraseña es fuerte ✓';
+  }
+</script>
+
+{% endblock %}

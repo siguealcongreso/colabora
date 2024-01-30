@@ -158,11 +158,18 @@ def usuario():
 
 @app.route("/confirma", methods=('GET', 'POST'))
 def confirma():
-    db = get_db()
-    users = usuarios(db)
     if request.method == 'POST':
-        return redirect(url_for('nueva', _method="GET"))
-    return render_template("confirma.html", users=users)
+        password = request.form['password']
+        db = get_db()
+        error = None
+        user = g.user
+        if not check_password_hash(user['contrasena'], password):
+            error = 'Contraseña incorrecta.'
+        if error is None:
+            return redirect(url_for('nueva', _method="GET"))
+        flash(error)
+        return redirect(url_for('confirma', _method="GET"))
+    return render_template("confirma.html")
 
 @app.route("/nueva", methods=('GET', 'POST'))
 def nueva():

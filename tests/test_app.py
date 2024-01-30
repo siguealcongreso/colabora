@@ -327,9 +327,31 @@ def test_usuario(client):
     with client:
         response = client.get('/usuario')
 
-def test_confirma(client):
+def test_confirma_despliega(client):
     with client:
         response = client.get('/confirma')
+        assert b'password' in response.data
+
+def test_confirma_enviar_contrasena_correcta(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario1',
+                                     'password': 'contrasena1'})
+        response = client.post('/confirma',
+                              data={'password': 'contrasena1'},
+                              follow_redirects=True)
+        assert response.request.path  == '/nueva'
+
+def test_confirma_enviar_contrasena_incorrecta(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario1',
+                                     'password': 'contrasena1'})
+        response = client.post('/confirma',
+                               data={'password': 'contrasena2'},
+                               follow_redirects=True)
+        assert session['_flashes'][1][1] == 'Contraseña incorrecta.'
+        assert response.request.path  == '/confirma'
 
 def test_nueva(client):
     with client:

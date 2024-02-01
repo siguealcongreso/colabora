@@ -173,6 +173,7 @@ def confirma():
     return render_template("confirma.html")
 
 @app.route("/nueva", methods=('GET', 'POST'))
+@login_required
 def nueva():
     if request.method == 'POST':
         password = request.form['password']

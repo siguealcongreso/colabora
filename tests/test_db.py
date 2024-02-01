@@ -71,6 +71,35 @@ def test_usuarios(database):
     assert "usuario2" == result[1]["usuario"]
     assert "editor" == result[1]["rol"]
 
+def test_actualiza_usuario_error(database):
+    database.executescript(_data_sql)
+    result = colabora.db.actualiza_usuario(database, usuario_id=1)
+    assert 'error: usuario 1 no actualizado' in result
+
+def test_actualiza_usuario_contrasena(database):
+    database.executescript(_data_sql)
+    result = colabora.db.actualiza_usuario(database, usuario_id=1,
+                                           contrasena='contrasena9')
+    assert 'ok: usuario 1 actualizado' in result
+
+def test_actualiza_usuario_usuario(database):
+    database.executescript(_data_sql)
+    result = colabora.db.actualiza_usuario(database, usuario_id=1,
+                                           usuario='usuario20')
+    assert 'ok: usuario 1 actualizado' in result
+
+def test_actualiza_usuario_rol(database):
+    database.executescript(_data_sql)
+    result = colabora.db.actualiza_usuario(database, usuario_id=1,
+                                           rol='admin')
+    assert 'ok: usuario 1 actualizado' in result
+
+def test_actualiza_usuario_activo(database):
+    database.executescript(_data_sql)
+    result = colabora.db.actualiza_usuario(database, usuario_id=1,
+                                           activo=0)
+    assert 'ok: usuario 1 actualizado' in result
+
 
 def test_estados(database):
     database.executescript(_data_sql)

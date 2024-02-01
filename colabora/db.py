@@ -317,3 +317,31 @@ def actualiza_iniciativa(db, entidad, legislatura, numero, tema=None, resumen=No
             db.commit()
             return f"ok: iniciativa {numero} actualizada"
     return f"error: iniciativa {numero} no actualizada"
+
+
+def actualiza_usuario(db, usuario_id, usuario=None, contrasena=None,
+                      rol=None, activo=None):
+    fields = []
+    values = []
+    if usuario != None:
+        fields.append(f"usuario=?")
+        values.append(usuario)
+    if contrasena != None:
+        fields.append(f"contrasena=?")
+        values.append(contrasena)
+    if rol != None:
+        fields.append(f"rol=?")
+        values.append(rol)
+    if activo != None:
+        fields.append(f"activo=?")
+        values.append(activo)
+    sets = ', '.join(fields)
+    if sets:
+        cmd = (f"UPDATE usuarios SET {sets} WHERE usuario_id=?")
+        values.extend([usuario_id])
+        cur = db.cursor()
+        cur.execute(cmd, values)
+        if cur.rowcount == 1:
+            db.commit()
+            return f"ok: usuario {usuario_id} actualizado"
+    return f"error: usuario {usuario_id} no actualizado"

@@ -159,6 +159,7 @@ def usuario():
     return render_template("usuario.html", users=users)
 
 @app.route("/confirma", methods=('GET', 'POST'))
+@login_required
 def confirma():
     if request.method == 'POST':
         password = request.form['password']

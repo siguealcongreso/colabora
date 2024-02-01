@@ -25,6 +25,7 @@ from .db import usuario_por_id
 from .db import estados as dbestados
 from .db import agrega_usuario
 from .db import asignadas_por_usuario
+from .db import actualiza_usuario
 
 
 ENTIDAD = 'Jalisco'
@@ -174,8 +175,19 @@ def confirma():
 @app.route("/nueva", methods=('GET', 'POST'))
 def nueva():
     if request.method == 'POST':
+        password = request.form['password']
         db = get_db()
-        users = usuarios(db)
+        error = None
+
+        if not password:
+            error = 'Se requiere una contraseña.'
+
+        if error is None:
+            pwd_hash = generate_password_hash(password)
+            actualiza_usuario(db, g.user['usuario_id'], contrasena=pwd_hash)
+            flash("Contraseña cambiada correctamente")
+            return redirect(url_for("lista"))
+        flash(error)
     return render_template("nueva.html")
 
 

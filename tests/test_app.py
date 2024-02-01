@@ -353,6 +353,24 @@ def test_confirma_enviar_contrasena_incorrecta(client):
         assert session['_flashes'][1][1] == 'Contraseña incorrecta.'
         assert response.request.path  == '/confirma'
 
-def test_nueva(client):
+def test_nueva_despliega(client):
     with client:
         response = client.get('/nueva')
+        assert b'Establecer nueva' in response.data
+
+def test_nueva_enviar_ok(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario1',
+                                     'password': 'contrasena1'})
+        response = client.post('/nueva', follow_redirects=True,
+                               data={'password': 'contrasena5'})
+        assert len(response.history) == 1
+        assert response.history[0].status == '302 FOUND'
+        assert response.request.path == "/"
+        assert 'Contraseña cambiada' in response.data.decode()
+
+def test_nueva_falta_contrasena(client):
+    response = client.post('/nueva', follow_redirects=True,
+                           data={'password': ''})
+    assert 'Se requiere una contraseña' in response.data.decode()

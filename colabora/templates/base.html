@@ -43,7 +43,7 @@
 
 
 </head>
-<body lang="en"{% if request.path == "/registro" %} onload="load();"{% endif %}>
+<body lang="en"{% if request.path in ("/registro", "/nueva") %} onload="load();"{% endif %}>
 <div class="wrapper-masthead">
   <div class="container">
     <header class="masthead clearfix">

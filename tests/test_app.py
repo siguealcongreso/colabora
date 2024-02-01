@@ -323,9 +323,19 @@ def test_load_logged_in_user_valid(client):
         result = colabora.views.load_logged_in_user()
         assert g.user['usuario_id'] == 1
 
-def test_usuario(client):
+def test_usuario_reenvia_a_login(client):
+    response = client.get('/usuario', follow_redirects=True)
+    assert len(response.history) == 1
+    assert response.history[0].status == '302 FOUND'
+    assert response.request.path == "/login"
+
+def test_usuario_despliega(client):
     with client:
+        response = client.post('/login',
+                               data={'username': 'usuario1',
+                                     'password': 'contrasena1'})
         response = client.get('/usuario')
+        assert 'Cambiar mi contraseña' in response.data.decode()
 
 def test_confirma_despliega(client):
     with client:

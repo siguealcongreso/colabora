@@ -152,6 +152,7 @@ def logout():
     return redirect(url_for('lista'))
 
 @app.route("/usuario")
+@login_required
 def usuario():
     db = get_db()
     users = usuarios(db)

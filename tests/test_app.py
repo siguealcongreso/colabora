@@ -329,13 +329,23 @@ def test_usuario_reenvia_a_login(client):
     assert response.history[0].status == '302 FOUND'
     assert response.request.path == "/login"
 
-def test_usuario_despliega(client):
+def test_usuario_despliega_escritor(client):
     with client:
         response = client.post('/login',
                                data={'username': 'usuario1',
                                      'password': 'contrasena1'})
         response = client.get('/usuario')
         assert 'Cambiar mi contraseña' in response.data.decode()
+        assert 'Enviar código' not in response.data.decode()
+
+def test_usuario_despliega_editor(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario2',
+                                     'password': 'contrasena2'})
+        response = client.get('/usuario')
+        assert 'Cambiar mi contraseña' in response.data.decode()
+        assert 'Enviar código' in response.data.decode()
 
 def test_confirma_reenvia_a_login(client):
     response = client.get('/confirma', follow_redirects=True)

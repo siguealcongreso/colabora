@@ -347,6 +347,16 @@ def test_usuario_despliega_editor(client):
         assert 'Cambiar mi contraseña' in response.data.decode()
         assert 'Enviar código' in response.data.decode()
 
+def test_usuario_envia(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario2',
+                                     'password': 'contrasena2'})
+        response = client.post('/usuario',
+                               data={'autor': 1})
+        assert response.request.path == '/usuario'
+        assert 'Código' in response.data.decode()
+
 def test_confirma_reenvia_a_login(client):
     response = client.get('/confirma', follow_redirects=True)
     assert len(response.history) == 1

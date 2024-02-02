@@ -18,7 +18,7 @@
 	</form>
 	<hr>
 	{% if g.user['rol'] in ('editor', 'admin') %}
-	<form class="needs-validation" novalidate method="post" action="codigo">
+	<form class="needs-validation" novalidate method="post">
         <button class="btn btn-secondary" type="submit">Enviar código a un usuario para contraseña olvidada</button>
 	{% for user in users %}
 	<div class="form-check">

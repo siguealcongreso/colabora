@@ -151,11 +151,14 @@ def logout():
     flash('¡Terminaste tu sesión correctamente!')
     return redirect(url_for('lista'))
 
-@app.route("/usuario")
+@app.route("/usuario", methods=('GET', 'POST'))
 @login_required
 def usuario():
     db = get_db()
     users = usuarios(db)
+    if request.method == 'POST':
+        codigo = 'En construcción'
+        return render_template("codigo.html", codigo=codigo)
     return render_template("usuario.html", users=users)
 
 @app.route("/confirma", methods=('GET', 'POST'))

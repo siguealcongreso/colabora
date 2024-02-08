@@ -75,7 +75,7 @@
       </div>
       <div class="row py-2 border border-top-0 bg-light">
         <div class=""><b>Comentario</b>
-	  {% if g.user['rol'] in ('editor',) %}
+	  {% if g.user['rol'] in ('editor', 'admin') %}
           <textarea class="form-control" name="comentario">{{ r.comentario }}</textarea>
             <span class="form-text">¿Cómo mejorar el tema o resumen?</span>
           {% else %}{{ r.comentario }}{% endif %}

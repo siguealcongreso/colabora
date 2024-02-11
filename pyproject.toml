@@ -1,0 +1,19 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "colabora"
+authors = [{name = "Patricio Paez", email = "pp@pp.com.mx"}]
+license = {file = "LICENSE"}
+classifiers = ["License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"]
+dynamic = ["version", "description"]
+dependencies = [
+    "Flask==2.2.5",
+    "secure>=0.3.0",
+]
+
+[tool.flit.sdist]
+include = ["defaults.py", "colabora.wsgi",
+]
+exclude = ["**/*~"]

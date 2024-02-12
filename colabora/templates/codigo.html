@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Iniciativas sin resumen - Legislatura LXIII{% endblock %}
+{% block content %}
+
+<div class="container">
+	<a class="btn btn-outline-primary" href=".">Ver mis asignadas</a>
+	<a class="btn btn-outline-primary" href="iniciativas">Ver todas las iniciativas</a>
+	<a class="btn btn-outline-primary float-end" href="logout">Terminar sesión</a>
+	<span class="btn btn-outline-secondary float-end disabled">Usuario: {{ g.user['usuario'] }}</span>
+	<p>
+    <div>
+    <label>Código {{ codigo }}</label>
+    </div>
+</div>
+
+{% endblock %}

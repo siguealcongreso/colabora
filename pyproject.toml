@@ -13,6 +13,12 @@ dependencies = [
     "secure>=0.3.0",
 ]
 
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov",
+]
+
 [tool.flit.sdist]
 include = ["defaults.py", "colabora.wsgi",
 ]

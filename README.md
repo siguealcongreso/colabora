@@ -44,3 +44,20 @@ resúmenes de iniciativas.
 10. Empuja tus modificaciones a tu repositorio
 
 11. Solicita que se incluyan tus cambios (Crea un Pull Request)
+
+## Para generar la documentación
+
+1. Instala la dependencia para la documentación
+
+       env/bin/pip install -e '.[doc]'
+
+2. Activa el entorno virtual
+
+       . env/bin/activate
+
+3. Genera la documentación
+
+       cd docs
+       make html
+
+4. Navega a build/html/index.html

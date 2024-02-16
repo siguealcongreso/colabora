@@ -9,7 +9,7 @@ license = {file = "LICENSE"}
 classifiers = ["License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"]
 dynamic = ["version", "description"]
 dependencies = [
-    "Flask==2.2.5",
+    "Flask==3.0.2",
     "secure>=0.3.0",
 ]
 

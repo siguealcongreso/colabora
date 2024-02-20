@@ -214,7 +214,7 @@ def test_crea_error(client):
                                             'documento': 'documento1'})
     assert b'error: iniciativa 1 no creada' == response.data
 
-def test_edita(client):
+def test_edita_escritor(client):
     with client:
         response = client.post('/login',
                                data={'username': 'usuario1',
@@ -223,6 +223,9 @@ def test_edita(client):
         assert b'trata?' in response.data
         assert b'name="comentario"' not in response.data
         assert b'comentario1' in response.data
+        
+        assert b'href="..">Ver mis asignadas</a>' in response.data
+        assert b'href="../iniciativas">Ver todas las iniciativas</a>' in response.data
 
 def test_edita_sin_permiso(client):
     with client:

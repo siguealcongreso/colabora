@@ -7,8 +7,10 @@
 	{% if g.user['rol'] == 'admin' %}
 	<a class="btn btn-outline-primary" href="../asigna">Asignar iniciativas</a>
 	{% endif %}
-	<a class="btn btn-outline-primary" href="../iniciativas">Ver mis asignadas</a>
-	<a class="btn btn-outline-primary" href="..">Ver todas las iniciativas</a>
+	<a class="btn btn-outline-primary" href="..">Ver mis asignadas</a>
+  {% if g.user['rol'] != "escritor" %}
+	<a class="btn btn-outline-primary" href="../iniciativas">Ver todas las iniciativas</a>
+  {% endif %}
 	<a class="btn btn-outline-primary float-end" href="../logout">Terminar sesión</a>
 	<span class="btn btn-outline-secondary float-end disabled">Usuario: {{ g.user['usuario'] }}</span>
 	{% else %}

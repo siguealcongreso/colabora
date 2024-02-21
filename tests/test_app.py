@@ -225,6 +225,19 @@ def test_edita_escritor(client):
         assert b'comentario1' in response.data
         
         assert b'href="..">Ver mis asignadas</a>' in response.data
+        assert b'href="../iniciativas">Ver todas las iniciativas</a>' not in response.data
+
+def test_edita_editor(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario2',
+                                     'password': 'contrasena2'})
+        response = client.get('/edita/1')
+        assert b'trata?' in response.data
+        assert b'name="comentario"' in response.data
+        assert b'comentario1' in response.data
+        
+        assert b'href="..">Ver mis asignadas</a>' in response.data
         assert b'href="../iniciativas">Ver todas las iniciativas</a>' in response.data
 
 def test_edita_sin_permiso(client):

@@ -127,16 +127,12 @@ def test_areas_por_iniciativa_vacio(database):
 
 def test_cantidad_asignadas_por_usuario(database):
     database.executescript(_data_sql)
-    result = colabora.db.cantidad_asignadas_por_usuario(database)
-    assert len(result) == 5
-    assert None == result[0]["usuario"]
-    assert 1 == result[0]["asignadas"]
-    assert "usuario1" == result[1]["usuario"]
-    assert 1 == result[1]["asignadas"]
-    assert "usuario2" == result[2]["usuario"]
-    assert 0 == result[2]["asignadas"]
-    assert "usuario3" == result[3]["usuario"]
-    assert 0 == result[3]["asignadas"]
+    result = colabora.db.cantidad_asignadas_por_usuario(database, entidad= 'entidad1', legislatura= 'legislatura1')
+    assert len(result) == 2
+    assert result['usuario1']['Nueva'] == 1
+    assert result['usuario1']['Total'] == 1
+    assert result['usuario1']['Pendiente'] == 0
+    assert result['usuario1']['Revisada'] == 0
 
 def test_asignadas_por_usuario(database):
     database.executescript(_data_sql)

@@ -95,20 +95,34 @@ def areas_por_iniciativa(db):
     return a_dict(records)
 
 
-def cantidad_asignadas_por_usuario(db):
-    cmd = ("SELECT usuario, count(numero) as asignadas FROM iniciativas "
+def cantidad_asignadas_por_usuario(db, entidad, legislatura):
+    cmd = ("SELECT numero, estado, usuario "
+           "FROM iniciativas "
+           "LEFT JOIN estado USING (estado_id) "
            "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
            "LEFT JOIN usuarios USING (usuario_id) "
-           "GROUP BY usuario "
-           "UNION "
-           "SELECT usuario, count(numero) as asignadas FROM usuarios "
-           "LEFT JOIN asignacion USING (usuario_id) "
-           "LEFT JOIN iniciativas USING (entidad_id, legislatura_id, numero) "
-           "GROUP BY usuario ")
+           "WHERE entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) AND "
+           "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?)")
     cur = db.cursor()
-    cur.execute(cmd)
+    cur.execute(cmd,(entidad, legislatura))
     records = cur.fetchall()
-    return records
+    asignadas = dict()
+    for row in records:
+        usuario = row['usuario']
+        estado = row['estado']
+        if estado == None:
+            estado = 'Nueva'
+        if usuario not in asignadas :
+            asignadas[usuario] = dict()
+            asignadas[usuario]['Total'] = 0
+            asignadas[usuario]['Nueva'] = 0
+            asignadas[usuario]['Pendiente'] = 0
+            asignadas[usuario]['Revisada'] = 0
+
+        asignadas[usuario][estado] += 1
+        asignadas[usuario]['Total'] += 1
+
+    return asignadas
 
 def asignadas_por_usuario(db, entidad, legislatura):
     cmd = ("SELECT numero, cambios, documento, tema, resumen, estado, comentario, usuario "

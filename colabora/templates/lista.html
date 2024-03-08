@@ -30,7 +30,7 @@
 	{% for user in users %}
 	<div class="form-check">
         <input class="form-check-input" type="radio" name="autor" value="{{ user.usuario }}" id="id{{ user.usuario }}" required>
-	<label class="form-check-label" for="id{{ user.usuario }}">{{ user.usuario }} {{ asignadas[user.usuario] }}
+	<label class="form-check-label" for="id{{ user.usuario }}">{{ user.usuario }} {{ asignadas.get(user.usuario, {'Total':0})['Total']['Total'] }}
 	</label>
 	{% if loop.last %}
 	<div class="valid-feedback">Ok</div>
@@ -38,7 +38,7 @@
 	{% endif %}
 	</div>
         {% endfor %}
-	{{ asignadas[None] }} por asignar
+	{{ asignadas['']['Total']['Total'] }} por asignar
 	{% endif %}
     </div>
         {% for r in records %}

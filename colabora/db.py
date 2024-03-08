@@ -112,6 +112,8 @@ def cantidad_asignadas_por_usuario(db, entidad, legislatura):
         estado = row['estado']
         if estado == None:
             estado = 'Nueva'
+        if usuario == None:
+            usuario = ''
         if usuario not in asignadas :
             asignadas[usuario] = dict()
             asignadas[usuario]['Total'] = 0

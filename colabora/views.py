@@ -53,8 +53,7 @@ def valores(records):
     tags = areas_por_iniciativa(db).get(ENTIDAD, {}).get(LEGISLATURA, {})
     areas = dbareas(db)
     users = usuarios(db)
-    cantidad = cantidad_asignadas_por_usuario(db, ENTIDAD, LEGISLATURA)
-    asignadas = {usuario: cantidad[usuario]['Total'] for usuario in cantidad}
+    asignadas = cantidad_asignadas_por_usuario(db, ENTIDAD, LEGISLATURA)
     return tags, comentarios, areas, users, asignadas, temas, resumenes
 
 

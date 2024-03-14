@@ -31,7 +31,7 @@
     <section class="section">
       <table class="table table-hover">
 	      <tr class="tl"><th>Usuario</th><th>Cantidad</th><th>Nuevas</th><th>Pendientes</th><th>Revisadas</th>
-      {% for user in users %}
+      {% for user in users |sort(attribute='usuario') %}
         <tr>
           <td>
             <div class="form-check">

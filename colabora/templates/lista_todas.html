@@ -8,9 +8,6 @@
 	{% if g.user['rol'] == 'admin' and request.path != '/asigna' %}
 	<a class="btn btn-outline-primary" href="asigna">Asignar iniciativas</a>
 	{% endif %}
-	{% if request.path == '/asigna' %}
-	<a class="btn btn-outline-primary" href=".">Ver mis asignadas</a>
-	{% endif %}
 	{% if request.path in ('/', '/asigna') and g.user['rol'] != 'escritor' %}
 	<a class="btn btn-outline-primary" href="iniciativas">Ver todas las iniciativas</a>
 	{% endif %}
@@ -24,22 +21,6 @@
 	<a class="btn btn-outline-primary" href="registro">Registrar nuevo usuario</a>
 	{% endif %}
       </p>
-	{% if request.path == '/asigna' %}
-	<form class="needs-validation" novalidate method="post">
-        <button class="btn btn-secondary" type="submit">Asignar</button>
-	{% for user in users %}
-	<div class="form-check">
-        <input class="form-check-input" type="radio" name="autor" value="{{ user.usuario }}" id="id{{ user.usuario }}" required>
-	<label class="form-check-label" for="id{{ user.usuario }}">{{ user.usuario }} {{ asignadas[user.usuario]['Total']['Total'] }}
-	</label>
-	{% if loop.last %}
-	<div class="valid-feedback">Ok</div>
-	<div class="invalid-feedback">Selecciona un usuario</div>
-	{% endif %}
-	</div>
-        {% endfor %}
-	{{ asignadas[None]['Total']['Total'] }} por asignar
-	{% endif %}
     </div>
   <div class="container">
     <section class="section">
@@ -72,17 +53,6 @@
           </div>
         </div>
         <div class="col-md-3">
-	  {% if request.path == '/asigna' %}
-          <div class="form-check">
-	    <input class="form-check-input" type="checkbox" name="numero" value="{{ r.numero }}" id="c{{ r.numero }}">
-	    <label class="form-check-label" for="c{{ r.numero }}"><b>Asignar</b></label>
-	    <div class="valid-feedback">Ok</div>
-	    <div class="invalid-feedback">Selecciona una o más iniciativas</div>
-	  {% else %}
-          <div class=""><b>Asignada</b> {% if r.usuario != None %}{{ r.usuario }}{% endif %}
-	  {% endif %}
-          </div>
-        </div>
         <div class="col-md-6">
           <div class=""><b>Estado</b> {% if r.estado != None %}{{ r.estado }}{% endif %}
           </div>

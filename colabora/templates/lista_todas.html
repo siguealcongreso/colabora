@@ -47,7 +47,9 @@
           <div class=""><b>Número</b> {{ r.numero }}
           </div>
         </div>
-        <div class="col-md-3">
+          <div class="col-md-3">
+            <div class=""><b>Asignada</b> {% if r.usuario != None %}{{ r.usuario }}{% endif %}</div>
+          </div>
         <div class="col-md-6">
           <div class=""><b>Estado</b> {% if r.estado != None %}{{ r.estado }}{% endif %}
           </div>

@@ -5,15 +5,10 @@
       <p>
 	{% if g.user %}
 	&nbsp;
-	{% if g.user['rol'] == 'admin' and request.path != '/asigna' %}
+	{% if g.user['rol'] == 'admin' %}
 	<a class="btn btn-outline-primary" href="asigna">Asignar iniciativas</a>
 	{% endif %}
-	{% if request.path in ('/', '/asigna') and g.user['rol'] != 'escritor' %}
-	<a class="btn btn-outline-primary" href="iniciativas">Ver todas las iniciativas</a>
-	{% endif %}
-	{% if request.path == '/iniciativas' %}
 	<a class="btn btn-outline-primary" href=".">Ver mis asignadas</a>
-	{% endif %}
 	<a class="btn btn-outline-primary float-end" href="logout">Terminar sesión</a>
 	<a class="btn btn-outline-primary float-end" href="usuario">Usuario: {{ g.user['usuario'] }}</a>
 	{% else %}

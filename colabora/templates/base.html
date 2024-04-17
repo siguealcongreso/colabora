@@ -12,6 +12,8 @@
     <meta property="og:title" content="{{ self.title() }}" />
     <meta property="twitter:title" content="{{ self.title() }}" />
 
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.4/css/dataTables.dataTables.css" />
+  
     <link rel="apple-touch-icon" sizes="57x57" href="/images/favicons/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/images/favicons/apple-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="/images/favicons/apple-icon-72x72.png">
@@ -77,6 +79,7 @@
 
 {% block content %}{% endblock %}
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script>
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 (function () {
@@ -100,6 +103,21 @@
 })()
 </script>
 
+<script>
+$(document).ready(function(){
+  var table = $('#asignadas').DataTable({
+    searching: false,
+    paging: false,
+    language: {
+        url: '//cdn.datatables.net/plug-ins/2.0.4/i18n/es-MX.json',
+    },
+  });
+});
+
+</script>
+
+<script src="https://cdn.datatables.net/2.0.4/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/2.0.4/i18n/es-MX.json"></script>
 
 <div class="wrapper-footer">
   <div class="container">

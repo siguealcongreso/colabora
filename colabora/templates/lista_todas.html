@@ -19,18 +19,28 @@
     </div>
   <div class="container">
     <section class="section">
-      <table class="table table-hover">
-	<tr class="tl"><th>Usuario</th><th>Cantidad</th><th>Nuevas</th><th>Pendientes</th><th>Revisadas</th>
-      {% for usuario in asignadas_usuario|sort %}
-        <tr>
-	  <td><a href="#h{{ loop.index }}">{% if usuario == '' %}Sin asignar{% else %}{{ usuario }}{% endif %}</a></td>
-	  <td>{{ asignadas[usuario]['Total'] }}</td>
-    <td>{{ asignadas[usuario]['Nueva'] }}</td>
-    <td>{{ asignadas[usuario]['Pendiente'] }}</td>
-    <td>{{ asignadas[usuario]['Revisada'] }}</td>
-	</tr>
-      {% endfor %}
-      </table>
+      <table class="table table-hover" id="asignadas" style="width:100%;">
+        <thead>
+            <tr class="tl">
+                <th>Usuario</th>
+                <th>Cantidad</th>
+                <th>Nuevas</th>
+                <th>Pendientes</th>
+                <th>Revisadas</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in asignadas_usuario|sort %}
+            <tr>
+                <td><a href="#h{{ loop.index }}">{% if usuario == '' %}Sin asignar{% else %}{{ usuario }}{% endif %}</a></td>
+                <td>{{ asignadas[usuario]['Total'] }}</td>
+                <td>{{ asignadas[usuario]['Nueva'] }}</td>
+                <td>{{ asignadas[usuario]['Pendiente'] }}</td>
+                <td>{{ asignadas[usuario]['Revisada'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
   </div>
     {% for usuario in asignadas_usuario|sort %}
     <div class="container">

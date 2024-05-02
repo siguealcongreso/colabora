@@ -9,7 +9,7 @@
 	<span class="btn btn-outline-secondary float-end disabled">Usuario: {{ g.user['usuario'] }}</span>
 	<p>
     <div>
-    <label>Código {{ codigo }}</label>
+    <label>Código</label><span class="btn btn-outline-secondary ms-2" onclick="copyToClipboard()" id="codigo" title="Copiar el código"> {{ codigo }}</span>
     </div>
 </div>
 

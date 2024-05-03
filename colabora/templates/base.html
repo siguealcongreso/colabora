@@ -45,7 +45,7 @@
 
 
 </head>
-<body lang="en"{% if request.path in ("/registro", "/nueva") %} onload="load();"{% endif %}>
+<body lang="en"{% if request.path in ("/registro", "/nueva", "/cambia") %} onload="load();"{% endif %}>
 <div class="wrapper-masthead">
   <div class="container">
     <header class="masthead clearfix">
@@ -118,6 +118,19 @@ $(document).ready(function(){
 
 <script src="https://cdn.datatables.net/2.0.4/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/plug-ins/2.0.4/i18n/es-MX.json"></script>
+
+<script>
+	function copyToClipboard() {
+		var codigo = document.getElementById("codigo").innerText;
+		navigator.clipboard.writeText(codigo)
+		.then(() => {
+			alert("Se ha copiado el código");
+		})
+		.catch(err => {
+			console.error('No se pudo copiar el código: ', err);
+		});
+	}
+</script>
 
 <div class="wrapper-footer">
   <div class="container">

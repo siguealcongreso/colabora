@@ -1,4 +1,5 @@
 import functools
+import secrets
 
 from flask import render_template
 from flask import request
@@ -8,6 +9,7 @@ from flask import flash
 from flask import session
 from flask import g
 from werkzeug.security import check_password_hash, generate_password_hash
+from itsdangerous import TimestampSigner
 from .app import app
 from .db import get_db
 from .db import iniciativas_asignadas
@@ -30,6 +32,9 @@ from .db import actualiza_usuario
 
 ENTIDAD = 'Jalisco'
 LEGISLATURA = 'LXIII'
+UPDATE_PASSWORD_KEY = secrets.token_hex(32)
+
+s = TimestampSigner(UPDATE_PASSWORD_KEY)
 
 
 def login_required(view):
@@ -156,9 +161,50 @@ def usuario():
     db = get_db()
     users = usuarios(db)
     if request.method == 'POST':
-        codigo = 'En construcción'
+        user = request.form['autor']
+        _user = obten_usuario(db, user)
+        userID = _user['usuario_id']
+
+        b_codigo = s.sign(str(userID))
+        codigo = b_codigo.decode('utf-8')
+
         return render_template("codigo.html", codigo=codigo)
     return render_template("usuario.html", users=users)
+
+@app.route("/recupera", methods=('GET', 'POST'))
+def recupera():
+    if request.method == 'POST':
+        codigo = request.form['code']
+        val = s.validate(codigo, max_age=86400)
+
+        if val == True:
+            _user_id = codigo.split('.')[0]
+            flash("Código validado correctamente.")
+            return redirect(url_for('cambia', _method="GET", user_id = _user_id))
+        else:
+            error = 'No se ha podido validar el código.'
+            flash(error)
+    return render_template("recupera.html")
+
+@app.route("/cambia", methods=('GET', 'POST'))
+def cambia():
+    user_id = request.args.get('user_id')
+    if request.method == 'POST':
+        password = request.form['password']
+        db = get_db()
+        error = None
+
+        if not password:
+            error = 'Se requiere una contraseña.'
+
+        if error is None:
+            pwd_hash = generate_password_hash(password)
+
+            actualiza_usuario(db, user_id, contrasena=pwd_hash)
+            flash("Contraseña cambiada correctamente.")
+            return redirect(url_for("login_get"))
+        flash(error)
+    return render_template("cambia.html")
 
 @app.route("/confirma", methods=('GET', 'POST'))
 @login_required

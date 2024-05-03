@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Iniciativas sin resumen - Legislatura LXIII{% endblock %}
+{% block content %}
+
+<div class="container">
+    <form method="post" class="needs-validation" novalidate id="form">
+        <label for="codigo-recuperacion" class="form-label">Código de recuperación</label>
+        <input type="text" class="form-control" id="codigo-recuperacion" name="code">
+        <input class="mt-3 btn btn-secondary" type="submit" value="Enviar">
+    </form>
+</div>
+{% endblock %}

@@ -179,8 +179,10 @@ def recupera():
 
         if val == True:
             _user_id = codigo.split('.')[0]
+            session['user_id'] = _user_id
+            session.permanent = False
             flash("Código validado correctamente.")
-            return redirect(url_for('cambia', _method="GET", user_id = _user_id))
+            return redirect(url_for('cambia', _method="GET"))
         else:
             error = 'No se ha podido validar el código.'
             flash(error)
@@ -188,7 +190,8 @@ def recupera():
 
 @app.route("/cambia", methods=('GET', 'POST'))
 def cambia():
-    user_id = request.args.get('user_id')
+    if 'user_id' not in session:
+        abort(403)
     if request.method == 'POST':
         password = request.form['password']
         db = get_db()
@@ -200,7 +203,9 @@ def cambia():
         if error is None:
             pwd_hash = generate_password_hash(password)
 
+            user_id = session['user_id']
             actualiza_usuario(db, user_id, contrasena=pwd_hash)
+            session.clear()
             flash("Contraseña cambiada correctamente.")
             return redirect(url_for("login_get"))
         flash(error)

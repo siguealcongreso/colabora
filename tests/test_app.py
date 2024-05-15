@@ -4,9 +4,14 @@ from flask import g
 from colabora.main import app
 import colabora.views
 import colabora.db
+import secrets
+from itsdangerous import TimestampSigner
 
 colabora.views.ENTIDAD = 'entidad1'
 colabora.views.LEGISLATURA = 'legislatura1'
+
+from colabora.views import UPDATE_PASSWORD_KEY
+s = TimestampSigner(UPDATE_PASSWORD_KEY)
 
 
 def test_list_sin_sesion(client):
@@ -381,9 +386,10 @@ def test_usuario_envia(client):
                                data={'username': 'usuario2',
                                      'password': 'contrasena2'})
         response = client.post('/usuario',
-                               data={'autor': 1})
+                               data={'autor': 'usuario1'})
+        codigo = s.sign('1').decode('utf-8')
         assert response.request.path == '/usuario'
-        assert 'Código' in response.data.decode()
+        assert f'{codigo}' in response.data.decode()
 
 def test_confirma_reenvia_a_login(client):
     response = client.get('/confirma', follow_redirects=True)

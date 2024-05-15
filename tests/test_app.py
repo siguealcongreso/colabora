@@ -460,3 +460,23 @@ def test_nueva_falta_contrasena(client):
         response = client.post('/nueva', follow_redirects=True,
                                data={'password': ''})
         assert 'Se requiere una contraseña' in response.data.decode()
+
+def test_recupera_despliega(client):
+    with client:
+        response = client.get('/recupera')
+        assert b'<input type="text" class="form-control" id="codigo-recuperacion" name="code">' in response.data
+
+def test_recupera_enviar_ok(client):
+    with client:
+        response = client.post('/recupera', follow_redirects=True,
+                               data={'code': s.sign('1').decode('utf-8')})
+        assert len(response.history) == 1
+        assert response.history[0].status == '302 FOUND'
+        assert response.request.path == "/cambia"
+        assert 'Código validado correctamente.' in response.data.decode()
+
+def test_recupera_enviar_incorrecto(client):
+    with client:
+        response = client.post('/recupera', follow_redirects=True,
+                               data={'code': 'invalid'})
+        assert 'No se ha podido validar el código.' in response.data.decode()

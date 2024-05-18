@@ -480,3 +480,35 @@ def test_recupera_enviar_incorrecto(client):
         response = client.post('/recupera', follow_redirects=True,
                                data={'code': 'invalid'})
         assert 'No se ha podido validar el código.' in response.data.decode()
+
+def test_cambia_sin_sesion(client):
+    with client:
+        response = client.get('/cambia')
+        assert 'user_id' not in session
+        assert 403 == response.status_code
+        assert b'Forbidden' in response.data
+
+
+def test_cambia_en_sesion(client):
+    with client.session_transaction() as session:
+        session['user_id'] = 1
+    response = client.get('/cambia')
+    assert 'user_id' in session
+    assert b'Establecer' in response.data
+
+def test_cambia_en_session_enviar_incorrecto(client):
+    with client.session_transaction() as session:
+        session['user_id'] = 1
+    response = client.post('/cambia', follow_redirects=True,
+                               data={'password': ''})
+    assert 'Se requiere una contraseña.' in response.data.decode()
+
+def test_cambia_en_session_enviar_ok(client):
+    with client.session_transaction() as session:
+        session['user_id'] = 1
+    response = client.post('/cambia', follow_redirects=True,
+                               data={'password': 'contrasenanueva'})
+    assert len(response.history) == 1
+    assert response.history[0].status == '302 FOUND'
+    assert response.request.path == "/login"
+    assert 'Contraseña cambiada correctamente.' in response.data.decode()

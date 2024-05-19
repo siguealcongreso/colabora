@@ -4,9 +4,14 @@ from flask import g
 from colabora.main import app
 import colabora.views
 import colabora.db
+import secrets
+from itsdangerous import TimestampSigner
 
 colabora.views.ENTIDAD = 'entidad1'
 colabora.views.LEGISLATURA = 'legislatura1'
+
+from colabora.views import UPDATE_PASSWORD_KEY
+s = TimestampSigner(UPDATE_PASSWORD_KEY)
 
 
 def test_list_sin_sesion(client):
@@ -381,9 +386,10 @@ def test_usuario_envia(client):
                                data={'username': 'usuario2',
                                      'password': 'contrasena2'})
         response = client.post('/usuario',
-                               data={'autor': 1})
+                               data={'autor': 'usuario1'})
+        codigo = s.sign('1').decode('utf-8')
         assert response.request.path == '/usuario'
-        assert 'Código' in response.data.decode()
+        assert f'{codigo}' in response.data.decode()
 
 def test_confirma_reenvia_a_login(client):
     response = client.get('/confirma', follow_redirects=True)
@@ -454,3 +460,55 @@ def test_nueva_falta_contrasena(client):
         response = client.post('/nueva', follow_redirects=True,
                                data={'password': ''})
         assert 'Se requiere una contraseña' in response.data.decode()
+
+def test_recupera_despliega(client):
+    with client:
+        response = client.get('/recupera')
+        assert b'<input type="text" class="form-control" id="codigo-recuperacion" name="code">' in response.data
+
+def test_recupera_enviar_ok(client):
+    with client:
+        response = client.post('/recupera', follow_redirects=True,
+                               data={'code': s.sign('1').decode('utf-8')})
+        assert len(response.history) == 1
+        assert response.history[0].status == '302 FOUND'
+        assert response.request.path == "/cambia"
+        assert 'Código validado correctamente.' in response.data.decode()
+
+def test_recupera_enviar_incorrecto(client):
+    with client:
+        response = client.post('/recupera', follow_redirects=True,
+                               data={'code': 'invalid'})
+        assert 'No se ha podido validar el código.' in response.data.decode()
+
+def test_cambia_sin_sesion(client):
+    with client:
+        response = client.get('/cambia')
+        assert 'user_id' not in session
+        assert 403 == response.status_code
+        assert b'Forbidden' in response.data
+
+
+def test_cambia_en_sesion(client):
+    with client.session_transaction() as session:
+        session['user_id'] = 1
+    response = client.get('/cambia')
+    assert 'user_id' in session
+    assert b'Establecer' in response.data
+
+def test_cambia_en_session_enviar_incorrecto(client):
+    with client.session_transaction() as session:
+        session['user_id'] = 1
+    response = client.post('/cambia', follow_redirects=True,
+                               data={'password': ''})
+    assert 'Se requiere una contraseña.' in response.data.decode()
+
+def test_cambia_en_session_enviar_ok(client):
+    with client.session_transaction() as session:
+        session['user_id'] = 1
+    response = client.post('/cambia', follow_redirects=True,
+                               data={'password': 'contrasenanueva'})
+    assert len(response.history) == 1
+    assert response.history[0].status == '302 FOUND'
+    assert response.request.path == "/login"
+    assert 'Contraseña cambiada correctamente.' in response.data.decode()

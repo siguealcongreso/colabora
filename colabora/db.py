@@ -305,9 +305,15 @@ def agrega_legislatura(db, nombre):
     return f"ok: '{nombre}' creado"
 
 def actualiza_iniciativa(db, entidad, legislatura, numero, tema=None, resumen=None,
-                         comentario=None, estado_id=None):
+                         comentario=None, estado_id=None, cambios=None, documento=None):
     fields = []
     values = []
+    if cambios != None:
+        fields.append(f"cambios=?")
+        values.append(cambios)
+    if documento != None:
+        fields.append(f"documento=?")
+        values.append(documento)
     if tema != None:
         fields.append(f"tema=?")
         values.append(tema)

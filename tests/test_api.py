@@ -82,3 +82,37 @@ def test_iniciativa_agregar_error(client):
                                  'key': 'api-key-cambiar'})
     assert response.status == '200 OK'
     assert response.json == {'result': 'error: iniciativa 3 no creada'}
+
+
+def test_iniciativa_actualizar_sin_key(client):
+    response = client.patch('api/iniciativa',
+                            json={'entidad': 'entidad1',
+                                  'legislatura': 'legislatura1',
+                                  'numero': 3,
+                                  'cambios': 'cambios33',
+                                  'documento': 'documento33'})
+    assert response.status == '403 FORBIDDEN'
+
+
+def test_iniciativa_actualizar_ok(client):
+    response = client.patch('api/iniciativa',
+                            json={'entidad': 'entidad1',
+                                  'legislatura': 'legislatura1',
+                                  'numero': 3,
+                                  'cambios': 'cambios33',
+                                  'documento': 'documento33',
+                                  'key': 'api-key-cambiar'})
+    assert response.status == '200 OK'
+    assert response.json == {'result': 'ok: iniciativa 3 actualizada'}
+
+
+def test_iniciativa_actualizar_error(client):
+    response = client.patch('api/iniciativa',
+                            json={'entidad': 'entidad1',
+                                  'legislatura': 'legislatura1',
+                                  'numero': 2,
+                                  'cambios': 'cambios22',
+                                  'documento': 'documento22',
+                                  'key': 'api-key-cambiar'})
+    assert response.status == '200 OK'
+    assert response.json == {'result': 'error: iniciativa 2 no actualizada'}

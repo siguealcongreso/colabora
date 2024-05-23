@@ -6,6 +6,7 @@ from flask import abort
 from flask import current_app
 from .db import get_db
 from .db import agrega_iniciativa
+from .db import actualiza_iniciativa
 
 
 bp = Blueprint('api', __name__, url_prefix='/api')
@@ -47,4 +48,19 @@ def iniciativa():
     result = agrega_iniciativa(db, entidad, legislatura,
                                numero, cambios, documento,
                                tema="", resumen="", comentario="")
+    return {'result': result}
+
+
+@bp.route('/iniciativa', methods=['PATCH'])
+@key_required
+def iniciativa_actualiza():
+    db = get_db()
+    json = request.json
+    entidad = json['entidad']
+    legislatura = json['legislatura']
+    numero = json['numero']
+    documento = json.get('documento', None)
+    cambios = json.get('cambios', None)
+    result = actualiza_iniciativa(db, entidad, legislatura, numero,
+                                  cambios=cambios, documento=documento)
     return {'result': result}

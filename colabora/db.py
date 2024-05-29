@@ -374,10 +374,12 @@ def remueve_iniciativa(db, entidad, legislatura, numero):
            "legislatura_id = (SELECT legislatura_id FROM legislatura WHERE nombre=?) AND "
            "numero = ?")
     cur = db.cursor()
-    try:
-        desclasifica(db, entidad, legislatura, numero)
-        cur.execute(cmd, (entidad, legislatura, numero))
-        db.commit()
-    except sqlite3.DatabaseError:
+    row = iniciativa(db, entidad, legislatura, numero)
+    if row is None:
         return f"error: iniciativa {numero} no removida"
+    elif row['usuario'] is not None:
+         return f"error: iniciativa {numero} no removida"
+    desclasifica(db, entidad, legislatura, numero)
+    cur.execute(cmd, (entidad, legislatura, numero))
+    db.commit()
     return f"ok: iniciativa {numero} removida"

@@ -367,3 +367,19 @@ def actualiza_usuario(db, usuario_id, usuario=None, contrasena=None,
             db.commit()
             return f"ok: usuario {usuario_id} actualizado"
     return f"error: usuario {usuario_id} no actualizado"
+
+def remueve_iniciativa(db, entidad, legislatura, numero):
+    cmd = ("DELETE FROM iniciativas WHERE "
+           "entidad_id = (SELECT entidad_id FROM entidad WHERE nombre=?) AND "
+           "legislatura_id = (SELECT legislatura_id FROM legislatura WHERE nombre=?) AND "
+           "numero = ?")
+    cur = db.cursor()
+    row = iniciativa(db, entidad, legislatura, numero)
+    if row is None:
+        return f"error: iniciativa {numero} no removida"
+    elif row['usuario'] is not None:
+         return f"error: iniciativa {numero} no removida"
+    desclasifica(db, entidad, legislatura, numero)
+    cur.execute(cmd, (entidad, legislatura, numero))
+    db.commit()
+    return f"ok: iniciativa {numero} removida"

@@ -352,3 +352,13 @@ def test_remueve_inciativa_error_inexistente(database):
     database.executescript(_data_sql)
     result = colabora.db.remueve_iniciativa(database, 'entidad1', 'legislatura1', 1000)
     assert result == "error: iniciativa 1000 no removida"
+
+def test_remueve_usuario(database):
+    database.executescript(_data_sql)
+    result = colabora.db.remueve_usuario(database, 4)
+    assert result == "ok: usuario 4 removido"
+
+def test_remueve_usuario_error(database):
+    database.executescript(_data_sql)
+    result = colabora.db.remueve_usuario(database, 1)
+    assert result == "error: usuario 1 no removido"

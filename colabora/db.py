@@ -383,3 +383,13 @@ def remueve_iniciativa(db, entidad, legislatura, numero):
     cur.execute(cmd, (entidad, legislatura, numero))
     db.commit()
     return f"ok: iniciativa {numero} removida"
+
+def remueve_usuario(db, usuario_id):
+    cmd = ("DELETE FROM usuarios WHERE usuario_id = ?")
+    cur = db.cursor()
+    try:
+        cur.execute(cmd, (usuario_id,))
+        db.commit()
+    except sqlite3.DatabaseError:
+        return f"error: usuario {usuario_id} no removido"
+    return f"ok: usuario {usuario_id} removido"

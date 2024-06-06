@@ -116,3 +116,37 @@ def test_iniciativa_actualizar_error(client):
                                   'key': 'api-key-cambiar'})
     assert response.status == '200 OK'
     assert response.json == {'result': 'error: iniciativa 2 no actualizada'}
+
+
+def test_iniciativa_remover_sin_key(client):
+    response = client.delete('api/iniciativa',
+                            json={'entidad': 'entidad1',
+                                  'legislatura': 'legislatura1',
+                                  'numero': 3,
+                                  'cambios': 'cambios33',
+                                  'documento': 'documento33'})
+    assert response.status == '403 FORBIDDEN'
+
+
+def test_iniciativa_remover_ok(client):
+    response = client.delete('api/iniciativa',
+                            json={'entidad': 'entidad1',
+                                  'legislatura': 'legislatura1',
+                                  'numero': 3,
+                                  'cambios': 'cambios33',
+                                  'documento': 'documento33',
+                                  'key': 'api-key-cambiar'})
+    assert response.status == '200 OK'
+    assert response.json == {'result': 'ok: iniciativa 3 removida'}
+
+
+def test_iniciativa_remover_error(client):
+    response = client.delete('api/iniciativa',
+                            json={'entidad': 'entidad1',
+                                  'legislatura': 'legislatura1',
+                                  'numero': 2,
+                                  'cambios': 'cambios22',
+                                  'documento': 'documento22',
+                                  'key': 'api-key-cambiar'})
+    assert response.status == '200 OK'
+    assert response.json == {'result': 'error: iniciativa 2 no removida'}

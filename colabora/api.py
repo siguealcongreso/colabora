@@ -7,6 +7,7 @@ from flask import current_app
 from .db import get_db
 from .db import agrega_iniciativa
 from .db import actualiza_iniciativa
+from .db import remueve_iniciativa
 
 
 bp = Blueprint('api', __name__, url_prefix='/api')
@@ -63,4 +64,16 @@ def iniciativa_actualiza():
     cambios = json.get('cambios', None)
     result = actualiza_iniciativa(db, entidad, legislatura, numero,
                                   cambios=cambios, documento=documento)
+    return {'result': result}
+
+@bp.route('/iniciativa', methods=['DELETE'])
+@key_required
+def iniciativa_remueve():
+    db = get_db()
+    json = request.json
+    entidad = json['entidad']
+    legislatura = json['legislatura']
+    numero = json['numero']
+    result = remueve_iniciativa(db, entidad, legislatura,
+                               numero)
     return {'result': result}

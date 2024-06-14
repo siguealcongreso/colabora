@@ -18,3 +18,11 @@ views
 .. automodule:: colabora.views
    :members:
    :undoc-members:
+
+
+api
+=====
+
+.. automodule:: colabora.api
+   :members:
+   :undoc-members:

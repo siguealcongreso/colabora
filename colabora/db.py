@@ -43,6 +43,8 @@ def a_dict(records):
 
 
 def usuario_por_id(db, usuario_id):
+    """Regresa un diccionario con los valores del
+    usuario que corresponde a *usuario_id*."""
     cmd = "SELECT * FROM usuarios WHERE usuario_id=?"
     cur = db.cursor()
     cur.execute(cmd, (usuario_id,))
@@ -50,6 +52,8 @@ def usuario_por_id(db, usuario_id):
 
 
 def obten_usuario(db, usuario):
+    """Regresa un diccionario con los valores del
+    usuario que corresponde a *usuario*."""
     cmd = "SELECT * FROM usuarios WHERE usuario=?"
     cur = db.cursor()
     cur.execute(cmd, (usuario,))
@@ -69,6 +73,10 @@ def usuarios(db):
     return records
 
 def estados(db):
+    """Regresa una lista de estados.
+
+    Cada elemento es un diccionario con las
+    llaves *estado_id* y *estado*."""
     cmd = "SELECT * FROM estado"
     cur = db.cursor()
     cur.execute(cmd)
@@ -76,6 +84,10 @@ def estados(db):
     return records
 
 def areas(db):
+    """Regresa una lista de areas.
+
+    Cada elemento es un diccionario con las
+    llaves *area_id* y *nombre*."""
     cmd = "SELECT nombre FROM areas"
     cur = db.cursor()
     cur.execute(cmd)
@@ -234,6 +246,14 @@ def desclasifica(db, entidad, legislatura, numero):
 
 def agrega_iniciativa(db, entidad, legislatura, numero, cambios, documento,
                       tema, resumen, comentario):
+    """Se agrega una iniciativa que corresponde a *entidad*, *legislatura*,
+    *numero*, con los valores *cambios*, *documento*, *tema*, *resumen*,
+    *comentario*.
+
+    Regresa:
+
+     - 'ok: iniciativa *numero* creada'
+     - 'error: iniciativa *numero* no creada'"""
     cmd = ("INSERT INTO iniciativas (entidad_id, legislatura_id, numero, "
            "cambios, documento, tema, resumen, comentario) "
            "VALUES "
@@ -295,6 +315,12 @@ def agrega_entidad(db, nombre):
 
 
 def agrega_legislatura(db, nombre):
+    """Agrega la legislatura *nombre*, si aún no existe.
+
+    Regresa:
+
+     - 'ok: *nombre* creado'
+     - 'error: *nombre* no creado'"""
     cmd = "INSERT INTO legislatura (nombre) VALUES (?)"
     cur = db.cursor()
     try:
@@ -306,6 +332,16 @@ def agrega_legislatura(db, nombre):
 
 def actualiza_iniciativa(db, entidad, legislatura, numero, tema=None, resumen=None,
                          comentario=None, estado_id=None, cambios=None, documento=None):
+    """Actualiza la iniciativa que corresponde a *entidad*,
+    *legislatura*, *numero* con los valores de *tema*, *resumen*,
+    *comentario*, *estado*, *cambios* o *documento*.  Los
+    parámetros que no es incluyen no se modifican.
+
+    Regresa:
+
+      - 'ok: usuario *usuario_id* actualizado'
+      - 'error: usuario *usuario_id* no actualizado'
+    """
     fields = []
     values = []
     if cambios != None:
@@ -343,6 +379,15 @@ def actualiza_iniciativa(db, entidad, legislatura, numero, tema=None, resumen=No
 
 def actualiza_usuario(db, usuario_id, usuario=None, contrasena=None,
                       rol=None, activo=None):
+    """Actualiza el usuario que corresponde a *usuario_id* con los
+    valores de *usuario*, *contrasena*, *rol* o *activo*.  Los
+    parámetros que no es incluyen no se modifican.
+
+    Regresa:
+
+      - 'ok: usuario *usuario_id* actualizado'
+      - 'error: usuario *usuario_id* no actualizado'
+    """
     fields = []
     values = []
     if usuario != None:
@@ -369,6 +414,15 @@ def actualiza_usuario(db, usuario_id, usuario=None, contrasena=None,
     return f"error: usuario {usuario_id} no actualizado"
 
 def remueve_iniciativa(db, entidad, legislatura, numero):
+    """Remueve la iniciativa que corresponde a *entidad*,
+    *legislatura*, *numero*, solamente si no está asignada.
+    Antes de remover, se desclasifica.
+
+    Regresa:
+
+     - 'ok: iniciativa *numero* removida'
+     - 'error: iniciativa *numero* no removida'
+    """
     cmd = ("DELETE FROM iniciativas WHERE "
            "entidad_id = (SELECT entidad_id FROM entidad WHERE nombre=?) AND "
            "legislatura_id = (SELECT legislatura_id FROM legislatura WHERE nombre=?) AND "
@@ -385,6 +439,14 @@ def remueve_iniciativa(db, entidad, legislatura, numero):
     return f"ok: iniciativa {numero} removida"
 
 def remueve_usuario(db, usuario_id):
+    """Remueve el usuario que corresponde a *usuario_id*,
+    solamente si no tienen iniciativas asignadas.
+
+    Regresa:
+
+     - 'ok: usuario *usuario_id* removido'
+     - 'error: usuario *usuario_id* no removido'
+    """
     cmd = ("DELETE FROM usuarios WHERE usuario_id = ?")
     cur = db.cursor()
     try:

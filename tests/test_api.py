@@ -50,6 +50,15 @@ def test_key_required_no_key(client):
             assert wrapped()
 
 
+def test_iniciativa(client):
+    response = client.get('/api/iniciativa',
+                          json={'entidad': 'entidad1',
+                                'legislatura': 'legislatura1',
+                                'key': 'api-key-cambiar'})
+    assert response.status == '200 OK'
+    assert len(response.json['result']) == 2
+
+
 def test_iniciativa_agregar_sin_key(client):
     response = client.post('/api/iniciativa',
                            json={'entidad': 'entidad1',

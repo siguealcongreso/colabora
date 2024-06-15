@@ -8,6 +8,7 @@ from .db import get_db
 from .db import agrega_iniciativa
 from .db import actualiza_iniciativa
 from .db import remueve_iniciativa
+from .db import iniciativas
 
 
 bp = Blueprint('api', __name__, url_prefix='/api')
@@ -34,6 +35,18 @@ def login():
                 'key': current_app.config['API_KEY']}
     else:
         return {'result': 'error: ingreso denegado'}
+
+
+@bp.route('/iniciativa', methods=['GET'])
+@key_required
+def iniciativas_lista():
+    db = get_db()
+    json = request.json
+    entidad = json['entidad']
+    legislatura = json['legislatura']
+    result = iniciativas(db, entidad=entidad, legislatura=legislatura)
+    json = [dict(row) for row in result]
+    return {'result': json}
 
 
 @bp.route('/iniciativa', methods=['POST'])

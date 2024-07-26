@@ -2,8 +2,17 @@ import os
 import tempfile
 
 import pytest
+import colabora.views
 from colabora.app import app as appli
 from colabora.db import get_db, init_db
+
+
+def mock_generate_password_hash(password):
+    return password + ':hashed'
+
+
+def mock_check_password_hash(hash, password):
+    return hash == password + ':hashed'
 
 
 with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
@@ -12,6 +21,12 @@ with open(os.path.join(os.path.dirname(__file__), 'data.sql'), 'rb') as f:
 
 @pytest.fixture
 def app():
+    monkeypatch = pytest.MonkeyPatch()
+    monkeypatch.setattr(colabora.views, 'generate_password_hash',
+                        mock_generate_password_hash)
+    monkeypatch.setattr(colabora.views, 'check_password_hash',
+                        mock_check_password_hash)
+
     db_fd, db_path = tempfile.mkstemp()
     print(db_fd, db_path)
 
@@ -23,6 +38,7 @@ def app():
 
     yield appli
 
+    monkeypatch.undo()
     os.close(db_fd)
     os.unlink(db_path)
 

@@ -24,7 +24,7 @@ INSERT INTO areas (nombre)
 VALUES ('area2');
 
 INSERT INTO usuarios (usuario, rol, contrasena)
-VALUES ('usuario1', 'escritor', 'pbkdf2:sha256:260000$tO9sZi75hb37KUJx$31b698118aeaa310216e3817187df664592d953a7e509ef1b143e61d6e1a3ee6');
+VALUES ('usuario1', 'escritor', 'contrasena1:hashed');
 
 INSERT INTO asignacion (entidad_id, legislatura_id, numero, usuario_id) VALUES
 ((SELECT entidad_id FROM entidad WHERE nombre='entidad1'),
@@ -34,10 +34,10 @@ INSERT INTO asignacion (entidad_id, legislatura_id, numero, usuario_id) VALUES
 );
 
 INSERT INTO usuarios (usuario, rol, contrasena)
-VALUES ('usuario2', 'editor', 'pbkdf2:sha256:260000$kcXIu3KRdxMBnn7e$1f8b1e0734bde500c5db3401bda54177af962764086b9df337df77848438aa92');
+VALUES ('usuario2', 'editor', 'contrasena2:hashed');
 
 INSERT INTO usuarios (usuario, rol, contrasena)
-VALUES ('usuario3', 'admin', 'pbkdf2:sha256:260000$wwFM6rPwlrseIYi9$3fd438a00a0c40b250e1e8e82454f9b7fc6987d7d588bca40e8d2467894f9a81');
+VALUES ('usuario3', 'admin', 'contrasena3:hashed');
 
 
 INSERT INTO iniciativas (entidad_id, legislatura_id, numero,
@@ -63,4 +63,4 @@ INSERT INTO clasificacion (entidad_id, legislatura_id, numero, area_id) VALUES
 );
 
 INSERT INTO usuarios (usuario, rol, contrasena)
-VALUES ('usuario4', 'escritor', 'scrypt:32768:8:1$1ZiDdTY36Dbkix1O$3f183443e6791621fce2a2f8c1d99acd6cae21424fa2e6d45850eec462bd66adc9986ff447cbeb9da5252ce1bee55c70fd595c52cb62278a9e71197291b7ca71');
+VALUES ('usuario4', 'escritor', 'contrasena4:hashed');

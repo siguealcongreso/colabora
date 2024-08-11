@@ -5,6 +5,8 @@ resúmenes de iniciativas.
 
 ## Para contribuir a la aplicación
 
+### Preparación
+
 1. Copia este repositorio a tu cuenta (Crea un fork)
 
 2. Clona de tu repositorio a tu computadora:
@@ -34,6 +36,8 @@ resúmenes de iniciativas.
 7. Corre la aplicación
 
        env/bin/flask --debug --app colabora.main run
+
+### Trabajo en un Issue
 
 8. Crea una rama para las modificaciones
 

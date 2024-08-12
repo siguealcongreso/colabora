@@ -81,16 +81,32 @@ recientes del repositorio original:
 
        pytest --cov=colabora
 
-8. Realiza uno o más commits en tu computadora
+8. Revisa que tus modificaciones cumplen con los *Requerimientos para
+los commits* que se describen en la siguiente sección.
 
-9. Empuja la rama con tus modificaciones a tu repositorio en GitHub
+9. Realiza uno o más commits en tu computadora
 
-10. Solicita que se incluyan tus cambios (Crea un Pull Request)
+10. Empuja la rama con tus modificaciones a tu repositorio en GitHub
 
-11. Una vez que se aprobó el Pull Request, borra la rama del issue:
+11. Solicita que se incluyan tus cambios (Crea un Pull Request)
+
+12. Una vez que se aprobó el Pull Request, borra la rama del issue:
 
        git branch -d issue-48
        git push -d origin issue-48
+
+
+## Requerimientos para los commits
+
+1. Revisa que `git diff --check` no reporte renglones con espacios al
+final en los archivos que modificas.
+
+2. Modifica solamente los renglones necesarios para resolver el issue
+en cuestión. No hagas cambios cosméticos en otros renglones del código
+que no tienen que ver con lo que estás mejorando.
+
+3. Si estás agregando texto, revisa que cumple con la Ortografía y
+Gramática.
 
 ## Para generar la documentación
 

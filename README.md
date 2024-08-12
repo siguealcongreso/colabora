@@ -94,17 +94,17 @@ recientes del repositorio original:
 
 ## Para generar la documentación
 
-1. Instala la dependencia para la documentación
-
-       env/bin/pip install -e '.[doc]'
-
-2. Activa el entorno virtual
+1. Activa el entorno virtual
 
        . env/bin/activate
+
+2. Instala la dependencia para la documentación
+
+       pip install -e '.[doc]'
 
 3. Genera la documentación
 
        cd docs
        make html
 
-4. Navega a build/html/index.html
+4. Navega a `build/html/index.html`

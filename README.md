@@ -7,35 +7,50 @@ resúmenes de iniciativas.
 
 ### Preparación
 
-1. Copia este repositorio a tu cuenta (Crea un fork)
+1. Copia este repositorio a tu cuenta en GitHub (Crea un fork)
 
-2. Clona de tu repositorio a tu computadora:
+2. Clona de tu repositorio a tu computadora, se crea el remote `origin`:
 
        git clone git@github.com:<tu-usuario>/colabora.git
 
-3. Crea un entorno virtual
+3. Agrega un remote `upstream`:
 
-       cd colabora
+       git remote add upstream https://github.com/siguealcongreso/colabora.git
+
+4. Configura git para hacer pull de `main` en `upstream` y siempre hacer push
+a `origin`:
+
+       git config --local branch.main.remote upstream
+       git remote set-url --push upstream git@github.com:<tu-usuario>/colabora.git
+
+5. Crea un entorno virtual
+
        python3 -m venv env
 
-4. Instala la aplicación con sus dependencias en modo de desarrollo
+6. Activa el entorno virtual
 
-       env/bin/pip install -e '.[test]'
+       . env/bin/activate
 
-5. Corre las pruebas
+7. Instala la aplicación con sus dependencias en modo de desarrollo
 
-       env/bin/pytest --cov=colabora
+       pip install -e '.[test]'
 
-6. Inicializa la base de datos
+8. Corre las pruebas
 
-       env/bin/flask --app colabora.main shell
-       >> import colabora.db
-       >> colabora.db.init_db()
+       pytest --cov=colabora
+
+9. Inicializa la base de datos
+
+       flask --app colabora.main shell
+       >> from colabora.db import init_db
+       >> init_db()
        >> exit()
 
-7. Corre la aplicación
+10. Corre la aplicación
 
-       env/bin/flask --debug --app colabora.main run
+       flask --debug --app colabora.main run
+
+11. Visita http://localhost:5000
 
 ### Trabajo en un Issue
 

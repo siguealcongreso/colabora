@@ -54,15 +54,43 @@ a `origin`:
 
 ### Trabajo en un Issue
 
-8. Crea una rama para las modificaciones
+1. Actualiza la rama `main` de tu repositorio local con los cambios más
+recientes del repositorio original:
 
-       git checkout -b agregar-mejora
+       git checkout main
+       git pull upstream
 
-9. Haz modificaciones
+2. Crea una nueva rama en donde van a ir los cambios en los que trabajes.
 
-10. Empuja tus modificaciones a tu repositorio
+       git checkout -b issue-48 main
 
-11. Solicita que se incluyan tus cambios (Crea un Pull Request)
+3. Haz modificaciones
+
+
+4. Activa el entorno virtual
+
+       . env/bin/activate
+
+5. Corre la aplicación
+
+       flask --debug --app colabora.main run
+
+6. Visita http://localhost:5000 para revisar las modficaciones
+
+7. Corre las pruebas
+
+       pytest --cov=colabora
+
+8. Realiza uno o más commits en tu computadora
+
+9. Empuja la rama con tus modificaciones a tu repositorio en GitHub
+
+10. Solicita que se incluyan tus cambios (Crea un Pull Request)
+
+11. Una vez que se aprobó el Pull Request, borra la rama del issue:
+
+       git branch -d issue-48
+       git push -d origin issue-48
 
 ## Para generar la documentación
 

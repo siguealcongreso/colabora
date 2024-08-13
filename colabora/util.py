@@ -18,5 +18,5 @@ def revisa_tema(tema):
 
     if len(correcciones) != 0:
         estado = 'Error'
-        
+
     return estado, correcciones

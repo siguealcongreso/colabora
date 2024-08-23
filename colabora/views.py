@@ -81,7 +81,7 @@ def lista():
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
         comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
-        temas=temas, resumenes=resumenes, correciones = correcciones
+        temas=temas, resumenes=resumenes, correcciones = correcciones
     )
 
 @app.route("/iniciativas")

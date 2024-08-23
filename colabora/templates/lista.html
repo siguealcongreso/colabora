@@ -130,6 +130,15 @@
 	      {% endfor %}
         </div>
       </div>
+      {%if correcciones[loop.index0][0]== "Error"%}
+        <div class="row py-2 border border-top-0 bg-light">
+          <div class="alert alert-danger"><b>Correcciones</b>
+            {% for errores in correcciones[loop.index0][1] %}
+            {{ errores }}<br>
+            {% endfor %}
+          </div>
+        </div>
+      {%endif%}
     </div>
 </div>
 </div>

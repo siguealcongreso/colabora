@@ -28,7 +28,7 @@ from .db import estados as dbestados
 from .db import agrega_usuario
 from .db import asignadas_por_usuario
 from .db import actualiza_usuario
-
+from .util import revisa_tema
 
 ENTIDAD = 'Jalisco'
 LEGISLATURA = 'LXIII'
@@ -73,11 +73,15 @@ def lista():
         records = iniciativas(db, ENTIDAD, LEGISLATURA,
                               solo_sin_asignar=True)
     tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
+    correcciones = []
+    for tema in temas:
+        correcion = revisa_tema(tema)
+        correcciones.append(correcion)
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
         comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
-        temas=temas, resumenes=resumenes
+        temas=temas, resumenes=resumenes, correciones = correcciones
     )
 
 @app.route("/iniciativas")

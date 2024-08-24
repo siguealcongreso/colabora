@@ -1,15 +1,22 @@
 {% extends "base.html" %}
-{% block title %}Iniciativas sin resumen - Legislatura LXIII{% endblock %}
+{% block title %}Iniciativas asignadas - Legislatura LXIII{% endblock %}
 {% block content %}
     <div class="container">
       <p>
 	{% if g.user %}
 	&nbsp;
-	{% if g.user['rol'] == 'admin' %}
-	<a class="btn btn-outline-primary" href="asigna">Asignar iniciativas</a>
+	{% if g.user['rol'] == 'admin' and request.path != '/desasigna' %}
 	<a class="btn btn-outline-primary" href="desasigna">Desasignar iniciativas</a>
 	{% endif %}
+	{% if request.path == '/desasigna' %}
 	<a class="btn btn-outline-primary" href=".">Ver mis asignadas</a>
+	{% endif %}
+	{% if request.path in ('/', '/desasigna') and g.user['rol'] != 'escritor' %}
+	<a class="btn btn-outline-primary" href="iniciativas">Ver todas las iniciativas</a>
+	{% endif %}
+	{% if request.path == '/iniciativas' %}
+	<a class="btn btn-outline-primary" href=".">Ver mis asignadas</a>
+	{% endif %}
 	<a class="btn btn-outline-primary float-end" href="logout">Terminar sesión</a>
 	<a class="btn btn-outline-primary float-end" href="usuario">Usuario: {{ g.user['usuario'] }}</a>
 	{% else %}
@@ -17,10 +24,12 @@
 	<a class="btn btn-outline-primary" href="registro">Registrar nuevo usuario</a>
 	{% endif %}
       </p>
-    </div>
+	{% if request.path == '/desasigna' %}
+	<form class="needs-validation" novalidate method="post">
+        <button class="btn btn-secondary" type="submit">Desasignar</button>
   <div class="container">
     <section class="section">
-      <table class="table table-hover" id="asignadas" style="width:100%;">
+      <table class="table table-hover" id="asignadas">
         <thead>
             <tr class="tl">
                 <th>Usuario</th>
@@ -31,36 +40,50 @@
             </tr>
         </thead>
         <tbody>
-            {% for usuario in asignadas_usuario|sort %}
+            {% for user in users | sort(attribute='usuario') %}
             <tr>
-                <td><a href="#h{{ loop.index }}">{% if usuario == '' %}Sin asignar{% else %}{{ usuario }}{% endif %}</a></td>
-                <td>{{ asignadas[usuario]['Total'] }}</td>
-                <td>{{ asignadas[usuario]['Nueva'] }}</td>
-                <td>{{ asignadas[usuario]['Pendiente'] }}</td>
-                <td>{{ asignadas[usuario]['Revisada'] }}</td>
+                <td>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="autor" value="{{ user.usuario }}" id="id{{ user.usuario }}" required>
+                        <label class="form-check-label" for="id{{ user.usuario }}">{{ user.usuario }}</label>
+                        {% if loop.last %}
+                        <div class="valid-feedback">Ok</div>
+                        <div class="invalid-feedback">Selecciona un usuario</div>
+                        {% endif %}
+                    </div>
+                </td>
+                <td>{{ asignadas.get(user.usuario, {'Total':0})['Total'] }}</td>
+                <td>{{ asignadas.get(user.usuario, {'Nueva':0})['Nueva'] }}</td>
+                <td>{{ asignadas.get(user.usuario, {'Pendiente':0})['Pendiente'] }}</td>
+                <td>{{ asignadas.get(user.usuario, {'Revisada':0})['Revisada'] }}</td>
             </tr>
             {% endfor %}
         </tbody>
-    </table>
-  </div>
-    {% for usuario in asignadas_usuario|sort %}
-    <div class="container">
-      {% if usuario == '' %}
-      <h2 id="h{{ loop.index }}">Sin asignar  - {{ asignadas[usuario]['Total'] }}</h2>
-      {% else %}
-      <h2 id="h{{ loop.index }}">{{ usuario }} - {{ asignadas[usuario]['Total'] }}</h2>
-      {% endif %}
+    </table>    
+      </div>
+	{{ asignadas['']['Total'] }} por asignar
+	{% endif %}
+    <h3 class="alert alert-danger">Favor de usar con cuidado.</h2>
     </div>
-    {% for r in asignadas_usuario[usuario] %}
+    {% for usuario, iniciativas_user in iniciativas_por_usuario.items() | sort%}
+    <div class="container">
+        <h2 id="h{{ loop.index }}">{{ usuario }} - {{ iniciativas_user|length }}</h2>
+    </div>
+    {% for r in iniciativas_user %}
     <div class="container px-4">
       <div class="row py-2 bg-light border-bottom-0 border">
         <div class="col-md-3">
           <div class=""><b>Número</b> {{ r.numero }}
           </div>
         </div>
-          <div class="col-md-3">
-            <div class=""><b>Asignada</b> {% if r.usuario != None %}{{ r.usuario }}{% endif %}</div>
+        <div class="col-md-3">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="numero" value="{{ r.numero }}" id="c{{ r.numero }}" {% if r.estado != None %}disabled{% endif %}>
+            <label class="form-check-label" for="c{{ r.numero }}"><b>Desasignar</b></label>
+            <div class="valid-feedback">Ok</div>
+            <div class="invalid-feedback">Selecciona una o más iniciativas</div>
           </div>
+        </div>
         <div class="col-md-6">
           <div class=""><b>Estado</b> {% if r.estado != None %}{{ r.estado }}{% endif %}
           </div>
@@ -112,7 +135,8 @@
 </div>
 </div>
 <br>
-      {% endfor %}
-      {% endfor %}
+</div>
+{% endfor %}
+{% endfor %}
       </form>
 {% endblock %}

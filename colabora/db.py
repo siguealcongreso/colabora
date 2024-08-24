@@ -186,6 +186,20 @@ def iniciativas(db, entidad, legislatura, solo_sin_asignar=False):
     records = cur.fetchall()
     return records
 
+def obtener_iniciativas(db, entidad, legislatura, solo_asignadas=False):
+    cmd = ("SELECT numero, cambios, documento, tema, resumen, estado, comentario, usuario "
+           "FROM iniciativas "
+           "LEFT JOIN estado USING (estado_id) "
+           "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
+           "LEFT JOIN usuarios USING (usuario_id) "
+           "WHERE entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) AND "
+           "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?)") 
+    if solo_asignadas:
+        cmd += " AND usuario IS NOT NULL"
+    cur = db.cursor()
+    cur.execute(cmd, (entidad, legislatura))
+    records = cur.fetchall()
+    return records
 
 def iniciativas_asignadas(db, entidad, legislatura, usuario):
     cmd = ("SELECT numero, cambios, documento, tema, resumen, estado, comentario, usuario "
@@ -215,6 +229,22 @@ def asigna(db, entidad, legislatura, numero, usuario):
     except sqlite3.DatabaseError:
         return f"error: iniciativa {numero} no asignada a {usuario}"
     return f"ok: iniciativa {numero} asignada a {usuario}"
+
+def desasigna(db, entidad, legislatura, numero):
+    cmd = ("DELETE FROM asignacion "
+           "WHERE entidad_id = (SELECT entidad_id FROM entidad WHERE nombre=?) "
+           "AND legislatura_id = (SELECT legislatura_id FROM legislatura WHERE nombre=?) "
+           "AND numero = ?")
+    cur = db.cursor()
+    try:
+        cur.execute(cmd, (entidad, legislatura, numero))
+        db.commit()
+        if cur.rowcount > 0:
+            return f"ok: iniciativa {numero} desasignada"
+        else:
+            return f"error: iniciativa {numero} no estaba asignada"
+    except sqlite3.DatabaseError:
+        return f"error: no se pudo desasignar la iniciativa {numero}"
 
 
 def clasifica(db, entidad, legislatura, numero, area):

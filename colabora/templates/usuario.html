@@ -6,6 +6,9 @@
 	{% if g.user %}
 	<a class="btn btn-outline-primary" href=".">Ver mis asignadas</a>
 	<a class="btn btn-outline-primary" href="iniciativas">Ver todas las iniciativas</a>
+	{% if g.user['rol'] == 'admin'%}
+	<a class="btn btn-outline-primary" href="desasigna">Desasignar iniciativas</a>
+	{% endif %}
 	<a class="btn btn-outline-primary float-end" href="logout">Terminar sesión</a>
 	<span class="btn btn-outline-secondary float-end disabled">Usuario: {{ g.user['usuario'] }}</span>
 	{% else %}

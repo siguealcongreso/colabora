@@ -300,12 +300,14 @@ def edita(numero):
     estados = dbestados(db)
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
     tags = areas_por_iniciativa(db).get(ENTIDAD, {}).get(LEGISLATURA, {}).get(int(numero), [])
+    correcciones = revisa_tema(record[3])
     return render_template('edita.html',
                            r=record,
                            tags=tags,
                            estados=estados,
                            roles=roles,
-                           areas=areas)
+                           areas=areas,
+                           correcciones=correcciones,)
 
 @app.route("/edita/<numero>", methods=["POST"])
 @login_required

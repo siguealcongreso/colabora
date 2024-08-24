@@ -84,6 +84,15 @@
           {% else %}{{ r.comentario }}{% endif %}
         </div>
       </div>
+      {%if correcciones[0]== "Error"%}
+        <div class="row py-2 border border-top-0 bg-light">
+          <div class="alert alert-danger"><b>Correcciones</b>
+            {% for item in correcciones[1] %}
+              {{ item }}<br>
+            {% endfor %}
+          </div>
+        </div>
+      {%endif%}
       <div class="row py-2 border border-top-0 bg-light">
         <div class="">
 	   <button type="submit" class="btn btn-secondary">Guardar</button>

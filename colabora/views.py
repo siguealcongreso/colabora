@@ -74,10 +74,10 @@ def lista():
                               solo_sin_asignar=True)
     tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
-    correcciones = []
-    for tema in range(len(temas)):
-        errores = revisa_tema(records[tema][1])
-        correcciones.append(errores)
+    correcciones = {}
+    for i in range(len(temas)):
+        errores = revisa_tema(records[i][3])
+        correcciones[records[i][0]] = errores
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
         comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
@@ -94,10 +94,14 @@ def lista_todas():
     tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
     asignadas_usuario = asignadas_por_usuario(db, ENTIDAD, LEGISLATURA)
+    correcciones = {}
+    for i in range(len(temas)):
+        errores = revisa_tema(records[i][3])
+        correcciones[records[i][0]] = errores
     return render_template(
         "lista_todas.html", records=records, tags=tags, areas=areas,
         comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
-        temas=temas, resumenes=resumenes, asignadas_usuario=asignadas_usuario
+        temas=temas, resumenes=resumenes, asignadas_usuario=asignadas_usuario, correcciones= correcciones
     )
 
 @app.route("/registro", methods=('GET', 'POST'))

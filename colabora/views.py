@@ -269,10 +269,14 @@ def asigna():
     records = iniciativas(db, ENTIDAD, LEGISLATURA,
                           solo_sin_asignar=True)
     tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
+    correcciones = {}
+    for i in range(len(temas)):
+        errores = revisa_tema(records[i][3])
+        correcciones[records[i][0]] = errores
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
         comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
-        temas=temas, resumenes=resumenes
+        temas=temas, resumenes=resumenes, correcciones = correcciones
     )
 
 

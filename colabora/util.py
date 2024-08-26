@@ -9,9 +9,9 @@ def revisa_tema(tema):
 
     if incorrectas:
         correcciones.append(f'Revisar si la(s) palabra(s) "{", ".join(incorrectas)}" están bien escritas')
-    if tema.endswith== '.':
+    if tema[-1] == '.':
         correcciones.append('El tema no debe llevar punto al final')
-    if tema.startswith == ' ' or tema.endswith == ' ':
+    if tema[0] == ' ' or tema[-1] == ' ':
         correcciones.append('El tema no debe llevar espacio ni al inicio ni al final')
     if re.search(r"(?<!\.)\n", tema):
         correcciones.append('El tema no debe llevar un renglón nuevo sin que vaya después de un punto')

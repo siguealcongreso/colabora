@@ -1,14 +1,8 @@
 import re
-from spellchecker import SpellChecker
 def revisa_tema(tema): 
     correcciones = []
     estado = 'Ok'
     
-    spell = SpellChecker(language='es')
-    incorrectas = spell.unknown(re.findall(r'\b\w+\b', tema))
-
-    if incorrectas:
-        correcciones.append(f'Revisar si la(s) palabra(s) "{", ".join(incorrectas)}" están bien escritas')
     if tema:
         if tema[-1] == '.':
             correcciones.append('El tema no debe llevar punto al final')

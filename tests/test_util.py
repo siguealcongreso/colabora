@@ -1,10 +1,5 @@
 from colabora.util import revisa_tema
 
-def test_revisa_tema_ortografia():
-    tema = 'Saldud'
-    result = revisa_tema(tema)
-    assert result == ('Error', ['Revisar si la(s) palabra(s) "saldud" están bien escritas'])
-
 def test_revisa_tema_punto_final():
     tema = 'Salud.'
     result = revisa_tema(tema)

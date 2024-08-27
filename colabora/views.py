@@ -28,7 +28,7 @@ from .db import estados as dbestados
 from .db import agrega_usuario
 from .db import asignadas_por_usuario
 from .db import actualiza_usuario
-
+from .util import revisa_tema
 
 ENTIDAD = 'Jalisco'
 LEGISLATURA = 'LXIII'
@@ -74,10 +74,14 @@ def lista():
                               solo_sin_asignar=True)
     tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
+    correcciones = {}
+    for i in range(len(temas)):
+        errores = revisa_tema(records[i][3])
+        correcciones[records[i][0]] = errores
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
         comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
-        temas=temas, resumenes=resumenes
+        temas=temas, resumenes=resumenes, correcciones = correcciones
     )
 
 @app.route("/iniciativas")
@@ -90,10 +94,14 @@ def lista_todas():
     tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
     asignadas_usuario = asignadas_por_usuario(db, ENTIDAD, LEGISLATURA)
+    correcciones = {}
+    for i in range(len(temas)):
+        errores = revisa_tema(records[i][3])
+        correcciones[records[i][0]] = errores
     return render_template(
         "lista_todas.html", records=records, tags=tags, areas=areas,
         comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
-        temas=temas, resumenes=resumenes, asignadas_usuario=asignadas_usuario
+        temas=temas, resumenes=resumenes, asignadas_usuario=asignadas_usuario, correcciones= correcciones
     )
 
 @app.route("/registro", methods=('GET', 'POST'))
@@ -261,10 +269,14 @@ def asigna():
     records = iniciativas(db, ENTIDAD, LEGISLATURA,
                           solo_sin_asignar=True)
     tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
+    correcciones = {}
+    for i in range(len(temas)):
+        errores = revisa_tema(records[i][3])
+        correcciones[records[i][0]] = errores
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
         comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
-        temas=temas, resumenes=resumenes
+        temas=temas, resumenes=resumenes, correcciones = correcciones
     )
 
 
@@ -292,12 +304,14 @@ def edita(numero):
     estados = dbestados(db)
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
     tags = areas_por_iniciativa(db).get(ENTIDAD, {}).get(LEGISLATURA, {}).get(int(numero), [])
+    correcciones = revisa_tema(record[3])
     return render_template('edita.html',
                            r=record,
                            tags=tags,
                            estados=estados,
                            roles=roles,
-                           areas=areas)
+                           areas=areas,
+                           correcciones=correcciones,)
 
 @app.route("/edita/<numero>", methods=["POST"])
 @login_required

@@ -61,7 +61,7 @@
             <div class=""><b>Asignada</b> {% if r.usuario != None %}{{ r.usuario }}{% endif %}</div>
           </div>
         <div class="col-md-6">
-          <div class="{% if r.estado == None and r['tema'] != '' %}alert alert-warning{% endif %}"><b>Estado</b> {% if r.estado != None %}{{ r.estado }}{% endif %}
+          <div class="{% if r.estado == None and r['tema'] != '' %}alert alert-warning{% elif r.estado == 'Pendiente' %}alert alert-info{% endif %}"><b>Estado</b> {% if r.estado != None %}{{ r.estado }}{% endif %}
           </div>
         </div>
       </div>

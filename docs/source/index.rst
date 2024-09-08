@@ -11,6 +11,7 @@
    :caption: Índice:
 
    diseno
+   api
    referencia
 
 Índices y tablas

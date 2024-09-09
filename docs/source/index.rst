@@ -11,6 +11,7 @@
    :caption: Índice:
 
    diseno
+   seguridad
    referencia
 
 Índices y tablas

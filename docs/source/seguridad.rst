@@ -17,6 +17,21 @@ Para autorizar las operaciones CRUD de la API, se obtiene una llave al hacer log
 Elementos
 ---------
 
+``login_required``
+
+    Decorador que redirecciona a la vista de log in en caso de que se quiera acceder a una página protegida.
+
+``key_required``
+
+    Decorador que no permite el uso de la API si el usuario no está autorizado.
+
+Módulo y funciones con ``zxcvbn``
+
+    El módulo ``zxcvbn`` es importado en las plantillas ``cambia.html``, ``nueva.html`` y ``registro.html``, donde se requiere
+    que el usuario escriba una contraseña.
+    La función ``load`` actualiza su calificación al terminar de escribir, mientras que ``validate`` utiliza el módulo para evaluarla 
+    y proporcionar retroalimentación mediante una barra dinámica.
+
 Acceso
 ------
 

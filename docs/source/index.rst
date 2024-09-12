@@ -11,6 +11,7 @@
    :caption: Índice:
 
    diseno
+   seguridad
    api
    referencia
 

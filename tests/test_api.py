@@ -76,6 +76,8 @@ def test_iniciativa_agregar_ok(client):
                                  'numero': 4,
                                  'cambios': 'cambios4',
                                  'documento': 'documento4',
+                                 'tema': 'tema1',
+                                 'resumen': 'resumen1',
                                  'key': 'api-key-cambiar'})
     assert response.status == '200 OK'
     assert response.json == {'result': 'ok: iniciativa 4 creada'}
@@ -88,6 +90,8 @@ def test_iniciativa_agregar_error(client):
                                  'numero': 3,
                                  'cambios': 'cambios3',
                                  'documento': 'documento3',
+                                 'tema': 'tema3',
+                                 'resumen': 'resumen3',
                                  'key': 'api-key-cambiar'})
     assert response.status == '200 OK'
     assert response.json == {'result': 'error: iniciativa 3 no creada'}

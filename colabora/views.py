@@ -280,17 +280,6 @@ def asigna():
     )
 
 
-@app.route("/crea/<numero>", methods=['POST'])
-def crea(numero):
-    db = get_db()
-    cambios = request.form['cambios']
-    documento = request.form['documento']
-    result = agrega_iniciativa(db, ENTIDAD, LEGISLATURA,
-                               numero, cambios, documento, tema="", resumen="",
-                               comentario="")
-    return result
-
-
 @app.route("/edita/<numero>")
 @login_required
 def edita(numero):

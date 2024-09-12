@@ -59,9 +59,11 @@ def iniciativa():
     numero = json['numero']
     documento = json['documento']
     cambios = json['cambios']
+    tema = json.get('tema', '')
+    resumen = json.get('resumen', '')
     result = agrega_iniciativa(db, entidad, legislatura,
                                numero, cambios, documento,
-                               tema="", resumen="", comentario="")
+                               tema=tema, resumen=resumen, comentario="")
     return {'result': result}
 
 

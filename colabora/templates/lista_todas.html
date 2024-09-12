@@ -61,7 +61,7 @@
             <div class=""><b>Asignada</b> {% if r.usuario != None %}{{ r.usuario }}{% endif %}</div>
           </div>
         <div class="col-md-6">
-          <div class=""><b>Estado</b> {% if r.estado != None %}{{ r.estado }}{% endif %}
+          <div class="{% if r.estado == None and r['tema'] != '' %}alert alert-warning{% elif r.estado == 'Pendiente' %}alert alert-info{% endif %}"><b>Estado</b> {% if r.estado != None %}{{ r.estado }}{% endif %}
           </div>
         </div>
       </div>
@@ -77,7 +77,7 @@
           </div>
         </div>
       </div>
-      <div class="row py-2 border border-top-0 bg-light">
+      <div class="row py-2 border border-top-0 {% if r['tema'] == '' and r.usuario != None %}alert alert-warning{% else %}bg-light{% endif %}">
           <div class="col-md-3">
             <div class=""><b>Tema</b>
 	      {% for t in temas[r.numero] %}

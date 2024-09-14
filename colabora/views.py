@@ -13,9 +13,11 @@ from itsdangerous import TimestampSigner
 from .app import app
 from .db import get_db
 from .db import iniciativas_asignadas
+from .db import obtener_iniciativas
 from .db import iniciativas, areas as dbareas, usuarios
 from .db import cantidad_asignadas_por_usuario
 from .db import asigna as dbasigna
+from .db import desasigna as dbdesasigna
 from .db import agrega_iniciativa
 from .db import iniciativa
 from .db import areas_por_iniciativa
@@ -278,7 +280,33 @@ def asigna():
         comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
         temas=temas, resumenes=resumenes, correcciones = correcciones
     )
-
+    
+@app.route("/desasigna", methods=["GET", "POST"])
+@login_required
+def desasigna():
+    db = get_db()
+    roles = {d['usuario']: d['rol'] for d in usuarios(db)}
+    if g.user['rol'] != 'admin':
+        abort(403)
+    if request.method == 'POST':
+        for numero in request.form.getlist('numero'):
+            result = dbdesasigna(db, ENTIDAD, LEGISLATURA, numero)
+            print(result)
+    records = obtener_iniciativas(db, ENTIDAD, LEGISLATURA,
+                          solo_asignadas=True)
+    tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
+    
+    iniciativas_por_usuario = {}
+    for record in records:
+        if record['usuario'] not in iniciativas_por_usuario:
+            iniciativas_por_usuario[record['usuario']] = []
+        iniciativas_por_usuario[record['usuario']].append(record)
+    
+    return render_template(
+        "lista_desasigna.html", iniciativas_por_usuario=iniciativas_por_usuario, tags=tags, areas=areas,
+        comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
+        temas=temas, resumenes=resumenes
+    )
 
 @app.route("/edita/<numero>")
 @login_required

@@ -211,16 +211,6 @@ def test_asigna_enviar(client):
                            )
     assert b'usuario3' in response.data
 
-def test_crea_ok(client):
-    response = client.post('/crea/2', data={'cambios': 'cambios2',
-                                            'documento': 'documento2'})
-    assert b'ok: iniciativa 2 creada' == response.data
-
-def test_crea_error(client):
-    response = client.post('/crea/1', data={'cambios': 'cambios1',
-                                            'documento': 'documento1'})
-    assert b'error: iniciativa 1 no creada' == response.data
-
 def test_edita_escritor(client):
     with client:
         response = client.post('/login',

@@ -226,27 +226,3 @@ ingresa con su cuenta, y realiza diversas operaciones.
    |                           |             |                                   |
    |                           |             |                                   |
    +---------------------------+-------------+-----------------------------------+
-
-
-
-Seguridad
----------
-
-Hay los siguientes roles:
-
-``escritor``
-
-  Puede escribir en tema, resumen y área de las iniciativas que tienen asignadas.  No
-  puede escribir si la iniciativa ya fue aprobada por un editor.
-
-``editor``
-
-  Puede escribir en comentarios de cualquier iniciativa. Puede
-  escribir en tema, resumen y área de cualquier iniciativa.  Puede aprobar cualquier
-  iniciativa.
-
-``admin``
-
-  Puede escribir en asignada de cualquier iniciativa, además de los permisos de
-  ``editor``.
-

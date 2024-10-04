@@ -9,6 +9,7 @@ from .db import agrega_iniciativa
 from .db import actualiza_iniciativa
 from .db import remueve_iniciativa
 from .db import iniciativas
+from .db import asigna
 
 
 bp = Blueprint('api', __name__, url_prefix='/api')
@@ -51,7 +52,7 @@ def iniciativas_lista():
 
 @bp.route('/iniciativa', methods=['POST'])
 @key_required
-def iniciativa():
+def iniciativa_agrega():
     db = get_db()
     json = request.json
     entidad = json['entidad']
@@ -92,4 +93,17 @@ def iniciativa_remueve():
     numero = json['numero']
     result = remueve_iniciativa(db, entidad, legislatura,
                                numero)
+    return {'result': result}
+
+@bp.route('/asigna', methods=['POST'])
+@key_required
+def asigna_usuario():
+    db = get_db()
+    json = request.json
+    entidad = json['entidad']
+    legislatura = json['legislatura']
+    numero = json['numero']
+    usuario = json['usuario']
+    result = asigna(db, entidad, legislatura,
+                    numero, usuario)
     return {'result': result}

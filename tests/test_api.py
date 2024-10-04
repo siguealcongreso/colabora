@@ -164,3 +164,25 @@ def test_iniciativa_remover_error(client):
                                   'key': 'api-key-cambiar'})
     assert response.status == '200 OK'
     assert response.json == {'result': 'error: iniciativa 2 no removida'}
+
+
+def test_asigna_ok(client):
+    response = client.post('/api/asigna',
+                          json={'entidad': 'entidad1',
+                                'legislatura': 'legislatura1',
+                                'numero': 3,
+                                'usuario': 'usuario3',
+                                'key': 'api-key-cambiar'})
+    assert response.status == '200 OK'
+    assert response.json == {'result': 'ok: iniciativa 3 asignada a usuario3'}
+
+
+def test_asigna_error(client):
+    response = client.post('/api/asigna',
+                          json={'entidad': 'entidad1',
+                                'legislatura': 'legislatura1',
+                                'numero': 1,
+                                'usuario': 'usuario1',
+                                'key': 'api-key-cambiar'})
+    assert response.status == '200 OK'
+    assert response.json == {'result': 'error: iniciativa 1 no asignada a usuario1'}

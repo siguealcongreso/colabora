@@ -3,7 +3,8 @@ API
 
 La API sirve para actualizar y consultar la base de datos de la
 aplicación.  Está implementada en el módulo `api` como un `blueprint
-<https://flask.palletsprojects.com/en/3.0.x/blueprints/>`_ de Flask.
+<https://flask.palletsprojects.com/en/3.0.x/blueprints/>`_ de Flask y
+utiliza las funciones existentes del módulo `db`.
 
 Se accesa a partir de la ruta `/api` mediante un programa que opere
 como un cliente de HTTP.  El acceso está restringido mediante una
@@ -15,14 +16,12 @@ realizar, por ejemplo:
  - Agregar, modificar y remover iniciativas
  - Listar las iniciativas
 
-Para llamar las funciones se necesitan:
+El programa cliente debe hacer la solicitud HTTP con los siguientes
+componentes:
 
  #. La URL del elemento a modificar o consultar
  #. El método para la función a realizar
  #. Los datos requeridos en formato JSON
-
-El programa cliente debe hacer la solicitud HTTP a la URL con el
-método indicado e incluir los datos en el cuerpo de la solicitud.
 
 La respuesta de la aplicación es en formato JSON, de esta forma cuando
 es exitosa::

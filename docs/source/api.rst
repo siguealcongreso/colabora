@@ -49,8 +49,8 @@ Ruta: /api/iniciativa
    |           |                        | key,                             |                      |
    |           |                        | cambios, documento               |                      |
    +-----------+------------------------+----------------------------------+----------------------+
-   |  PATCH    | Actualizar             | entidad, legislatura, numero,    | cambios, documento   |
-   |           |                        | key                              |                      |
+   |  PATCH    | Actualizar             | entidad, legislatura, numero,    | cambios, documento,  |
+   |           |                        | key                              | estado_id            |
    |           |                        |                                  |                      |
    +-----------+------------------------+----------------------------------+----------------------+
    |  DELETE   | Remover                | entidad, legislatura, numero,    |                      |

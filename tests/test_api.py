@@ -114,6 +114,7 @@ def test_iniciativa_actualizar_ok(client):
                                   'numero': 3,
                                   'cambios': 'cambios33',
                                   'documento': 'documento33',
+                                  'estado_id': 1,
                                   'key': 'api-key-cambiar'})
     assert response.status == '200 OK'
     assert response.json == {'result': 'ok: iniciativa 3 actualizada'}

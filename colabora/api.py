@@ -77,8 +77,9 @@ def iniciativa_actualiza():
     numero = json['numero']
     documento = json.get('documento', None)
     cambios = json.get('cambios', None)
+    estado_id = json.get('estado_id', None)
     result = actualiza_iniciativa(db, entidad, legislatura, numero,
-                                  cambios=cambios, documento=documento)
+                                  cambios=cambios, documento=documento, estado_id=estado_id)
     return {'result': result}
 
 @bp.route('/iniciativa', methods=['DELETE'])

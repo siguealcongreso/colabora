@@ -186,3 +186,14 @@ def test_asigna_error(client):
                                 'key': 'api-key-cambiar'})
     assert response.status == '200 OK'
     assert response.json == {'result': 'error: iniciativa 1 no asignada a usuario1'}
+
+
+def test_asigna_ok(client):
+    response = client.post('/api/clasifica',
+                          json={'entidad': 'entidad1',
+                                'legislatura': 'legislatura1',
+                                'numero': 1,
+                                'area': 'area2',
+                                'key': 'api-key-cambiar'})
+    assert response.status == '200 OK'
+    assert response.json == {'result': 'ok: iniciativa 1 asignada a area2'}

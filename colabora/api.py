@@ -10,6 +10,7 @@ from .db import actualiza_iniciativa
 from .db import remueve_iniciativa
 from .db import iniciativas
 from .db import asigna
+from .db import clasifica
 
 
 bp = Blueprint('api', __name__, url_prefix='/api')
@@ -106,4 +107,17 @@ def asigna_usuario():
     usuario = json['usuario']
     result = asigna(db, entidad, legislatura,
                     numero, usuario)
+    return {'result': result}
+
+@bp.route('/clasifica', methods=['POST'])
+@key_required
+def clasifica_area():
+    db = get_db()
+    json = request.json
+    entidad = json['entidad']
+    legislatura = json['legislatura']
+    numero = json['numero']
+    area = json['area']
+    result = clasifica(db, entidad, legislatura,
+                       numero, area)
     return {'result': result}

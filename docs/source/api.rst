@@ -151,3 +151,46 @@ diccionario con los valores de cada iniciativa::
     ...
     ]
   }
+
+Asignación
+----------
+
+Ruta: /api/asigna
+
+   +-----------+------------------------+----------------------------------+
+   |  Método   | Función                | Datos requeridos                 |
+   +===========+========================+==================================+
+   |  POST     | Asignar                | entidad, legislatura, numero,    |
+   |           |                        | key,                             |
+   |           |                        | usuario                          |
+   +-----------+------------------------+----------------------------------+
+
+Ejemplo::
+
+  http POST https://localhost:5000/api/asigna \
+       entidad=Jalisco legislatura=LXIII numero=123 \
+       usuario="Usuario" \
+       key='api-key-cambiar'
+
+
+Clasificación
+-------------
+
+Ruta: /api/clasifica
+
+   +-----------+------------------------+----------------------------------+
+   |  Método   | Función                | Datos requeridos                 |
+   +===========+========================+==================================+
+   |  POST     | Clasificar             | entidad, legislatura, numero,    |
+   |           |                        | key,                             |
+   |           |                        | area                             |
+   +-----------+------------------------+----------------------------------+
+
+Una misma iniciativa puede tener una o más clasificaciones.
+
+Ejemplo::
+
+  http POST https://localhost:5000/api/clasifica \
+       entidad=Jalisco legislatura=LXIII numero=123 \
+       area="Finanzas" \
+       key='api-key-cambiar'

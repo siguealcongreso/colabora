@@ -50,8 +50,8 @@ def test_key_required_no_key(client):
             assert wrapped()
 
 
-def test_iniciativa(client):
-    response = client.get('/api/iniciativa',
+def test_iniciativas(client):
+    response = client.get('/api/iniciativas',
                           json={'entidad': 'entidad1',
                                 'legislatura': 'legislatura1',
                                 'key': 'api-key-cambiar'})

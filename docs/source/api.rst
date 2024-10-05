@@ -36,6 +36,44 @@ Y así cuando hay un error::
        "result": "error: iniciativa 123 no creada"
    }
 
+
+Iniciativas
+-----------
+
+Ruta: /api/iniciativas
+
+   +-----------+------------------------+----------------------------------+
+   |  Método   | Función                | Datos requeridos                 |
+   +===========+========================+==================================+
+   |  GET      | Listar                 | entidad, legislatura, key        |
+   +-----------+------------------------+----------------------------------+
+
+Para listar todas las iniciativas existentes::
+
+  http GET http://localhost:5000/api/iniciativa entidad='Jalisco' \
+       legislatura='LXIII'  key='api-key-cambiar'
+
+
+El resultado incluye una lista en la que cada elemento es un
+diccionario con los valores de cada iniciativa::
+
+
+  {
+   "result": [
+    {
+      "cambios": "cambios",
+      "comentario": "",
+      "documento": "documento.pdf",
+      "estado": null,
+      "numero": 123,
+      "resumen": "",
+      "tema": "",
+      "usuario": null
+    },
+    ...
+    ]
+  }
+
 Iniciativa
 -----------
 
@@ -55,8 +93,6 @@ Ruta: /api/iniciativa
    |  DELETE   | Remover                | entidad, legislatura, numero,    |                      |
    |           |                        | key                              |                      |
    |           |                        |                                  |                      |
-   +-----------+------------------------+----------------------------------+----------------------+
-   |  GET      | Listar                 | entidad, legislatura, key        |                      |
    +-----------+------------------------+----------------------------------+----------------------+
 
 
@@ -126,31 +162,6 @@ Con el resultado::
       "result": "ok: iniciativa 123 removida"
   }
 
-Para listar todas las iniciativas existentes::
-
-  http GET http://localhost:5000/api/iniciativa entidad='Jalisco' \
-       legislatura='LXIII'  key='api-key-cambiar'
-
-
-El resultado incluye una lista en la que cada elemento es un
-diccionario con los valores de cada iniciativa::
-
-
-  {
-   "result": [
-    {
-      "cambios": "cambios",
-      "comentario": "",
-      "documento": "documento.pdf",
-      "estado": null,
-      "numero": 123,
-      "resumen": "",
-      "tema": "",
-      "usuario": null
-    },
-    ...
-    ]
-  }
 
 Asignación
 ----------

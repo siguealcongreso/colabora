@@ -39,7 +39,7 @@ def login():
         return {'result': 'error: ingreso denegado'}
 
 
-@bp.route('/iniciativa', methods=['GET'])
+@bp.route('/iniciativas', methods=['GET'])
 @key_required
 def iniciativas_lista():
     db = get_db()

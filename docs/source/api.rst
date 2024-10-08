@@ -2,27 +2,26 @@ API
 ===
 
 La API sirve para actualizar y consultar la base de datos de la
-aplicación.  Está implementada en el módulo `api` como un `blueprint
-<https://flask.palletsprojects.com/en/3.0.x/blueprints/>`_ de Flask.
-
-Se accesa a partir de la ruta `/api` mediante un programa que opere
-como un cliente de HTTP.  El acceso está restringido mediante una
-llave.
-
-LA API ofrece funciones que los usuarios de la aplicación no pueden
+aplicación. Ofrece funciones que los usuarios de la aplicación no pueden
 realizar, por ejemplo:
 
  - Agregar, modificar y remover iniciativas
  - Listar las iniciativas
 
-Para llamar las funciones se necesitan:
+Está implementada en el módulo `api` como un `blueprint
+<https://flask.palletsprojects.com/en/3.0.x/blueprints/>`_ de Flask y
+utiliza las funciones existentes del módulo `db`.
+
+Se accesa a partir de la ruta `/api` mediante un programa que opere
+como un cliente de HTTP.  El acceso está restringido mediante una
+llave.
+
+El programa cliente debe hacer la solicitud HTTP con los siguientes
+componentes:
 
  #. La URL del elemento a modificar o consultar
  #. El método para la función a realizar
  #. Los datos requeridos en formato JSON
-
-El programa cliente debe hacer la solicitud HTTP a la URL con el
-método indicado e incluir los datos en el cuerpo de la solicitud.
 
 La respuesta de la aplicación es en formato JSON, de esta forma cuando
 es exitosa::
@@ -37,6 +36,44 @@ Y así cuando hay un error::
        "result": "error: iniciativa 123 no creada"
    }
 
+
+Iniciativas
+-----------
+
+Ruta: /api/iniciativas
+
+   +-----------+------------------------+----------------------------------+
+   |  Método   | Función                | Datos requeridos                 |
+   +===========+========================+==================================+
+   |  GET      | Listar                 | entidad, legislatura, key        |
+   +-----------+------------------------+----------------------------------+
+
+Para listar todas las iniciativas existentes::
+
+  http GET http://localhost:5000/api/iniciativa entidad='Jalisco' \
+       legislatura='LXIII'  key='api-key-cambiar'
+
+
+El resultado incluye una lista en la que cada elemento es un
+diccionario con los valores de cada iniciativa::
+
+
+  {
+   "result": [
+    {
+      "cambios": "cambios",
+      "comentario": "",
+      "documento": "documento.pdf",
+      "estado": null,
+      "numero": 123,
+      "resumen": "",
+      "tema": "",
+      "usuario": null
+    },
+    ...
+    ]
+  }
+
 Iniciativa
 -----------
 
@@ -49,15 +86,13 @@ Ruta: /api/iniciativa
    |           |                        | key,                             |                      |
    |           |                        | cambios, documento               |                      |
    +-----------+------------------------+----------------------------------+----------------------+
-   |  PATCH    | Actualizar             | entidad, legislatura, numero,    | cambios, documento   |
-   |           |                        | key                              |                      |
+   |  PATCH    | Actualizar             | entidad, legislatura, numero,    | cambios, documento,  |
+   |           |                        | key                              | estado_id            |
    |           |                        |                                  |                      |
    +-----------+------------------------+----------------------------------+----------------------+
    |  DELETE   | Remover                | entidad, legislatura, numero,    |                      |
    |           |                        | key                              |                      |
    |           |                        |                                  |                      |
-   +-----------+------------------------+----------------------------------+----------------------+
-   |  GET      | Listar                 | entidad, legislatura, key        |                      |
    +-----------+------------------------+----------------------------------+----------------------+
 
 
@@ -127,28 +162,46 @@ Con el resultado::
       "result": "ok: iniciativa 123 removida"
   }
 
-Para listar todas las iniciativas existentes::
 
-  http GET http://localhost:5000/api/iniciativa entidad='Jalisco' \
-       legislatura='LXIII'  key='api-key-cambiar'
+Asignación
+----------
+
+Ruta: /api/asigna
+
+   +-----------+------------------------+----------------------------------+
+   |  Método   | Función                | Datos requeridos                 |
+   +===========+========================+==================================+
+   |  POST     | Asignar                | entidad, legislatura, numero,    |
+   |           |                        | key,                             |
+   |           |                        | usuario                          |
+   +-----------+------------------------+----------------------------------+
+
+Ejemplo::
+
+  http POST https://localhost:5000/api/asigna \
+       entidad=Jalisco legislatura=LXIII numero=123 \
+       usuario="Usuario" \
+       key='api-key-cambiar'
 
 
-El resultado incluye una lista en la que cada elemento es un
-diccionario con los valores de cada iniciativa::
+Clasificación
+-------------
 
+Ruta: /api/clasifica
 
-  {
-   "result": [
-    {
-      "cambios": "cambios",
-      "comentario": "",
-      "documento": "documento.pdf",
-      "estado": null,
-      "numero": 123,
-      "resumen": "",
-      "tema": "",
-      "usuario": null
-    },
-    ...
-    ]
-  }
+   +-----------+------------------------+----------------------------------+
+   |  Método   | Función                | Datos requeridos                 |
+   +===========+========================+==================================+
+   |  POST     | Clasificar             | entidad, legislatura, numero,    |
+   |           |                        | key,                             |
+   |           |                        | area                             |
+   +-----------+------------------------+----------------------------------+
+
+Una misma iniciativa puede tener una o más clasificaciones.
+
+Ejemplo::
+
+  http POST https://localhost:5000/api/clasifica \
+       entidad=Jalisco legislatura=LXIII numero=123 \
+       area="Finanzas" \
+       key='api-key-cambiar'

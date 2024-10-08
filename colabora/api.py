@@ -9,6 +9,8 @@ from .db import agrega_iniciativa
 from .db import actualiza_iniciativa
 from .db import remueve_iniciativa
 from .db import iniciativas
+from .db import asigna
+from .db import clasifica
 
 
 bp = Blueprint('api', __name__, url_prefix='/api')
@@ -37,7 +39,7 @@ def login():
         return {'result': 'error: ingreso denegado'}
 
 
-@bp.route('/iniciativa', methods=['GET'])
+@bp.route('/iniciativas', methods=['GET'])
 @key_required
 def iniciativas_lista():
     db = get_db()
@@ -51,7 +53,7 @@ def iniciativas_lista():
 
 @bp.route('/iniciativa', methods=['POST'])
 @key_required
-def iniciativa():
+def iniciativa_agrega():
     db = get_db()
     json = request.json
     entidad = json['entidad']
@@ -77,8 +79,9 @@ def iniciativa_actualiza():
     numero = json['numero']
     documento = json.get('documento', None)
     cambios = json.get('cambios', None)
+    estado_id = json.get('estado_id', None)
     result = actualiza_iniciativa(db, entidad, legislatura, numero,
-                                  cambios=cambios, documento=documento)
+                                  cambios=cambios, documento=documento, estado_id=estado_id)
     return {'result': result}
 
 @bp.route('/iniciativa', methods=['DELETE'])
@@ -91,4 +94,30 @@ def iniciativa_remueve():
     numero = json['numero']
     result = remueve_iniciativa(db, entidad, legislatura,
                                numero)
+    return {'result': result}
+
+@bp.route('/asigna', methods=['POST'])
+@key_required
+def asigna_usuario():
+    db = get_db()
+    json = request.json
+    entidad = json['entidad']
+    legislatura = json['legislatura']
+    numero = json['numero']
+    usuario = json['usuario']
+    result = asigna(db, entidad, legislatura,
+                    numero, usuario)
+    return {'result': result}
+
+@bp.route('/clasifica', methods=['POST'])
+@key_required
+def clasifica_area():
+    db = get_db()
+    json = request.json
+    entidad = json['entidad']
+    legislatura = json['legislatura']
+    numero = json['numero']
+    area = json['area']
+    result = clasifica(db, entidad, legislatura,
+                       numero, area)
     return {'result': result}

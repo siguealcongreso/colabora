@@ -70,8 +70,7 @@ def lista():
         records = iniciativas_asignadas(db, ENTIDAD, LEGISLATURA,
                                             g.user['usuario'])
     else:
-        records = iniciativas(db, ENTIDAD, LEGISLATURA,
-                              solo_sin_asignar=True)
+        records = []
     tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
     correcciones = {}

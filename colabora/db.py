@@ -306,17 +306,17 @@ def agrega_entidad(db, nombre):
     return f"ok: '{nombre}' creado"
 
 
-def agrega_legislatura(db, nombre):
+def agrega_legislatura(db, entidad, nombre):
     """Agrega la legislatura *nombre*, si aún no existe.
 
     Regresa:
 
      - 'ok: *nombre* creado'
      - 'error: *nombre* no creado'"""
-    cmd = "INSERT INTO legislatura (nombre) VALUES (?)"
+    cmd = "INSERT INTO legislatura (nombre, entidad_id) VALUES (?, (SELECT entidad_id FROM entidad WHERE nombre=?))"
     cur = db.cursor()
     try:
-        cur.execute(cmd, (nombre,))
+        cur.execute(cmd, (nombre, entidad))
         db.commit()
     except sqlite3.DatabaseError:
         return f"error: '{nombre}' no creado"

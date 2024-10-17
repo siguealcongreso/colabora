@@ -288,12 +288,13 @@ def test_agrega_entidad_error(database):
 
 
 def test_agrega_legislatura_ok(database):
-    result = colabora.db.agrega_legislatura(database, 'legislatura1')
+    database.executescript(_data_sql)
+    result = colabora.db.agrega_legislatura(database, 'entidad1', 'legislatura1')
     assert "ok: 'legislatura1' creado" == result
 
 def test_agrega_legislatura_error(database):
-    result = colabora.db.agrega_legislatura(database, 'legislatura1')
-    result = colabora.db.agrega_legislatura(database, 'legislatura1')
+    result = colabora.db.agrega_legislatura(database, 'entidad1', 'legislatura1')
+    result = colabora.db.agrega_legislatura(database, 'entidad1', 'legislatura1')
     assert "error: 'legislatura1' no creado" == result
 
 def test_actualiza_iniciativa_ok(database):

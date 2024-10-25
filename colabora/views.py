@@ -55,10 +55,10 @@ def valores(records):
     resumenes = {r["numero"]: r["resumen"].split('\n') for r in records}
     comentarios = {r["numero"]: r["comentario"].split('\n') for r in records}
     db = get_db()
-    tags = areas_por_iniciativa(db).get(ENTIDAD, {}).get(LEGISLATURA, {})
+    tags = areas_por_iniciativa(db).get(g.user['entidad'], {}).get(g.user['legislatura'], {})
     areas = dbareas(db)
     users = usuarios(db)
-    asignadas = cantidad_asignadas_por_usuario(db, ENTIDAD, LEGISLATURA)
+    asignadas = cantidad_asignadas_por_usuario(db, g.user['entidad'], g.user['legislatura'])
     return tags, comentarios, areas, users, asignadas, temas, resumenes
 
 
@@ -67,11 +67,12 @@ def valores(records):
 def lista():
     db = get_db()
     if 'uid' in session:
-        records = iniciativas_asignadas(db, ENTIDAD, LEGISLATURA,
+        records = iniciativas_asignadas(db, g.user['entidad'], g.user['legislatura'],
                                             g.user['usuario'])
+        tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
     else:
         records = []
-    tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
+        tags, comentarios, areas, users, asignadas, temas, resumenes = [], [], [], [], [], [], []
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
     correcciones = {}
     for i in range(len(temas)):
@@ -89,10 +90,10 @@ def lista_todas():
     db = get_db()
     if g.user['rol'] == 'escritor':
         abort(403)
-    records = iniciativas(db, ENTIDAD, LEGISLATURA)
+    records = iniciativas(db, g.user['entidad'], g.user['legislatura'])
     tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
-    asignadas_usuario = asignadas_por_usuario(db, ENTIDAD, LEGISLATURA)
+    asignadas_usuario = asignadas_por_usuario(db, g.user['entidad'], g.user['legislatura'])
     correcciones = {}
     for i in range(len(temas)):
         errores = revisa_tema(records[i][3])
@@ -263,9 +264,9 @@ def asigna():
         abort(403)
     if request.method == 'POST':
         for numero in request.form.getlist('numero'):
-            result = dbasigna(db, ENTIDAD, LEGISLATURA,
+            result = dbasigna(db, g.user['entidad'], g.user['legislatura'],
                               numero, request.form['autor'])
-    records = iniciativas(db, ENTIDAD, LEGISLATURA,
+    records = iniciativas(db, g.user['entidad'], g.user['legislatura'],
                           solo_sin_asignar=True)
     tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
     correcciones = {}
@@ -283,7 +284,7 @@ def asigna():
 @login_required
 def edita(numero):
     db = get_db()
-    record = iniciativa(db, ENTIDAD, LEGISLATURA, numero)
+    record = iniciativa(db, g.user['entidad'], g.user['legislatura'], numero)
     if not record:
         abort(404)
     if record['usuario'] != g.user['usuario'] and g.user['rol'] not in ('editor', 'admin'):
@@ -291,7 +292,7 @@ def edita(numero):
     areas = dbareas(db)
     estados = dbestados(db)
     roles = {d['usuario']: d['rol'] for d in usuarios(db)}
-    tags = areas_por_iniciativa(db).get(ENTIDAD, {}).get(LEGISLATURA, {}).get(int(numero), [])
+    tags = areas_por_iniciativa(db).get(g.user['entidad'], {}).get(g.user['legislatura'], {}).get(int(numero), [])
     correcciones = revisa_tema(record[3])
     return render_template('edita.html',
                            r=record,
@@ -311,15 +312,15 @@ def edita_post(numero):
     estado_id = request.form.get('estado_id')
     area = request.form.getlist('area')
     areas = dbareas(db)
-    result = actualiza_iniciativa(db, ENTIDAD, LEGISLATURA, numero,
+    result = actualiza_iniciativa(db, g.user['entidad'], g.user['legislatura'], numero,
                                   tema=tema, resumen=resumen,
                                   comentario=comentario,
                                   estado_id=estado_id)
-    desclasifica(db, ENTIDAD, LEGISLATURA, numero)
+    desclasifica(db, g.user['entidad'], g.user['legislatura'], numero)
     if "0" in area:
         area.remove("0")
     for i in area:
-        clasifica(db, ENTIDAD, LEGISLATURA, numero, areas[int(i)-1]['nombre'])
+        clasifica(db, g.user['entidad'], g.user['legislatura'], numero, areas[int(i)-1]['nombre'])
     flash("Información guardada")
     return redirect(url_for('edita', numero=numero))
 

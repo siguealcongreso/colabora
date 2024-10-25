@@ -45,7 +45,9 @@ def a_dict(records):
 def usuario_por_id(db, usuario_id):
     """Regresa un diccionario con los valores del
     usuario que corresponde a *usuario_id*."""
-    cmd = "SELECT * FROM usuarios WHERE usuario_id=?"
+    cmd = ("SELECT *, legislatura.nombre as legislatura, entidad.nombre as entidad FROM usuarios "
+           "JOIN legislatura USING (legislatura_id) "
+           "JOIN entidad USING (entidad_id) WHERE usuario_id=?")
     cur = db.cursor()
     cur.execute(cmd, (usuario_id,))
     return cur.fetchone()

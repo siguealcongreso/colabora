@@ -44,6 +44,9 @@ def test_usuario_por_id_encontrado(database):
     database.executescript(_data_sql)
     result = colabora.db.usuario_por_id(database, 1)
     assert result['usuario'] == 'usuario1'
+    assert result['legislatura_id'] == 1
+    assert result['legislatura'] == 'legislatura1'
+    assert result['entidad'] == 'entidad1'
 
 def test_usuario_por_id_no_encontrado(database):
     database.executescript(_data_sql)

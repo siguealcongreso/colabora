@@ -284,11 +284,11 @@ def agrega_estado(db, estado):
     return f"ok: '{estado}' creada"
 
 
-def agrega_usuario(db, nombre, contrasena, rol):
-    cmd = "INSERT INTO usuarios (usuario, contrasena, rol) VALUES (?, ?, ?)"
+def agrega_usuario(db, nombre, contrasena, rol, entidad, legislatura):
+    cmd = "INSERT INTO usuarios (usuario, contrasena, rol, legislatura_id) VALUES (?, ?, ?, (SELECT legislatura_id FROM legislatura WHERE nombre=? AND entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?)))"
     cur = db.cursor()
     try:
-        cur.execute(cmd, (nombre, generate_password_hash(contrasena), rol))
+        cur.execute(cmd, (nombre, generate_password_hash(contrasena), rol, entidad, legislatura))
         db.commit()
     except sqlite3.DatabaseError:
         return f"error: '{nombre}' no creado"

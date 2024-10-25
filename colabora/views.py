@@ -118,7 +118,7 @@ def registro():
             error = 'Se requiere una contraseña.'
 
         if error is None:
-            res = agrega_usuario(db, username, password, 'escritor')
+            res = agrega_usuario(db, username, password, 'escritor', ENTIDAD, LEGISLATURA)
             if res.startswith('error'):
                 error = f"El usuario {username} ya existe."
             else:

@@ -290,7 +290,7 @@ def agrega_usuario(db, nombre, contrasena, rol, entidad, legislatura):
     cmd = "INSERT INTO usuarios (usuario, contrasena, rol, legislatura_id) VALUES (?, ?, ?, (SELECT legislatura_id FROM legislatura WHERE nombre=? AND entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?)))"
     cur = db.cursor()
     try:
-        cur.execute(cmd, (nombre, generate_password_hash(contrasena), rol, entidad, legislatura))
+        cur.execute(cmd, (nombre, generate_password_hash(contrasena), rol, legislatura, entidad))
         db.commit()
     except sqlite3.DatabaseError:
         return f"error: '{nombre}' no creado"

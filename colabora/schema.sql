@@ -42,7 +42,7 @@ CREATE TABLE usuarios (
     contrasena TEXT DEFAULT '',
     rol TEXT DEFAULT '',
     activo DEFAULT 1,
-    legislatura_id INTEGER,
+    legislatura_id INTEGER NOT NULL,
     FOREIGN KEY (legislatura_id) REFERENCES legislatura(legislatura_id)
     );
 

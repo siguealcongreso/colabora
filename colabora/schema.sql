@@ -14,11 +14,12 @@ CREATE TABLE entidad (
 
 CREATE TABLE legislatura (
     legislatura_id INTEGER PRIMARY KEY,
-    nombre TEXT NOT NULL UNIQUE
+    nombre TEXT NOT NULL,
+    entidad_id INTEGER NOT NULL,
+    FOREIGN KEY (entidad_id) REFERENCES entidad(entidad_id)
 );
 
 CREATE TABLE iniciativas (
-    entidad_id INTEGER NOT NULL,
     legislatura_id INTEGER NOT NULL,
     numero INTEGER NOT NULL,
     cambios TEXT DEFAULT '',
@@ -27,7 +28,7 @@ CREATE TABLE iniciativas (
     resumen TEXT DEFAULT '',
     comentario TEXT DEFAULT '',
     estado_id INTEGER REFERENCES estado(estado_id),
-    PRIMARY KEY (entidad_id, legislatura_id, numero)
+    PRIMARY KEY (legislatura_id, numero)
     );
 
 CREATE TABLE areas (
@@ -40,25 +41,25 @@ CREATE TABLE usuarios (
     usuario TEXT NOT NULL UNIQUE,
     contrasena TEXT DEFAULT '',
     rol TEXT DEFAULT '',
-    activo DEFAULT 1
+    activo DEFAULT 1,
+    legislatura_id INTEGER NOT NULL,
+    FOREIGN KEY (legislatura_id) REFERENCES legislatura(legislatura_id)
     );
 
 CREATE TABLE clasificacion (
-    entidad_id INTEGER NOT NULL,
     legislatura_id INTEGER NOT NULL,
     numero INTEGER NOT NULL,
     area_id INTEGER NOT NULL REFERENCES areas(area_id),
-    PRIMARY KEY (entidad_id, legislatura_id, numero, area_id),
-    FOREIGN KEY (entidad_id, legislatura_id, numero) REFERENCES iniciativas
+    PRIMARY KEY (legislatura_id, numero, area_id),
+    FOREIGN KEY (legislatura_id, numero) REFERENCES iniciativas
 );
 
 CREATE TABLE asignacion (
-    entidad_id INTEGER NOT NULL,
     legislatura_id INTEGER NOT NULL,
     numero INTEGER NOT NULL,
     usuario_id INTEGER NOT NULL REFERENCES usuarios(usuario_id),
-    PRIMARY KEY (entidad_id, legislatura_id, numero, usuario_id),
-    FOREIGN KEY (entidad_id, legislatura_id, numero) REFERENCES iniciativas
+    PRIMARY KEY (legislatura_id, numero, usuario_id),
+    FOREIGN KEY (legislatura_id, numero) REFERENCES iniciativas
 );
 
 CREATE TABLE estado (

@@ -44,6 +44,9 @@ def test_usuario_por_id_encontrado(database):
     database.executescript(_data_sql)
     result = colabora.db.usuario_por_id(database, 1)
     assert result['usuario'] == 'usuario1'
+    assert result['legislatura_id'] == 1
+    assert result['legislatura'] == 'legislatura1'
+    assert result['entidad'] == 'entidad1'
 
 def test_usuario_por_id_no_encontrado(database):
     database.executescript(_data_sql)
@@ -268,12 +271,13 @@ def test_agrega_estado_error(database):
 
 
 def test_agrega_usuario_ok(database):
-    result = colabora.db.agrega_usuario(database, 'usuario1', 'contrasena1', 'rol1')
-    assert "ok: 'usuario1' creado" == result
+    database.executescript(_data_sql)
+    result = colabora.db.agrega_usuario(database, 'usuario5', 'contrasena5', 'rol1', 'entidad1', 'legislatura1')
+    assert "ok: 'usuario5' creado" == result
 
 def test_agrega_usuario_error(database):
-    result = colabora.db.agrega_usuario(database, 'usuario1', 'contrasena1', 'rol1')
-    result = colabora.db.agrega_usuario(database, 'usuario1', 'contrasena1', 'rol1')
+    database.executescript(_data_sql)
+    result = colabora.db.agrega_usuario(database, 'usuario1', 'contrasena1', 'rol1', 'entidad1', 'legislatura1')
     assert "error: 'usuario1' no creado" == result
 
 
@@ -288,12 +292,13 @@ def test_agrega_entidad_error(database):
 
 
 def test_agrega_legislatura_ok(database):
-    result = colabora.db.agrega_legislatura(database, 'legislatura1')
+    database.executescript(_data_sql)
+    result = colabora.db.agrega_legislatura(database, 'entidad1', 'legislatura1')
     assert "ok: 'legislatura1' creado" == result
 
 def test_agrega_legislatura_error(database):
-    result = colabora.db.agrega_legislatura(database, 'legislatura1')
-    result = colabora.db.agrega_legislatura(database, 'legislatura1')
+    result = colabora.db.agrega_legislatura(database, 'entidad1', 'legislatura1')
+    result = colabora.db.agrega_legislatura(database, 'entidad1', 'legislatura1')
     assert "error: 'legislatura1' no creado" == result
 
 def test_actualiza_iniciativa_ok(database):

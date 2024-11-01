@@ -20,8 +20,8 @@ def test_list_sin_sesion(client):
     assert b'resumen1' not in response.data
     assert 'Iniciar sesión' in response.data.decode()
     assert b'title="Editar"' not in response.data
-    assert b'tema3' in response.data
-    assert b'resumen3' in response.data
+    assert b'tema3' not in response.data
+    assert b'resumen3' not in response.data
     assert b'Registrar' in response.data
 
 def test_list_en_sesion_escritor(client):

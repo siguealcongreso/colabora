@@ -45,7 +45,9 @@ def a_dict(records):
 def usuario_por_id(db, usuario_id):
     """Regresa un diccionario con los valores del
     usuario que corresponde a *usuario_id*."""
-    cmd = "SELECT * FROM usuarios WHERE usuario_id=?"
+    cmd = ("SELECT *, legislatura.nombre as legislatura, entidad.nombre as entidad FROM usuarios "
+           "JOIN legislatura USING (legislatura_id) "
+           "JOIN entidad USING (entidad_id) WHERE usuario_id=?")
     cur = db.cursor()
     cur.execute(cmd, (usuario_id,))
     return cur.fetchone()
@@ -97,10 +99,10 @@ def areas(db):
 def areas_por_iniciativa(db):
     cmd = ("SELECT entidad.nombre, legislatura.nombre, numero, areas.nombre "
            "FROM clasificacion "
-           "LEFT JOIN iniciativas USING (entidad_id, legislatura_id, numero) "
+           "LEFT JOIN iniciativas USING (legislatura_id, numero) "
            "JOIN areas USING (area_id) "
-           "JOIN entidad USING (entidad_id) "
-           "JOIN legislatura USING (legislatura_id)")
+           "JOIN legislatura USING (legislatura_id) "
+           "JOIN entidad USING (entidad_id)")
     cur = db.cursor()
     cur.execute(cmd)
     records = cur.fetchall()
@@ -111,12 +113,11 @@ def cantidad_asignadas_por_usuario(db, entidad, legislatura):
     cmd = ("SELECT numero, estado, usuario "
            "FROM iniciativas "
            "LEFT JOIN estado USING (estado_id) "
-           "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
+           "LEFT JOIN asignacion USING (legislatura_id, numero) "
            "LEFT JOIN usuarios USING (usuario_id) "
-           "WHERE entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) AND "
-           "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?)")
+           "WHERE iniciativas.legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?)")
     cur = db.cursor()
-    cur.execute(cmd,(entidad, legislatura))
+    cur.execute(cmd,(legislatura,))
     records = cur.fetchall()
     asignadas = dict()
     for row in records:
@@ -142,12 +143,11 @@ def asignadas_por_usuario(db, entidad, legislatura):
     cmd = ("SELECT numero, cambios, documento, tema, resumen, estado, comentario, usuario "
            "FROM iniciativas "
            "LEFT JOIN estado USING (estado_id) "
-           "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
+           "LEFT JOIN asignacion USING (legislatura_id, numero) "
            "LEFT JOIN usuarios USING (usuario_id) "
-           "WHERE entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) AND "
-           "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?)")
+           "WHERE iniciativas.legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?)")
     cur = db.cursor()
-    cur.execute(cmd, (entidad, legislatura))
+    cur.execute(cmd, (legislatura,))
     records = cur.fetchall()
     asignadas = defaultdict(list)
     for row in records:
@@ -162,12 +162,11 @@ def iniciativa(db, entidad, legislatura, numero):
     cmd = ("SELECT numero, cambios, documento, tema, resumen, estado, comentario, usuario "
            "FROM iniciativas "
            "LEFT JOIN estado USING (estado_id) "
-           "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
+           "LEFT JOIN asignacion USING (legislatura_id, numero) "
            "LEFT JOIN usuarios USING (usuario_id) "
-           "WHERE entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) AND "
-           "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?) AND "
+           "WHERE iniciativas.legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?) AND "
            "numero=?")
-    cur.execute(cmd, (entidad, legislatura, numero))
+    cur.execute(cmd, (legislatura, numero))
     record = cur.fetchone()
     return record
 
@@ -175,14 +174,13 @@ def iniciativas(db, entidad, legislatura, solo_sin_asignar=False):
     cmd = ("SELECT numero, cambios, documento, tema, resumen, estado, comentario, usuario "
            "FROM iniciativas "
            "LEFT JOIN estado USING (estado_id) "
-           "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
+           "LEFT JOIN asignacion USING (legislatura_id, numero) "
            "LEFT JOIN usuarios USING (usuario_id) "
-           "WHERE entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) AND "
-           "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?)")
+           "WHERE iniciativas.legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?)")
     if solo_sin_asignar:
         cmd += " AND usuario ISNULL"
     cur = db.cursor()
-    cur.execute(cmd,(entidad, legislatura))
+    cur.execute(cmd,(legislatura,))
     records = cur.fetchall()
     return records
 
@@ -191,26 +189,25 @@ def iniciativas_asignadas(db, entidad, legislatura, usuario):
     cmd = ("SELECT numero, cambios, documento, tema, resumen, estado, comentario, usuario "
            "FROM iniciativas "
            "LEFT JOIN estado USING (estado_id) "
-           "LEFT JOIN asignacion USING (entidad_id, legislatura_id, numero) "
+           "LEFT JOIN asignacion USING (legislatura_id, numero) "
            "LEFT JOIN usuarios USING (usuario_id) "
-           "WHERE entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) AND "
-           "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?) AND "
+           "WHERE iniciativas.legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?) AND "
            "usuario=?")
     cur = db.cursor()
-    cur.execute(cmd, (entidad, legislatura, usuario))
+    cur.execute(cmd, (legislatura, usuario))
     records = cur.fetchall()
     return records
 
 def asigna(db, entidad, legislatura, numero, usuario):
-    cmd = ("INSERT INTO asignacion (entidad_id, legislatura_id, numero, usuario_id) "
+    cmd = ("INSERT INTO asignacion (legislatura_id, numero, usuario_id) "
            "VALUES"
-           "((SELECT entidad_id FROM entidad WHERE nombre=?), "
-           "(SELECT legislatura_id FROM legislatura WHERE nombre=?), "
+           "((SELECT legislatura_id FROM legislatura WHERE nombre=? AND "
+           "entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?)), "
            "?, "
            "(SELECT usuario_id FROM usuarios WHERE usuario=?))")
     cur = db.cursor()
     try:
-        cur.execute(cmd, (entidad, legislatura, numero, usuario))
+        cur.execute(cmd, (legislatura, entidad, numero, usuario))
         db. commit()
     except sqlite3.DatabaseError:
         return f"error: iniciativa {numero} no asignada a {usuario}"
@@ -218,15 +215,14 @@ def asigna(db, entidad, legislatura, numero, usuario):
 
 
 def clasifica(db, entidad, legislatura, numero, area):
-    cmd = ("INSERT INTO clasificacion (entidad_id, legislatura_id, numero, area_id) "
+    cmd = ("INSERT INTO clasificacion (legislatura_id, numero, area_id) "
            "VALUES"
-           "((SELECT entidad_id FROM entidad WHERE nombre=?), "
-           "(SELECT legislatura_id FROM legislatura WHERE nombre=?), "
+           "((SELECT legislatura_id FROM legislatura WHERE nombre=? AND entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?)), "
            "?, "
            "(SELECT area_id FROM areas WHERE nombre=?))")
     cur = db.cursor()
     try:
-        cur.execute(cmd, (entidad, legislatura, numero, area))
+        cur.execute(cmd, (legislatura, entidad, numero, area))
         db. commit()
     except sqlite3.DatabaseError:
         return f"error: iniciativa {numero} no asignada a {area}"
@@ -234,11 +230,10 @@ def clasifica(db, entidad, legislatura, numero, area):
 
 def desclasifica(db, entidad, legislatura, numero):
     cmd = ("DELETE FROM clasificacion WHERE "
-           "entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) AND "
-           "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?) AND "
+           "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=? AND entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?)) AND "
            "numero=?")
     cur = db.cursor()
-    cur.execute(cmd, (entidad, legislatura, numero))
+    cur.execute(cmd, (legislatura, entidad, numero))
     if cur.rowcount >= 1:
         db. commit()
         return f"ok: se removieron {cur.rowcount} areas de iniciativa {numero}"
@@ -254,15 +249,14 @@ def agrega_iniciativa(db, entidad, legislatura, numero, cambios, documento,
 
      - 'ok: iniciativa *numero* creada'
      - 'error: iniciativa *numero* no creada'"""
-    cmd = ("INSERT INTO iniciativas (entidad_id, legislatura_id, numero, "
+    cmd = ("INSERT INTO iniciativas (legislatura_id, numero, "
            "cambios, documento, tema, resumen, comentario) "
            "VALUES "
-           "((SELECT entidad_id FROM entidad WHERE nombre=?), "
-           "(SELECT legislatura_id FROM legislatura WHERE nombre=?), "
+           "((SELECT legislatura_id FROM legislatura WHERE nombre=? AND entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?)), "
            "?, ?, ?, ?, ?, ?)")
     cur = db.cursor()
     try:
-        cur.execute(cmd, (entidad, legislatura, numero, cambios, documento,
+        cur.execute(cmd, (legislatura, entidad, numero, cambios, documento,
                           tema, resumen, comentario))
         db.commit()
     except sqlite3.DatabaseError:
@@ -292,11 +286,11 @@ def agrega_estado(db, estado):
     return f"ok: '{estado}' creada"
 
 
-def agrega_usuario(db, nombre, contrasena, rol):
-    cmd = "INSERT INTO usuarios (usuario, contrasena, rol) VALUES (?, ?, ?)"
+def agrega_usuario(db, nombre, contrasena, rol, entidad, legislatura):
+    cmd = "INSERT INTO usuarios (usuario, contrasena, rol, legislatura_id) VALUES (?, ?, ?, (SELECT legislatura_id FROM legislatura WHERE nombre=? AND entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?)))"
     cur = db.cursor()
     try:
-        cur.execute(cmd, (nombre, generate_password_hash(contrasena), rol))
+        cur.execute(cmd, (nombre, generate_password_hash(contrasena), rol, legislatura, entidad))
         db.commit()
     except sqlite3.DatabaseError:
         return f"error: '{nombre}' no creado"
@@ -314,17 +308,17 @@ def agrega_entidad(db, nombre):
     return f"ok: '{nombre}' creado"
 
 
-def agrega_legislatura(db, nombre):
+def agrega_legislatura(db, entidad, nombre):
     """Agrega la legislatura *nombre*, si aún no existe.
 
     Regresa:
 
      - 'ok: *nombre* creado'
      - 'error: *nombre* no creado'"""
-    cmd = "INSERT INTO legislatura (nombre) VALUES (?)"
+    cmd = "INSERT INTO legislatura (nombre, entidad_id) VALUES (?, (SELECT entidad_id FROM entidad WHERE nombre=?))"
     cur = db.cursor()
     try:
-        cur.execute(cmd, (nombre,))
+        cur.execute(cmd, (nombre, entidad))
         db.commit()
     except sqlite3.DatabaseError:
         return f"error: '{nombre}' no creado"
@@ -365,10 +359,9 @@ def actualiza_iniciativa(db, entidad, legislatura, numero, tema=None, resumen=No
     sets = ', '.join(fields)
     if sets:
         cmd = (f"UPDATE iniciativas SET {sets} WHERE "
-               "entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?) "
-               "AND legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=?) "
+               "legislatura_id=(SELECT legislatura_id FROM legislatura WHERE nombre=? AND entidad_id=(SELECT entidad_id FROM entidad WHERE nombre=?)) "
                "AND numero=?")
-        values.extend([entidad, legislatura, numero])
+        values.extend([legislatura, entidad, numero])
         cur = db.cursor()
         cur.execute(cmd, values)
         if cur.rowcount == 1:
@@ -424,8 +417,7 @@ def remueve_iniciativa(db, entidad, legislatura, numero):
      - 'error: iniciativa *numero* no removida'
     """
     cmd = ("DELETE FROM iniciativas WHERE "
-           "entidad_id = (SELECT entidad_id FROM entidad WHERE nombre=?) AND "
-           "legislatura_id = (SELECT legislatura_id FROM legislatura WHERE nombre=?) AND "
+           "legislatura_id = (SELECT legislatura_id FROM legislatura WHERE nombre=? AND entidad_id = (SELECT entidad_id FROM entidad WHERE nombre=?)) AND "
            "numero = ?")
     cur = db.cursor()
     row = iniciativa(db, entidad, legislatura, numero)
@@ -434,7 +426,7 @@ def remueve_iniciativa(db, entidad, legislatura, numero):
     elif row['usuario'] is not None:
          return f"error: iniciativa {numero} no removida"
     desclasifica(db, entidad, legislatura, numero)
-    cur.execute(cmd, (entidad, legislatura, numero))
+    cur.execute(cmd, (legislatura, entidad, numero))
     db.commit()
     return f"ok: iniciativa {numero} removida"
 

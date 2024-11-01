@@ -360,6 +360,7 @@ def test_usuario_despliega_escritor(client):
         response = client.get('/usuario')
         assert 'Cambiar mi contraseña' in response.data.decode()
         assert 'Enviar código' not in response.data.decode()
+        assert b'Ver todas las iniciativas' not in response.data
 
 def test_usuario_despliega_editor(client):
     with client:

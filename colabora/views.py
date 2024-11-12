@@ -335,15 +335,17 @@ def buscar_tema():
     else:
         results = [tema for tema in temas_creados(db) if input_usuario in tema[0].lower()]
     for result in results:
-        filas += f"""
-        <tr>
-            <td ondblclick="llenarTema('{result[0]}')"
-                class="user-select-none"
-                style="cursor: pointer;">
-                {result[0]}
-            </td>
-        </tr>
-        """
+        estado, correcciones = revisa_tema(result[0])
+        if estado == "Ok":
+            filas += f"""
+            <tr>
+                <td ondblclick="llenarTema('{result[0]}')"
+                    class="user-select-none"
+                    style="cursor: pointer;">
+                    {result[0]}
+                </td>
+            </tr>
+            """
     return filas
 
 @app.before_request

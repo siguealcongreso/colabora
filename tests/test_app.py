@@ -503,3 +503,23 @@ def test_cambia_en_session_enviar_ok(client):
     assert response.history[0].status == '302 FOUND'
     assert response.request.path == "/login"
     assert 'Contraseña cambiada correctamente.' in response.data.decode()
+
+def test_buscar_tema_no_input(client):
+    response = client.post('/buscar',
+                           data={'tema': ''})
+    assert response.status == '200 OK'
+    assert b"<td>tema1</td>" in response.data
+    assert b"<td>tema3</td>" in response.data
+
+def test_buscar_tema_input(client):
+    response = client.post('/buscar',
+                           data={'tema': '1'})
+    assert response.status == '200 OK'
+    assert b"<td>tema1</td>" in response.data
+
+def test_buscar_tema_no_resultados(client):
+    response = client.post('/buscar',
+                           data={'tema': 'tema4'})
+    assert response.status == '200 OK'
+    assert b"<td>tema1</td>" not in response.data
+    assert b"<td>tema3</td>" not in response.data

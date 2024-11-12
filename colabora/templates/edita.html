@@ -56,8 +56,25 @@
       </div>
       <div class="row py-2 border border-top-0 bg-light">
           <div class="col-md-3"><b>Tema</b>
-            <textarea class="form-control" name="tema">{{ r.tema }}</textarea>
+            <span class="htmx-indicator"> 
+              <p>Cargando temas...</p>
+            </span> 
+            <textarea class="form-control" name="tema"
+                      placeholder="Empieza a escribir para ver sugerencias"
+                      hx-post="/buscar" 
+                      hx-trigger="input changed delay:500ms, search" 
+                      hx-target="#resultados" 
+                      hx-indicator=".htmx-indicator"
+                      >
+                      {{ r.tema }}
+            </textarea>
             <a class="form-text" class="link-primary" href="https://siguealcongreso.org/resumenes/criterios-para-resumenes/">¿De qué trata?</a>
+            <div class="col-md-3 w-100 overflow-auto" style="height: 10rem;">
+              <table class="table table-sm fs-6">
+                <tbody id="resultados">
+                </tbody>
+              </table>
+          </div>
           </div>
           <div class="col-md-6"><b>Resumen</b>
             <textarea class="form-control" rows="5" name="resumen">{{ r.resumen }}</textarea>

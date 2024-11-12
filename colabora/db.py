@@ -450,7 +450,7 @@ def remueve_usuario(db, usuario_id):
 
 def temas_creados(db):
     """Regresa una tupla de los temas creados"""
-    cmd = "SELECT tema FROM iniciativas WHERE tema !=''"
+    cmd = "SELECT DISTINCT tema FROM iniciativas WHERE tema !=''"
     cur = db.cursor()
     cur.execute(cmd)
     records = cur.fetchall()

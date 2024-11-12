@@ -449,7 +449,7 @@ def remueve_usuario(db, usuario_id):
     return f"ok: usuario {usuario_id} removido"
 
 def temas_creados(db):
-    """Regresa una lista de los temas creados"""
+    """Regresa una tupla de los temas creados"""
     cmd = "SELECT tema FROM iniciativas"
     cur = db.cursor()
     cur.execute(cmd)

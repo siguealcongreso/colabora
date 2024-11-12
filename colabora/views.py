@@ -337,7 +337,11 @@ def buscar_tema():
     for result in results:
         filas += f"""
         <tr>
-            <td>{result[0]}</td>
+            <td ondblclick="llenarTema('{result[0]}')"
+                class="user-select-none"
+                style="cursor: pointer;">
+                {result[0]}
+            </td>
         </tr>
         """
     return filas

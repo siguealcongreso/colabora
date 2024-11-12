@@ -57,6 +57,7 @@
       <div class="row py-2 border border-top-0 bg-light">
           <div class="col-md-3"><b>Tema</b>
             <textarea class="form-control" name="tema"
+                      id="tema-input"
                       placeholder="Empieza a escribir para ver sugerencias"
                       hx-post="/buscar" 
                       hx-trigger="input changed delay:500ms, search" 
@@ -116,4 +117,9 @@
 </form>
 </div>
 </div>
+<script>
+  function llenarTema(value){
+      document.getElementById('tema-input').value = value;
+  }
+</script>
 {% endblock %}

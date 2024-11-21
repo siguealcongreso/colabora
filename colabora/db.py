@@ -447,3 +447,11 @@ def remueve_usuario(db, usuario_id):
     except sqlite3.DatabaseError:
         return f"error: usuario {usuario_id} no removido"
     return f"ok: usuario {usuario_id} removido"
+
+def temas_creados(db):
+    """Regresa una tupla de los temas creados"""
+    cmd = "SELECT DISTINCT tema FROM iniciativas WHERE tema !=''"
+    cur = db.cursor()
+    cur.execute(cmd)
+    records = cur.fetchall()
+    return records

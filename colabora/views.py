@@ -28,6 +28,7 @@ from .db import estados as dbestados
 from .db import agrega_usuario
 from .db import asignadas_por_usuario
 from .db import actualiza_usuario
+from .db import temas_creados
 from .util import revisa_tema
 
 ENTIDAD = 'Jalisco'
@@ -324,6 +325,30 @@ def edita_post(numero):
     flash("Información guardada")
     return redirect(url_for('edita', numero=numero))
 
+@app.route('/buscar', methods=['POST'])
+@login_required
+def buscar_tema():
+    db = get_db()
+    table = str.maketrans("áéíóúñ","aeioun")
+    input_usuario = request.form.get('tema', '').strip().lower().translate(table)
+    filas = ''
+    if not input_usuario:
+        results = []
+    else:
+        results = [tema for tema in temas_creados(db) if input_usuario in tema[0].lower().translate(table)]
+    for result in results:
+        estado, correcciones = revisa_tema(result[0])
+        if estado == "Ok":
+            filas += f"""
+            <tr>
+                <td ondblclick="llenarTema('{result[0]}')"
+                    class="user-select-none"
+                    style="cursor: pointer;">
+                    {result[0]}
+                </td>
+            </tr>
+            """
+    return filas
 
 @app.before_request
 def load_logged_in_user():

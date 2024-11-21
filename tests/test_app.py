@@ -503,3 +503,43 @@ def test_cambia_en_session_enviar_ok(client):
     assert response.history[0].status == '302 FOUND'
     assert response.request.path == "/login"
     assert 'Contraseña cambiada correctamente.' in response.data.decode()
+
+def test_buscar_reenvia_a_login(client):
+    response = client.post('/buscar', follow_redirects=True)
+    assert len(response.history) == 1
+    assert response.history[0].status == '302 FOUND'
+    assert response.request.path == "/login"
+
+def test_buscar_tema_no_input(client):
+    with client.session_transaction() as session:
+        session['uid'] = 1
+    response = client.post('/buscar',
+                           data={'tema': ''})
+    assert response.status == '200 OK'
+    assert b'<td ondblclick="llenarTema(\'tema1\')"' not in response.data
+    assert b'<td ondblclick="llenarTema(\'tema3\')"' not in response.data
+
+def test_buscar_tema_input(client):
+    with client.session_transaction() as session:
+        session['uid'] = 1
+    response = client.post('/buscar',
+                           data={'tema': '1'})
+    assert response.status == '200 OK'
+    assert b'<td ondblclick="llenarTema(\'tema1\')"' in response.data
+
+def test_buscar_tema_input_acento(client):
+    with client.session_transaction() as session:
+        session['uid'] = 1
+    response = client.post('/buscar',
+                           data={'tema': 'téma1'})
+    assert response.status == '200 OK'
+    assert b'<td ondblclick="llenarTema(\'tema1\')"' in response.data
+
+def test_buscar_tema_no_resultados(client):
+    with client.session_transaction() as session:
+        session['uid'] = 1
+    response = client.post('/buscar',
+                           data={'tema': 'tema4'})
+    assert response.status == '200 OK'
+    assert b'<td ondblclick="llenarTema(\'tema1\')"' not in response.data
+    assert b'<td ondblclick="llenarTema(\'tema3\')"' not in response.data

@@ -61,10 +61,11 @@
                       placeholder="Empieza a escribir para ver sugerencias"
                       hx-post="/buscar" 
                       hx-trigger="input changed delay:500ms, search" 
-                      hx-target="#resultados" 
+                      hx-target="#resultados"
+                      rows="3"
                       >{{ r.tema }}</textarea>
             <a class="form-text" class="link-primary" href="https://siguealcongreso.org/resumenes/criterios-para-resumenes/">¿De qué trata?</a>
-            <div class="col-md-3 w-100 overflow-auto" style="height: 10rem;">
+            <div class="col-md-3 w-100 overflow-auto" style="max-height: 10rem;">
               <table class="table table-sm fs-6">
                 <tbody id="resultados">
                 </tbody>

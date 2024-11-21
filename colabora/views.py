@@ -326,14 +326,16 @@ def edita_post(numero):
     return redirect(url_for('edita', numero=numero))
 
 @app.route('/buscar', methods=['POST'])
+@login_required
 def buscar_tema():
     db = get_db()
-    input_usuario = request.form.get('tema', '').strip().lower()
+    table = str.maketrans("áéíóúñ","aeioun")
+    input_usuario = request.form.get('tema', '').strip().lower().translate(table)
     filas = ''
     if not input_usuario:
-        results = temas_creados(db)
+        results = []
     else:
-        results = [tema for tema in temas_creados(db) if input_usuario in tema[0].lower()]
+        results = [tema for tema in temas_creados(db) if input_usuario in tema[0].lower().translate(table)]
     for result in results:
         estado, correcciones = revisa_tema(result[0])
         if estado == "Ok":

@@ -180,8 +180,22 @@ def usuario():
         b_codigo = s.sign(str(userID))
         codigo = b_codigo.decode('utf-8')
 
-        return render_template("codigo.html", codigo=codigo)
-    return render_template("usuario.html", users=users)
+        return render_template("codigo.html", codigo=codigo, entidades=entidades)
+    return render_template("usuario.html", users=users, entidades=entidades)
+
+@app.get("/legislatura")
+@login_required
+def legislatura_get():
+    db = get_db()
+    entidades = legislaturas(db)
+    return render_template("usuario.html", entidades=entidades)
+
+@app.post("/legislatura")
+@login_required
+def legislatura_post():
+    db = get_db()
+    flash(f'{g.user['entidad_id']} {request.form['entidad']}')
+    return redirect(request.referrer)
 
 @app.route("/recupera", methods=('GET', 'POST'))
 def recupera():

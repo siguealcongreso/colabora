@@ -1,5 +1,8 @@
 INSERT INTO entidad (nombre) VALUES ('entidad1');
+INSERT INTO entidad (nombre) VALUES ('entidad2');
 INSERT INTO legislatura (nombre, entidad_id) VALUES ('legislatura1', 1);
+INSERT INTO legislatura (nombre, entidad_id) VALUES ('legislatura2', 1);
+INSERT INTO legislatura (nombre, entidad_id) VALUES ('legislatura1', 2);
 INSERT INTO estado (estado) VALUES ('estado1');
 
 INSERT INTO areas (nombre)

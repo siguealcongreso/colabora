@@ -367,3 +367,9 @@ def test_remueve_usuario_error(database):
     database.executescript(_data_sql)
     result = colabora.db.remueve_usuario(database, 1)
     assert result == "error: usuario 1 no removido"
+    
+def test_legislaturas(database):
+    database.executescript(_data_sql)
+    result = colabora.db.legislaturas(database)
+    print(result)
+    assert result == {'entidad1': ['legislatura1', 'legislatura2'], 'entidad2': ['legislatura1']}

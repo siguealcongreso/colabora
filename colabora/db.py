@@ -74,6 +74,24 @@ def usuarios(db):
     records = cur.fetchall()
     return records
 
+def legislaturas(db):
+    """Regresa una lista de las legislatura
+
+    Cada elemento es un diccionario con
+    `legislatura` y `entidad`.
+    """
+    cmd = ("SELECT DISTINCT entidad.nombre as entidad_nombre, legislatura.nombre as legislatura_nombre FROM legislatura "
+           "JOIN entidad ON legislatura.entidad_id = entidad.entidad_id ORDER BY entidad_nombre, legislatura_id")
+    cur = db.cursor()
+    cur.execute(cmd)
+    records = cur.fetchall()
+    entidades = {}
+    for entidad_nombre, legislatura_nombre in records:
+        if entidad_nombre not in entidades:
+            entidades[entidad_nombre] = []
+        entidades[entidad_nombre].append(legislatura_nombre)
+    return entidades
+
 def estados(db):
     """Regresa una lista de estados.
 

@@ -1,8 +1,18 @@
 <div class="container">
     <div class="btn-group">
-        <button class="btn btn-outline-secondary" disabled>{{ g.user['entidad'] }} - {{ g.user['legislatura'] }}</button>
-        <button class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" disabled data-bs-toggle="dropdown" aria-expanded="false" >
-          <span class="visually-hidden">Toggle Dropdown</span>
-        </button>
+        <form method="POST" action="{{ url_for('legislatura_get') }}">
+            <select class="btn" id="selector" name='entidad' onchange="this.form.submit()">
+                <option value="" disabled selected>{{ g.user['entidad'] }} - {{ g.user['legislatura'] }}</option>
+                {% for entidad_nombre, legislaturas in entidades.items() %}
+                    <optgroup label="{{ entidad_nombre }}">
+                        {% for legislatura in legislaturas %}
+                            <option value="{{ entidad_nombre }}|{{ legislatura }}">
+                                {{ legislatura }}
+                            </option>
+                        {% endfor %}
+                    </optgroup>
+                {% endfor %}
+            </select>
+        </form>
     </div>
 </div>

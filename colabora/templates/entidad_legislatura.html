@@ -1,6 +1,6 @@
 <div class="container">
     <div class="btn-group">
-        <form method="POST" action="{{ url_for('legislatura_get') }}">
+        <form method="POST" action="{{ url_for('legislatura_post') }}">
             <select class="btn" id="selector" name='entidad' onchange="this.form.submit()">
                 <option value="" disabled selected>{{ g.user['entidad'] }} - {{ g.user['legislatura'] }}</option>
                 {% for entidad_nombre, legislaturas in entidades.items() %}

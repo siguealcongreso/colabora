@@ -389,7 +389,7 @@ def actualiza_iniciativa(db, entidad, legislatura, numero, tema=None, resumen=No
 
 
 def actualiza_usuario(db, usuario_id, usuario=None, contrasena=None,
-                      rol=None, activo=None):
+                      rol=None, activo=None, legislatura_id=None):
     """Actualiza el usuario que corresponde a *usuario_id* con los
     valores de *usuario*, *contrasena*, *rol* o *activo*.  Los
     parámetros que no es incluyen no se modifican.
@@ -413,6 +413,9 @@ def actualiza_usuario(db, usuario_id, usuario=None, contrasena=None,
     if activo != None:
         fields.append(f"activo=?")
         values.append(activo)
+    if legislatura_id != None:
+        fields.append(f"legislatura_id=?")
+        values.append(legislatura_id)
     sets = ', '.join(fields)
     if sets:
         cmd = (f"UPDATE usuarios SET {sets} WHERE usuario_id=?")

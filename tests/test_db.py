@@ -103,6 +103,12 @@ def test_actualiza_usuario_activo(database):
                                            activo=0)
     assert 'ok: usuario 1 actualizado' in result
 
+def test_actualiza_usuario_legislatura(database):
+    database.executescript(_data_sql)
+    result = colabora.db.actualiza_usuario(database, usuario_id=1,
+                                           legislatura_id=2)
+    assert 'ok: usuario 1 actualizado' in result
+
 
 def test_estados(database):
     database.executescript(_data_sql)

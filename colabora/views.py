@@ -194,7 +194,9 @@ def legislatura_get():
 @login_required
 def legislatura_post():
     db = get_db()
-    flash(f'{g.user['entidad_id']} {request.form['entidad']}')
+    user_id = session['uid']
+    actualiza_usuario(db, user_id, legislatura_id=request.form['entidad'])
+    flash(f'Legislatura cambiada exitosamente.')
     return redirect(request.referrer)
 
 @app.route("/recupera", methods=('GET', 'POST'))

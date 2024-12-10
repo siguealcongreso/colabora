@@ -503,3 +503,20 @@ def test_cambia_en_session_enviar_ok(client):
     assert response.history[0].status == '302 FOUND'
     assert response.request.path == "/login"
     assert 'Contraseña cambiada correctamente.' in response.data.decode()
+
+def test_legislatura_get(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario1',
+                                     'password': 'contrasena1'})
+        response = client.get('/legislatura')
+        assert 200 == response.status_code
+
+def test_legislatura_post(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario1',
+                                     'password': 'contrasena1'})
+        response = client.get('/usuario')
+        response = client.post('/legislatura', follow_redirects=True, data={'entidad': 2}, headers={'referer': '/'})
+        assert 200 == response.status_code

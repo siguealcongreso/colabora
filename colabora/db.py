@@ -80,16 +80,16 @@ def legislaturas(db):
     Cada elemento es un diccionario con
     `legislatura` y `entidad`.
     """
-    cmd = ("SELECT DISTINCT entidad.nombre as entidad_nombre, legislatura.nombre as legislatura_nombre FROM legislatura "
+    cmd = ("SELECT DISTINCT entidad.nombre as entidad_nombre, legislatura.nombre as legislatura_nombre, legislatura_id FROM legislatura "
            "JOIN entidad ON legislatura.entidad_id = entidad.entidad_id ORDER BY entidad_nombre, legislatura_id")
     cur = db.cursor()
     cur.execute(cmd)
     records = cur.fetchall()
     entidades = {}
-    for entidad_nombre, legislatura_nombre in records:
+    for entidad_nombre, legislatura_nombre, legislatura_id in records:
         if entidad_nombre not in entidades:
             entidades[entidad_nombre] = []
-        entidades[entidad_nombre].append(legislatura_nombre)
+        entidades[entidad_nombre].append({legislatura_nombre, legislatura_id})
     return entidades
 
 def estados(db):

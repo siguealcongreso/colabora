@@ -372,4 +372,4 @@ def test_legislaturas(database):
     database.executescript(_data_sql)
     result = colabora.db.legislaturas(database)
     print(result)
-    assert result == {'entidad1': ['legislatura1', 'legislatura2'], 'entidad2': ['legislatura1']}
+    assert result == {'entidad1': [{'legislatura1', 1}, {'legislatura2', 2}], 'entidad2': [{'legislatura1', 3}]}

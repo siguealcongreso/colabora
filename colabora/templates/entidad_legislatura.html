@@ -6,8 +6,8 @@
                 {% for entidad_nombre, legislaturas in entidades.items() %}
                     <optgroup label="{{ entidad_nombre }}">
                         {% for legislatura, legislatura_id in legislaturas %}
-                            <option value="{{ legislatura }}">
-                                {{ legislatura_id }}
+                            <option value="{{ legislatura_id }}">
+                                {{ legislatura }}
                             </option>
                         {% endfor %}
                     </optgroup>

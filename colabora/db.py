@@ -89,7 +89,7 @@ def legislaturas(db):
     for entidad_nombre, legislatura_nombre, legislatura_id in records:
         if entidad_nombre not in entidades:
             entidades[entidad_nombre] = []
-        entidades[entidad_nombre].append({legislatura_nombre, legislatura_id})
+        entidades[entidad_nombre].append((legislatura_nombre, legislatura_id))
     return entidades
 
 def estados(db):

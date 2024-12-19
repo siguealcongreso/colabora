@@ -23,6 +23,9 @@ VALUES ('usuario3', 'admin', 'contrasena3:hashed', 1);
 INSERT INTO usuarios (usuario, rol, contrasena, legislatura_id)
 VALUES ('usuario4', 'escritor', 'contrasena4:hashed', 1);
 
+INSERT INTO usuarios (usuario_id, usuario, rol, contrasena, legislatura_id)
+VALUES (6, 'usuario6', 'admin', 'contrasena6:hashed', 2);
+
 INSERT INTO iniciativas (legislatura_id, numero,
 cambios, documento, tema, resumen, comentario)
 VALUES

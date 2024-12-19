@@ -67,7 +67,7 @@ def test_usuario_no_encontrado(database):
 def test_usuarios(database):
     database.executescript(_data_sql)
     result = colabora.db.usuarios(database)
-    assert len(result) == 4
+    assert len(result) == 5
     assert "usuario1" == result[0]["usuario"]
     assert "escritor" == result[0]["rol"]
     assert 1 == result[0]["usuario_id"]

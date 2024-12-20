@@ -67,7 +67,7 @@ def test_usuario_no_encontrado(database):
 def test_usuarios(database):
     database.executescript(_data_sql)
     result = colabora.db.usuarios(database)
-    assert len(result) == 4
+    assert len(result) == 5
     assert "usuario1" == result[0]["usuario"]
     assert "escritor" == result[0]["rol"]
     assert 1 == result[0]["usuario_id"]
@@ -142,6 +142,12 @@ def test_cantidad_asignadas_por_usuario(database):
     assert result['usuario1']['Total'] == 1
     assert result['usuario1']['Pendiente'] == 0
     assert result['usuario1']['Revisada'] == 0
+
+def test_cantidad_asignadas_por_usuario_sin_iniciativas(database):
+    database.executescript(_data_sql)
+    result = colabora.db.cantidad_asignadas_por_usuario(database, entidad= 'entidad1', legislatura= 'legislatura2')
+    assert len(result) == 1
+    assert result == {'': {'Total': 0, 'Nueva': 0, 'Pendiente': 0, 'Revisada': 0}}
 
 def test_asignadas_por_usuario(database):
     database.executescript(_data_sql)

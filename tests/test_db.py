@@ -383,4 +383,4 @@ def test_remueve_usuario_error(database):
 def test_legislaturas(database):
     database.executescript(_data_sql)
     result = colabora.db.legislaturas(database)
-    assert result == {'entidad1': [('legislatura1', 1), ('legislatura2', 2)], 'entidad2': [('legislatura1', 3)]}
+    assert result == {'entidad1': [('legislatura1', 1), ('legislatura2', 2), ('legislatura3', 4)], 'entidad2': [('legislatura1', 3)]}

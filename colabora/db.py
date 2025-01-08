@@ -139,13 +139,11 @@ def cantidad_asignadas_por_usuario(db, entidad, legislatura):
     records = cur.fetchall()
     asignadas = dict()
 
-    if not records:
-        asignadas[''] = dict()
-        asignadas['']['Total'] = 0
-        asignadas['']['Nueva'] = 0
-        asignadas['']['Pendiente'] = 0
-        asignadas['']['Revisada'] = 0
-        return asignadas
+    asignadas[''] = dict()
+    asignadas['']['Total'] = 0
+    asignadas['']['Nueva'] = 0
+    asignadas['']['Pendiente'] = 0
+    asignadas['']['Revisada'] = 0
     
     for row in records:
         usuario = row['usuario']

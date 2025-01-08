@@ -149,6 +149,12 @@ def test_cantidad_asignadas_por_usuario_sin_iniciativas(database):
     assert len(result) == 1
     assert result == {'': {'Total': 0, 'Nueva': 0, 'Pendiente': 0, 'Revisada': 0}}
 
+def test_cantidad_asignadas_por_usuario_todas_asignadas(database):
+    database.executescript(_data_sql)
+    result = colabora.db.cantidad_asignadas_por_usuario(database, entidad= 'entidad1', legislatura= 'legislatura3')
+    assert len(result) == 2
+    assert result == {'': {'Total': 0, 'Nueva': 0, 'Pendiente': 0, 'Revisada': 0}, 'usuario1': {'Total': 1, 'Nueva': 1, 'Pendiente': 0, 'Revisada': 0}}
+
 def test_asignadas_por_usuario(database):
     database.executescript(_data_sql)
     result = colabora.db.asignadas_por_usuario(database, 'entidad1', 'legislatura1')
@@ -383,4 +389,4 @@ def test_remueve_usuario_error(database):
 def test_legislaturas(database):
     database.executescript(_data_sql)
     result = colabora.db.legislaturas(database)
-    assert result == {'entidad1': [('legislatura1', 1), ('legislatura2', 2)], 'entidad2': [('legislatura1', 3)]}
+    assert result == {'entidad1': [('legislatura1', 1), ('legislatura2', 2), ('legislatura3', 4)], 'entidad2': [('legislatura1', 3)]}

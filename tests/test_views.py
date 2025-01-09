@@ -543,3 +543,20 @@ def test_buscar_tema_no_resultados(client):
     assert response.status == '200 OK'
     assert b'<td ondblclick="llenarTema(\'tema1\')"' not in response.data
     assert b'<td ondblclick="llenarTema(\'tema3\')"' not in response.data
+
+def test_legislatura_get(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario1',
+                                     'password': 'contrasena1'})
+        response = client.get('/legislatura')
+        assert 200 == response.status_code
+
+def test_legislatura_post(client):
+    with client:
+        response = client.post('/login',
+                               data={'username': 'usuario1',
+                                     'password': 'contrasena1'})
+        response = client.get('/usuario')
+        response = client.post('/legislatura', follow_redirects=True, data={'entidad': 2}, headers={'referer': '/'})
+        assert 200 == response.status_code

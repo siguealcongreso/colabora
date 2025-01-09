@@ -74,6 +74,24 @@ def usuarios(db):
     records = cur.fetchall()
     return records
 
+def legislaturas(db):
+    """Regresa una lista de las legislatura
+
+    Cada elemento es un diccionario con
+    `legislatura` y `entidad`.
+    """
+    cmd = ("SELECT DISTINCT entidad.nombre as entidad_nombre, legislatura.nombre as legislatura_nombre, legislatura_id FROM legislatura "
+           "JOIN entidad ON legislatura.entidad_id = entidad.entidad_id ORDER BY entidad_nombre, legislatura_id")
+    cur = db.cursor()
+    cur.execute(cmd)
+    records = cur.fetchall()
+    entidades = {}
+    for entidad_nombre, legislatura_nombre, legislatura_id in records:
+        if entidad_nombre not in entidades:
+            entidades[entidad_nombre] = []
+        entidades[entidad_nombre].append((legislatura_nombre, legislatura_id))
+    return entidades
+
 def estados(db):
     """Regresa una lista de estados.
 
@@ -120,6 +138,13 @@ def cantidad_asignadas_por_usuario(db, entidad, legislatura):
     cur.execute(cmd,(legislatura,))
     records = cur.fetchall()
     asignadas = dict()
+
+    asignadas[''] = dict()
+    asignadas['']['Total'] = 0
+    asignadas['']['Nueva'] = 0
+    asignadas['']['Pendiente'] = 0
+    asignadas['']['Revisada'] = 0
+    
     for row in records:
         usuario = row['usuario']
         estado = row['estado']
@@ -371,7 +396,7 @@ def actualiza_iniciativa(db, entidad, legislatura, numero, tema=None, resumen=No
 
 
 def actualiza_usuario(db, usuario_id, usuario=None, contrasena=None,
-                      rol=None, activo=None):
+                      rol=None, activo=None, legislatura_id=None):
     """Actualiza el usuario que corresponde a *usuario_id* con los
     valores de *usuario*, *contrasena*, *rol* o *activo*.  Los
     parámetros que no es incluyen no se modifican.
@@ -395,6 +420,9 @@ def actualiza_usuario(db, usuario_id, usuario=None, contrasena=None,
     if activo != None:
         fields.append(f"activo=?")
         values.append(activo)
+    if legislatura_id != None:
+        fields.append(f"legislatura_id=?")
+        values.append(legislatura_id)
     sets = ', '.join(fields)
     if sets:
         cmd = (f"UPDATE usuarios SET {sets} WHERE usuario_id=?")

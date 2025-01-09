@@ -67,7 +67,7 @@ def test_usuario_no_encontrado(database):
 def test_usuarios(database):
     database.executescript(_data_sql)
     result = colabora.db.usuarios(database)
-    assert len(result) == 4
+    assert len(result) == 5
     assert "usuario1" == result[0]["usuario"]
     assert "escritor" == result[0]["rol"]
     assert 1 == result[0]["usuario_id"]
@@ -103,6 +103,12 @@ def test_actualiza_usuario_activo(database):
                                            activo=0)
     assert 'ok: usuario 1 actualizado' in result
 
+def test_actualiza_usuario_legislatura(database):
+    database.executescript(_data_sql)
+    result = colabora.db.actualiza_usuario(database, usuario_id=1,
+                                           legislatura_id=2)
+    assert 'ok: usuario 1 actualizado' in result
+
 
 def test_estados(database):
     database.executescript(_data_sql)
@@ -136,6 +142,18 @@ def test_cantidad_asignadas_por_usuario(database):
     assert result['usuario1']['Total'] == 1
     assert result['usuario1']['Pendiente'] == 0
     assert result['usuario1']['Revisada'] == 0
+
+def test_cantidad_asignadas_por_usuario_sin_iniciativas(database):
+    database.executescript(_data_sql)
+    result = colabora.db.cantidad_asignadas_por_usuario(database, entidad= 'entidad1', legislatura= 'legislatura2')
+    assert len(result) == 1
+    assert result == {'': {'Total': 0, 'Nueva': 0, 'Pendiente': 0, 'Revisada': 0}}
+
+def test_cantidad_asignadas_por_usuario_todas_asignadas(database):
+    database.executescript(_data_sql)
+    result = colabora.db.cantidad_asignadas_por_usuario(database, entidad= 'entidad1', legislatura= 'legislatura3')
+    assert len(result) == 2
+    assert result == {'': {'Total': 0, 'Nueva': 0, 'Pendiente': 0, 'Revisada': 0}, 'usuario1': {'Total': 1, 'Nueva': 1, 'Pendiente': 0, 'Revisada': 0}}
 
 def test_asignadas_por_usuario(database):
     database.executescript(_data_sql)
@@ -373,3 +391,8 @@ def test_temas_creados(database):
     result = colabora.db.temas_creados(database)
     assert result[0][0] == "tema1"
     assert result[1][0] == "tema3"
+    
+def test_legislaturas(database):
+    database.executescript(_data_sql)
+    result = colabora.db.legislaturas(database)
+    assert result == {'entidad1': [('legislatura1', 1), ('legislatura2', 2), ('legislatura3', 4)], 'entidad2': [('legislatura1', 3)]}

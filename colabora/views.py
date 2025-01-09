@@ -12,6 +12,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from itsdangerous import TimestampSigner
 from .app import app
 from .db import get_db
+from .db import legislaturas
 from .db import iniciativas_asignadas
 from .db import iniciativas, areas as dbareas, usuarios
 from .db import cantidad_asignadas_por_usuario
@@ -67,6 +68,7 @@ def valores(records):
 @app.route("/")
 def lista():
     db = get_db()
+    entidades = legislaturas(db)
     if 'uid' in session:
         records = iniciativas_asignadas(db, g.user['entidad'], g.user['legislatura'],
                                             g.user['usuario'])
@@ -82,13 +84,14 @@ def lista():
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
         comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
-        temas=temas, resumenes=resumenes, correcciones = correcciones
+        temas=temas, resumenes=resumenes, correcciones = correcciones, entidades=entidades
     )
 
 @app.route("/iniciativas")
 @login_required
 def lista_todas():
     db = get_db()
+    entidades = legislaturas(db)
     if g.user['rol'] == 'escritor':
         abort(403)
     records = iniciativas(db, g.user['entidad'], g.user['legislatura'])
@@ -102,7 +105,7 @@ def lista_todas():
     return render_template(
         "lista_todas.html", records=records, tags=tags, areas=areas,
         comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
-        temas=temas, resumenes=resumenes, asignadas_usuario=asignadas_usuario, correcciones= correcciones
+        temas=temas, resumenes=resumenes, asignadas_usuario=asignadas_usuario, correcciones= correcciones, entidades=entidades
     )
 
 @app.route("/registro", methods=('GET', 'POST'))
@@ -169,6 +172,7 @@ def logout():
 def usuario():
     db = get_db()
     users = usuarios(db)
+    entidades = legislaturas(db)
     if request.method == 'POST':
         user = request.form['autor']
         _user = obten_usuario(db, user)
@@ -177,8 +181,24 @@ def usuario():
         b_codigo = s.sign(str(userID))
         codigo = b_codigo.decode('utf-8')
 
-        return render_template("codigo.html", codigo=codigo)
-    return render_template("usuario.html", users=users)
+        return render_template("codigo.html", codigo=codigo, entidades=entidades)
+    return render_template("usuario.html", users=users, entidades=entidades)
+
+@app.get("/legislatura")
+@login_required
+def legislatura_get():
+    db = get_db()
+    entidades = legislaturas(db)
+    return render_template("usuario.html", entidades=entidades)
+
+@app.post("/legislatura")
+@login_required
+def legislatura_post():
+    db = get_db()
+    user_id = session['uid']
+    actualiza_usuario(db, user_id, legislatura_id=request.form['entidad'])
+    flash(f'Legislatura cambiada exitosamente.')
+    return redirect(request.referrer)
 
 @app.route("/recupera", methods=('GET', 'POST'))
 def recupera():
@@ -223,9 +243,10 @@ def cambia():
 @app.route("/confirma", methods=('GET', 'POST'))
 @login_required
 def confirma():
+    db = get_db()
+    entidades = legislaturas(db)
     if request.method == 'POST':
         password = request.form['password']
-        db = get_db()
         error = None
         user = g.user
         if not check_password_hash(user['contrasena'], password):
@@ -234,14 +255,15 @@ def confirma():
             return redirect(url_for('nueva', _method="GET"))
         flash(error)
         return redirect(url_for('confirma', _method="GET"))
-    return render_template("confirma.html")
+    return render_template("confirma.html", entidades=entidades)
 
 @app.route("/nueva", methods=('GET', 'POST'))
 @login_required
 def nueva():
+    db = get_db()
+    entidades = legislaturas(db)
     if request.method == 'POST':
         password = request.form['password']
-        db = get_db()
         error = None
 
         if not password:
@@ -253,7 +275,7 @@ def nueva():
             flash("Contraseña cambiada correctamente")
             return redirect(url_for("lista"))
         flash(error)
-    return render_template("nueva.html")
+    return render_template("nueva.html", entidades=entidades)
 
 
 @app.route("/asigna", methods=["GET", "POST"])
@@ -270,6 +292,7 @@ def asigna():
     records = iniciativas(db, g.user['entidad'], g.user['legislatura'],
                           solo_sin_asignar=True)
     tags, comentarios, areas, users, asignadas, temas, resumenes = valores(records)
+    entidades = legislaturas(db)
     correcciones = {}
     for i in range(len(temas)):
         errores = revisa_tema(records[i][3])
@@ -277,7 +300,7 @@ def asigna():
     return render_template(
         "lista.html", records=records, tags=tags, areas=areas,
         comentarios=comentarios, users=users, asignadas=asignadas, roles=roles,
-        temas=temas, resumenes=resumenes, correcciones = correcciones
+        temas=temas, resumenes=resumenes, correcciones = correcciones, entidades=entidades
     )
 
 
@@ -285,6 +308,7 @@ def asigna():
 @login_required
 def edita(numero):
     db = get_db()
+    entidades = legislaturas(db)
     record = iniciativa(db, g.user['entidad'], g.user['legislatura'], numero)
     if not record:
         abort(404)
@@ -301,7 +325,8 @@ def edita(numero):
                            estados=estados,
                            roles=roles,
                            areas=areas,
-                           correcciones=correcciones,)
+                           correcciones=correcciones,
+                           entidades=entidades)
 
 @app.route("/edita/<numero>", methods=["POST"])
 @login_required

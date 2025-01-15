@@ -79,6 +79,12 @@ def test_actualiza_usuario_error(database):
     result = colabora.db.actualiza_usuario(database, usuario_id=1)
     assert 'error: usuario 1 no actualizado' in result
 
+def test_actualiza_usuario_id_inexistente(database):
+    database.executescript(_data_sql)
+    result = colabora.db.actualiza_usuario(database, usuario_id=99,
+                                           rol='escritor')
+    assert 'error: usuario 99 no actualizado' in result
+
 def test_actualiza_usuario_contrasena(database):
     database.executescript(_data_sql)
     result = colabora.db.actualiza_usuario(database, usuario_id=1,

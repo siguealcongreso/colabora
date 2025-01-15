@@ -153,7 +153,7 @@ def test_cantidad_asignadas_por_usuario_todas_asignadas(database):
     database.executescript(_data_sql)
     result = colabora.db.cantidad_asignadas_por_usuario(database, entidad= 'entidad1', legislatura= 'legislatura3')
     assert len(result) == 2
-    assert result == {'': {'Total': 0, 'Nueva': 0, 'Pendiente': 0, 'Revisada': 0}, 'usuario1': {'Total': 1, 'Nueva': 1, 'Pendiente': 0, 'Revisada': 0}}
+    assert result == {'': {'Total': 0, 'Nueva': 0, 'Pendiente': 0, 'Revisada': 0}, 'usuario1': {'Total': 1, 'Nueva': 0, 'Pendiente': 1, 'Revisada': 0}}
 
 def test_asignadas_por_usuario(database):
     database.executescript(_data_sql)

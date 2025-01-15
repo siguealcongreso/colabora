@@ -4,7 +4,7 @@ INSERT INTO legislatura (nombre, entidad_id) VALUES ('legislatura1', 1);
 INSERT INTO legislatura (nombre, entidad_id) VALUES ('legislatura2', 1);
 INSERT INTO legislatura (nombre, entidad_id) VALUES ('legislatura1', 2);
 INSERT INTO legislatura (nombre, entidad_id) VALUES ('legislatura3', 1);
-INSERT INTO estado (estado) VALUES ('estado1');
+INSERT INTO estado (estado) VALUES ('Pendiente');
 
 INSERT INTO areas (nombre)
 VALUES ('area1');

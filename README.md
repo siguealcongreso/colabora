@@ -77,9 +77,10 @@ recientes del repositorio original:
 
 6. Visita http://localhost:5000 para revisar las modficaciones
 
-7. Corre las pruebas
+7. Corre las pruebas y mide la cobertura
 
-       pytest --cov=colabora
+       pytest --cov
+       pytest --cov --cov-report=term-missing
 
 8. Revisa que tus modificaciones cumplen con los *Requerimientos para
 los commits* que se describen en la siguiente sección.

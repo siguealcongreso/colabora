@@ -33,7 +33,7 @@ def test_key_required_key_correcto(client):
 def test_key_required_key_incorrecto(client):
 
     def view():
-        return 'Ok'
+        return 'Ok' #pragma: no cover
     with app.test_request_context(json={'key': 'api-key-incorrecto'}):
         wrapped = key_required(view)
         with raises(Forbidden):
@@ -43,7 +43,7 @@ def test_key_required_key_incorrecto(client):
 def test_key_required_no_key(client):
 
     def view():
-        return 'Ok'
+        return 'Ok' #pragma: no cover
     with app.test_request_context(json={}):
         wrapped = key_required(view)
         with raises(Forbidden):
@@ -188,7 +188,7 @@ def test_asigna_error(client):
     assert response.json == {'result': 'error: iniciativa 1 no asignada a usuario1'}
 
 
-def test_asigna_ok(client):
+def test_clasifica_ok(client):
     response = client.post('/api/clasifica',
                           json={'entidad': 'entidad1',
                                 'legislatura': 'legislatura1',

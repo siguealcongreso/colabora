@@ -4,8 +4,10 @@ from flask import g
 from colabora.main import app
 import colabora.views
 import colabora.db
+import colabora.util
 import secrets
 from itsdangerous import TimestampSigner
+import pytest
 
 colabora.views.ENTIDAD = 'entidad1'
 colabora.views.LEGISLATURA = 'legislatura1'
@@ -526,6 +528,20 @@ def test_buscar_tema_input(client):
                            data={'tema': '1'})
     assert response.status == '200 OK'
     assert b'<td ondblclick="llenarTema(\'tema1\')"' in response.data
+
+def test_buscar_tema_sugerencias_rechazadas(client):
+    def mock_revisa_tema(tema):
+        return ('Error', [])
+    monkeypatch = pytest.MonkeyPatch()
+    monkeypatch.setattr(colabora.views, 'revisa_tema',
+                        mock_revisa_tema)
+    with client.session_transaction() as session:
+        session['uid'] = 1
+    response = client.post('/buscar',
+                           data={'tema': '1'})
+    monkeypatch.undo()
+    assert response.status == '200 OK'
+    assert '' == response.text
 
 def test_buscar_tema_input_acento(client):
     with client.session_transaction() as session:

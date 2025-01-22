@@ -4,7 +4,7 @@ INSERT INTO legislatura (nombre, entidad_id) VALUES ('legislatura1', 1);
 INSERT INTO legislatura (nombre, entidad_id) VALUES ('legislatura2', 1);
 INSERT INTO legislatura (nombre, entidad_id) VALUES ('legislatura1', 2);
 INSERT INTO legislatura (nombre, entidad_id) VALUES ('legislatura3', 1);
-INSERT INTO estado (estado) VALUES ('estado1');
+INSERT INTO estado (estado) VALUES ('Pendiente');
 
 INSERT INTO areas (nombre)
 VALUES ('area1');
@@ -42,10 +42,10 @@ VALUES
 );
 
 INSERT INTO iniciativas (legislatura_id, numero,
-cambios, documento, tema, resumen, comentario)
+cambios, documento, tema, resumen, comentario, estado_id)
 VALUES
 ((SELECT legislatura_id FROM legislatura WHERE nombre='legislatura3'),
- 4, 'Cambios 4', 'documento4', 'tema4', 'resumen4', 'comentario4'
+ 4, 'Cambios 4', 'documento4', 'tema4', 'resumen4', 'comentario4', 1
 );
 
 INSERT INTO clasificacion (legislatura_id, numero, area_id) VALUES

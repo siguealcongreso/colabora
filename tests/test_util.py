@@ -19,3 +19,8 @@ def test_revisa_tema_correcto():
     tema = 'Salud'
     result = revisa_tema(tema)
     assert result == ('Ok', [])
+
+def test_revisa_tema_nulo():
+    tema = None
+    result = revisa_tema(tema)
+    assert result == ('Ok', [])

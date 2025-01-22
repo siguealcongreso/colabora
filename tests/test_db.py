@@ -79,6 +79,12 @@ def test_actualiza_usuario_error(database):
     result = colabora.db.actualiza_usuario(database, usuario_id=1)
     assert 'error: usuario 1 no actualizado' in result
 
+def test_actualiza_usuario_id_inexistente(database):
+    database.executescript(_data_sql)
+    result = colabora.db.actualiza_usuario(database, usuario_id=99,
+                                           rol='escritor')
+    assert 'error: usuario 99 no actualizado' in result
+
 def test_actualiza_usuario_contrasena(database):
     database.executescript(_data_sql)
     result = colabora.db.actualiza_usuario(database, usuario_id=1,
@@ -114,7 +120,7 @@ def test_estados(database):
     database.executescript(_data_sql)
     result = colabora.db.estados(database)
     assert len(result) == 1
-    assert "estado1" == result[0]["estado"]
+    assert "Pendiente" == result[0]["estado"]
 
 
 def test_areas(database):
@@ -153,7 +159,7 @@ def test_cantidad_asignadas_por_usuario_todas_asignadas(database):
     database.executescript(_data_sql)
     result = colabora.db.cantidad_asignadas_por_usuario(database, entidad= 'entidad1', legislatura= 'legislatura3')
     assert len(result) == 2
-    assert result == {'': {'Total': 0, 'Nueva': 0, 'Pendiente': 0, 'Revisada': 0}, 'usuario1': {'Total': 1, 'Nueva': 1, 'Pendiente': 0, 'Revisada': 0}}
+    assert result == {'': {'Total': 0, 'Nueva': 0, 'Pendiente': 0, 'Revisada': 0}, 'usuario1': {'Total': 1, 'Nueva': 0, 'Pendiente': 1, 'Revisada': 0}}
 
 def test_asignadas_por_usuario(database):
     database.executescript(_data_sql)

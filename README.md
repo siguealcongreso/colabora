@@ -109,6 +109,62 @@ que no tienen que ver con lo que estás mejorando.
 3. Si estás agregando texto, revisa que cumple con la Ortografía y
 Gramática.
 
+## Para revisar un Pull Request
+
+1. Consulta el Issue indicado en `Development` del Pull Request para
+conocer la descripción y el resultado esperado.
+
+2. Actualiza la rama `main` de tu repositorio local con los cambios más
+recientes del repositorio original:
+
+       git checkout main
+       git pull upstream
+
+3. Activa el entorno virtual
+
+       . env/bin/activate
+
+4. Corre la aplicación
+
+       flask --debug --app colabora.main run
+
+5. Observa que se reproduce la situación actual en la descripción del
+Issue.
+
+6. Si aún no tienes una referencia remota al repositorio de donde vienen
+los cambios del Pull Request, crea una y descarga sus ramas:
+
+       git remote add <nombre> <repositorio>
+       git fetch <nombre>
+
+7. Cambia a la rama origen del Pull Request en ese repositorio:
+
+       git checkout `nombre:rama`
+
+8. Observa si se obtiene el resultado esperado del Issue.
+
+9. Revisa la descripción, los cambios realizados y la razón de la
+modificación en el Pull Request.
+
+10. Revisa los cambios realizados por el Pull Request:
+
+       git log -p main..`nombr`:rama`
+
+11. Revisa que la cobertura del código y de las pruebas está completa:
+
+       pytest --cov --cov-report=term-missing --cov-branch
+
+12. Una vez que termines los pasos anteriores, haz clic en `Files
+changed` del Pull Request y después en el botón verde `Review
+changes`.
+
+13. Si todo está bien, escribe `Revisado`.
+
+14. Si encontraste algún problema o tienes alguna duda, describe el
+problema o pregunta la información que sea necesaria.
+
+15. Haz clic en `Submit review`.
+
 ## Para generar la documentación
 
 1. Activa el entorno virtual

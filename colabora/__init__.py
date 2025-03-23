@@ -1,3 +1,3 @@
 """Aplicación para colaborar"""
 
-__version__ = "0.25"
+__version__ = "0.26"

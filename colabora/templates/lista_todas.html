@@ -69,7 +69,7 @@
         <div class="">
           <div class="">
               <b>Cambios</b> {{ r.cambios }}
-                (<a href="https://siguealcongreso.org/monitoreo/iniciativas/lxiii/{{ r.numero }}/" title="Ver ficha">{{ r.numero }}</a>)
+                (<a href="https://siguealcongreso.org/iniciativas/{{ g.user['legislatura'].lower() }}/{{ r.numero }}/" title="Ver ficha">{{ r.numero }}</a>)
             <a href="https://infolej.congresojal.gob.mx/documentos/estados/{{ r.documento }}" target="_blank" title="Leer el documento">🖹</a>
             {% if g.user and (r.usuario == g.user['usuario'] or g.user['rol'] in ('editor', 'admin')) %}
 	    <a href="edita/{{ r.numero }}" title="Editar">✏</a>
